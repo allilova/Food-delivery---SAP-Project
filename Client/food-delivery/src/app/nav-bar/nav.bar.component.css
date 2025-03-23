@@ -1,0 +1,19 @@
+nav{
+    margin-left: 50px;
+}
+
+ul{
+    display: flex;
+    list-style-type: none;
+}
+
+li{
+    text-decoration: none;
+    margin: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+a{
+    text-decoration: none;
+    color: rgb(59, 4, 4);
+}

@@ -3,9 +3,6 @@
 body{
     background-color: #FFDBDB;
 }
-nav{
-    margin-left: 50px;
-}
 
 ul{
     display: flex;
@@ -18,6 +15,10 @@ li{
     font-weight: bold;
     font-size: 18px;
 }
+a{
+    text-decoration: none;
+    color: white;
+}
 
 .main{
     display: flex;
@@ -28,6 +29,7 @@ li{
     margin: 60px;
     margin-top: 150px;
     margin-left: 70px;
+    color: rgb(59, 4, 4);;
 }
 .paragraph p{
     text-align: justify;
@@ -38,7 +40,7 @@ li{
 }
 
 .paragraph li{
-    background-color: #ff8b8b ;
+    background-color: rgb(59, 4, 4);
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -47,12 +49,33 @@ li{
     font-size: 16px;
 }
 
-.right img{
-    width: 80%;
+.delivery img{
+    width: 70%;
 }
 
-.right{
-    margin-left: 100px;
+
+.logo img{
+    width: 50%;
+}
+.logo{
     margin-top: -100px;
+    margin-left: 100px;
+}
+
+.delivery{
+    margin-top: -500px;
+    align-items: center;
+    margin-left: 200px;
+    margin-bottom: 0px;
+}
+.shadow img{
+    width: 70%;
+}
+.shadow{
+    align-items: center; 
+    margin-left: 200px;
+    margin-top: -419px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
 

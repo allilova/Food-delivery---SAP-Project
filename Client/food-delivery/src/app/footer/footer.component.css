@@ -1,0 +1,29 @@
+footer{
+    background-color:  rgb(59, 4, 4);
+    height: 160px;
+    color: white;
+}
+
+.span{
+    text-align: center;
+    margin-top: 20px;
+}
+.content{
+    display: flex;
+    text-align: center;
+    padding-left: 100px;
+    padding-top: 30px;
+}
+
+.workTime{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.contact{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.socialMedia{
+    margin-left: 50px;
+    margin-right: 50px;
+}

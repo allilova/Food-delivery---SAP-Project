@@ -27,3 +27,19 @@ footer{
     margin-left: 50px;
     margin-right: 50px;
 }
+
+ul{
+    display: flex;
+    list-style-type: none;
+}
+
+i{
+    color: white;
+    font-size: 25px;
+}
+
+li{
+    text-decoration: none;
+    margin: 10px;
+    font-weight: bold;
+}

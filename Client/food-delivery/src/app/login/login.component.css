@@ -1,27 +1,79 @@
-.login{
+fieldset{
+    width: 10cm;
+    height: 10cm;
+    margin: auto;
+    margin-top: 1cm;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: none;
+    font-family: sans-serif;
+    padding: 2em;
+    max-width: 50ch;
+    margin-bottom:1cm ;
     background-color: #FFDBDB;
-    width: 400px;
-    height: 400px;
-    border: solid 3px white;
-    margin-left: 500px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    margin-bottom: 82px;
-    margin-top: 40px;
+    border: solid 2px white;
 }
-.loginButton input{
+
+h2{
+    padding-bottom: 20px;
+    color: rgb(59, 4, 4);
+    
+}
+
+input{
+        display: block;
+        width: 100%;
+        padding: 0.5em 0.8em;
+        border: 2px solid #ccc;
+        outline: none;
+}
+
+label{
+    font-weight: bold;
+    color: rgb(59, 4, 4);
+}
+
+.field{
+    padding-bottom: 1.5em;
+}
+
+#submit{
     background-color: rgb(59, 4, 4);
     color: white;
     font-weight: bold;
-    border-radius: 10px;
-    height: 30px;
-    width: 70px;
+    border-radius: 5px;
+    height: 45px;
 }
 
-.password{
-    margin: 10px;
+label i{
+    padding-right: 5px;
 }
 
-form{
-    padding: 50px;
-    text-align: center;
+legend{
+    color: red;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(59, 4, 4);
+}
+
+ul{
+    list-style: none;
+    display: flex;
+}
+p{
+    color: rgb(59, 4, 4);
+}
+
+a i{
+    font-size: 20px;
+    padding-right: 10px;
+}
+ul{
+    margin-left: 130px;
+}
+.socialLogin{
+text-align: center;
+margin-top: 5px;
+margin-bottom: 5px;
 }

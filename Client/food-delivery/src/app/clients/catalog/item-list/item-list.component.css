@@ -1,0 +1,31 @@
+img{
+    width: 100%;
+}
+
+.card{
+    width: 8cm;
+    height: 9cm;
+    margin: auto;
+    margin-top: 1cm;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 50ch;
+    margin-bottom:1cm ;
+    background-color: #FFDBDB;
+    border: solid 2px white;
+    color: rgb(59, 4, 4);
+    text-align: center;
+}
+.text-card{
+    width: 8cm;
+    height: 4cm;
+    
+}
+
+button{
+    background-color: rgb(59, 4, 4);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 45px;
+    width: 100px;
+}

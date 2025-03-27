@@ -4,11 +4,12 @@ import {NavigationBarComponent} from './clients/core/nav-bar/nav-bar.component';
 import{FooterComponent} from './clients/core/footer/footer.component';
 import { HomeComponent } from './clients/home/home.component';
 import {LoginComponent} from './clients/login/login.component';
+import {CatalogComponent} from './clients/catalog/catalog.component'
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationBarComponent, FooterComponent, HomeComponent],
+  imports: [RouterOutlet, NavigationBarComponent, FooterComponent, CatalogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

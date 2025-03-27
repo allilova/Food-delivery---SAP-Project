@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {NavigationBarComponent} from './core/nav-bar/nav-bar.component';
-import{FooterComponent} from './core/footer/footer.component';
+import {NavigationBarComponent} from './clients/core/nav-bar/nav-bar.component';
+import{FooterComponent} from './clients/core/footer/footer.component';
 import { HomeComponent } from './clients/home/home.component';
 import {LoginComponent} from './clients/login/login.component';
 import { HttpClient } from '@angular/common/http';

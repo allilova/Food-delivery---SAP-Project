@@ -1,0 +1,30 @@
+#version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: food_delivery_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: food_delivery_app
+     # MYSQL_USER: root
+      #MYSQL_PASSWORD: root1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+    container_name: food_delivery_app
+    ports:
+      - "5454:5454"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/food_delivery_app
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root1234
+    depends_on:
+      - db
+
+volumes:
+  db_data:

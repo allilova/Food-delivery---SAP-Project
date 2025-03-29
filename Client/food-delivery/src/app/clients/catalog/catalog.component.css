@@ -1,9 +1,47 @@
+
 .item-list{
     gap: 2em;
     align-items: flex-start;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 1em;
+    padding-top: 0;
     display: flex;
     margin: 0;
+}
+
+.search-menu img{
+    width: 100%;
+}
+
+.search-menu ul{
+    display: flex;
+    align-items: center;
+    gap: 3em;
+    list-style-type: none;
+}
+
+.search-menu li a{
+    text-decoration: none;
+    color: rgb(59, 4, 4);
+    font-weight: bold;
+}
+.search-menu{
+    width: 700px;
+    padding: 2em;
+    padding-bottom: 0;
+}
+.category-card{
+    height: 100px;
+    width: 50px;
+    
+}
+
+i{
+    font-size: 30px;
+    padding-bottom: 5px;
+}
+h2{
+    padding-bottom: 5px;
+    color: rgb(59, 4, 4);
 }

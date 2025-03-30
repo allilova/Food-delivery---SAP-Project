@@ -18,7 +18,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int orderID;
 
-    @ManyToMany
+    @ManyToOne
     private User customer;
 
     @JsonIgnore

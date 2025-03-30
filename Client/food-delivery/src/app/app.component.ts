@@ -5,7 +5,8 @@ import{FooterComponent} from './clients/core/footer/footer.component';
 import { HomeComponent } from './clients/home/home.component';
 import {LoginComponent} from './clients/login/login.component';
 import {CatalogComponent} from './clients/catalog/catalog.component'
-import { HttpClient } from '@angular/common/http';
+
+
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,4 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   title = 'food-delivery';
 
-  constructor(private http: HttpClient){}
-
-  ngOnInit(){
-    
-  }
 }

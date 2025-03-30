@@ -12,6 +12,8 @@
 
 .search-menu img{
     width: 100%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .search-menu ul{

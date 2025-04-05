@@ -1,0 +1,21 @@
+<div class="cards">
+    @for (restaurant of restaurants; track $index){
+<div class="card">
+    <div class="img-card">
+        <img src="Gourmet Restaurant.jpg">
+    </div>
+    <div class="text-card">
+    <h4>{{restaurant.name}}</h4>
+    <p><i class="fa-solid fa-location-dot"></i>{{restaurant.address}}</p>
+    <p>{{restaurant.foodType}}</p>
+    <div class="ran-time">
+    <p><i class="fa-solid fa-star"></i>{{restaurant.rating}}</p>
+    <p><time datetime="time"><i class="fa-solid fa-clock"></i> {{restaurant.timeDelivery}}</time></p>
+    </div>
+    <button class="Order">View menu</button>
+</div>
+</div>
+}
+</div>
+
+

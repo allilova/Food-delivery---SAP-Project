@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {NavigationBarComponent} from './clients/core/nav-bar/nav-bar.component';
-import{FooterComponent} from './clients/core/footer/footer.component';
-import { HomeComponent } from './clients/home/home.component';
-import {LoginComponent} from './clients/login/login.component';
-import {CatalogComponent} from './clients/catalog/catalog.component'
+import {NavigationBarComponent} from './core/nav-bar/nav-bar.component';
+import{FooterComponent} from './core/footer/footer.component';
+import { HomeComponent } from './home/home.component';
+import {LoginComponent} from './login/login.component';
+import {CatalogComponent} from './catalog/catalog.component';
+import * as resturantsData from '../assets/resturants.json';
 
 
 
@@ -14,7 +15,11 @@ import {CatalogComponent} from './clients/catalog/catalog.component'
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'food-delivery';
+  data: any = resturantsData;
 
+  ngOnInit() {
+    console.log('Data', this.data);
+  }
 }

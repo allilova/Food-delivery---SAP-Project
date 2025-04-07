@@ -18,9 +18,10 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int userID;
+    private Long userID;
 
     private String name;
+
 
     private String email;
 
@@ -30,7 +31,7 @@ public class User {
 
     private String address;
 
-    private USER_ROLE role;
+    private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")

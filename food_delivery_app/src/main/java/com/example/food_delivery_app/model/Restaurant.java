@@ -16,7 +16,7 @@ import java.util.List;
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int restaurantID;
+    private Long restaurantID;
 
     @OneToOne
     private User restaurant;

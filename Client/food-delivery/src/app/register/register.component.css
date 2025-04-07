@@ -1,6 +1,6 @@
 fieldset{
-    width: 10cm;
-    height: 10cm;
+    width: 12cm;
+    height: 17cm;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -40,6 +40,7 @@ label{
     font-weight: bold;
     border-radius: 5px;
     height: 45px;
+    font-size: large;
 }
 
 label i{
@@ -48,6 +49,8 @@ label i{
 
 legend{
     color: red;
+    font-size: 11px;
+    font-weight: bold;
 }
 
 a{
@@ -68,13 +71,14 @@ a i{
     padding-right: 10px;
 }
 ul{
-    margin-left: 130px;
+    margin-left: 170px;
 }
-.socialLogin{
+.socialRegister{
 text-align: center;
 margin-top: 5px;
 margin-bottom: 5px;
 }
+
 .center{
     text-align: center;
 }

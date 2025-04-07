@@ -12,6 +12,6 @@ export class ApiService {
 
   getItems(){
     const {apiUrl} = environment;
-     return this.http.get<Item[]>(`${apiUrl}/items`)
+     return this.http.get<Item[]>(`${apiUrl}/Resturant`)
   }
 }

@@ -24,7 +24,9 @@ public class Order {
 
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurantID")
     private Restaurant restaurant;
+
 
     private Long totalAmount;
 

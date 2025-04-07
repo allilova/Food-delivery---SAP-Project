@@ -12,7 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   getItems(){
-    const { apiUrl } = environment;
-    return this.http.get<Restaurant[]>(`${apiUrl}/date.json`);
-}
+    const {apiUrl} = environment;
+     return this.http.get<Item[]>(`${apiUrl}/items`)
+  }
 }

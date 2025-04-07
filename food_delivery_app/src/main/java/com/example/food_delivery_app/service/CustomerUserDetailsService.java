@@ -24,7 +24,7 @@ public class CustomerUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("user not found with email: " + email);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
         USER_ROLE role = user.getRole();
@@ -38,4 +38,5 @@ public class CustomerUserDetailsService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
+
 }

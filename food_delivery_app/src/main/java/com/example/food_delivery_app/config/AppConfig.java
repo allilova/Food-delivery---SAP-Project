@@ -29,7 +29,7 @@ public class AppConfig {
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        return null; //http.build()
+        return http.build();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
@@ -39,7 +39,7 @@ public class AppConfig {
                 CorsConfiguration cfg = new CorsConfiguration();
 
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:4200/"
+                        "http://localhost:4200"
                       //tuk trqbva da se dobavqt front-end urls
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));

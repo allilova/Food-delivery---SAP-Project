@@ -1,0 +1,138 @@
+
+.item-list{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1em;
+    padding-top: 0;
+    display: flex;
+    margin: 0;
+}
+
+.search-menu img{
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.search-menu ul{
+    display: flex;
+    align-items: center;
+    gap: 3em;
+    list-style-type: none;
+}
+
+.search-menu li a{
+    text-decoration: none;
+    color: rgb(59, 4, 4);
+    font-weight: bold;
+}
+.search-menu{
+    width: 700px;
+    padding-left: 2em;
+    padding-bottom: 0;
+}
+.category-card{
+    height: 100px;
+    width: 50px;
+    
+}
+
+i{
+    font-size: 15px;
+    padding: 5px;
+    color: rgb(59, 4, 4);
+}
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    background-color: white;
+    width: 600px;
+    font-family: sans-serif;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+  
+.search-input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    padding: 4px 8px;
+    background-color: transparent;
+}
+
+.address-input{
+    border-color: white;
+    border: none;
+    height: 20px;
+}
+.heading{
+    background-color:  #f8b6b6;
+    height: 80px;
+    width: 650px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 30px;
+    color: rgb(59, 4, 4);
+    text-align: left;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+    padding-top: 40px;
+    padding-left: 20px;
+}
+
+
+img{
+    width: 100%;
+}
+
+.card{
+    width: 8cm;
+    height: 9.6cm;
+    margin: auto;
+    margin-top: 1cm;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 50ch;
+    margin-bottom:1cm ;
+    background-color: #FFDBDB;
+    border: solid 2px white;
+    color: rgb(59, 4, 4);
+    text-align: center;
+}
+.text-card{
+    width: 8cm;
+    height: 4cm;  
+}
+
+button{
+    background-color: rgb(59, 4, 4);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 45px;
+    width: 100px;
+    margin-top: 10px;
+    margin: 5px;
+}
+
+.cards{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1em;
+    display: flex;
+    margin: 0;
+}
+.ran-time{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+}
+ button i{
+    color:white;
+ }

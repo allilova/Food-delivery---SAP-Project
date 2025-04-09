@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Food-delivery---SAP-Project.iml" filepath="$PROJECT_DIR$/.idea/Food-delivery---SAP-Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/food_delivery_app/food_delivery_app.iml" filepath="$PROJECT_DIR$/food_delivery_app/food_delivery_app.iml" />
     </modules>
   </component>
 </project>

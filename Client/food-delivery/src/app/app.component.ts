@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import {NavigationBarComponent} from './core/nav-bar/nav-bar.component';
 import{FooterComponent} from './core/footer/footer.component';
 import { HomeComponent } from './home/home.component';
-import {LoginComponent} from './login/login.component';
+import {LoginComponent} from './user/login/login.component';
 
 
 

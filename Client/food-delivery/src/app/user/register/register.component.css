@@ -1,6 +1,6 @@
 fieldset{
-    width: 12cm;
-    height: 17cm;
+    width: 15cm;
+    height: 22.5cm;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -71,7 +71,7 @@ a i{
     padding-right: 10px;
 }
 ul{
-    margin-left: 170px;
+    margin-left: 200px;
 }
 .socialRegister{
 text-align: center;
@@ -82,3 +82,17 @@ margin-bottom: 5px;
 .center{
     text-align: center;
 }
+
+
+.gender-options {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    width: 160px;
+    gap: 10px;
+
+  }
+
+  .gender-options input {
+    width: 80px;
+  }

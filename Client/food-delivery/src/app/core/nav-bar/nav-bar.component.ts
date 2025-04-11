@@ -9,5 +9,5 @@ import { RouterLink } from "@angular/router";
     styleUrl: './nav.bar.component.css'
 })
 export class NavigationBarComponent{
-    isLoggedIn = false;
+    isLoggedIn = true;
 }

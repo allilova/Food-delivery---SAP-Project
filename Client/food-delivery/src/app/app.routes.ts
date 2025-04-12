@@ -6,6 +6,7 @@ import { RegisterComponent } from './user/register/register.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { SearchComponent } from './search/search.component';
+import { MenuComponent } from './menu/menu.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -13,6 +14,7 @@ export const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'catalog', component: CatalogComponent},
+    {path: 'menu', component: MenuComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'search', component: SearchComponent},
     {path: '404', component: ErrorComponent},

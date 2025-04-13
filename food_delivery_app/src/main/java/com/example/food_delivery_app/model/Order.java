@@ -40,7 +40,8 @@ public class Order {
     @OneToMany
     private List<OrderItem> items;
 
-    //private Payment payment;
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     private int itemsQuantity;
 

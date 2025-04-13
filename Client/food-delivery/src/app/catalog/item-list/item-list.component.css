@@ -46,4 +46,7 @@ button{
     gap: 1em;
     justify-content: center;
 }
+button i{
+    color:white;
+ }
 

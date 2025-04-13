@@ -1,0 +1,122 @@
+.info-client{
+    display: flex;
+    background-color:  #f8b6b6;
+    height: 200px;
+   margin: 4px 8px;
+   padding: 8px;
+   border-radius: 20px;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+   width: 50%;
+   color: rgb(59, 4, 4);
+}
+.img{
+    width: 200px;
+}
+.text{
+    width: 300px;
+    padding-top: 10px;
+}
+
+.info-client img{
+    width: 90%;
+    border-radius: 20px;
+}
+.text p{
+    margin: 5px;
+}
+button{
+    background-color: rgb(59, 4, 4);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 35px;
+    width: 100px;
+    margin-top: 130px;
+}
+.item-list{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1em;
+    padding-top: 0;
+    display: flex;
+    margin: 0;
+}
+img{
+    width: 100%;
+}
+
+.card{
+    width: 8cm;
+    height: 9.6cm;
+    margin: auto;
+    margin-top: 1cm;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    max-width: 50ch;
+    margin-bottom:1cm ;
+    background-color: #FFDBDB;
+    border: solid 2px white;
+    color: rgb(59, 4, 4);
+    text-align: center;
+}
+.text-card{
+    width: 8cm;
+    height: 4cm;  
+}
+.list-items button{
+    background-color: rgb(59, 4, 4);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 45px;
+    width: 100px;
+    margin-top: 10px;
+    margin: 5px;
+}
+
+.cards{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1em;
+    display: flex;
+    margin: 0;
+}
+.ran-time{
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+}
+ button i{
+    color:white;
+ }
+
+ i{
+    font-size: 15px;
+    padding: 5px;
+    color: rgb(59, 4, 4);
+}
+ h2{
+margin: 5px;
+margin-top: 20px;
+color: rgb(59, 4, 4);
+}
+
+data{
+    font-weight: bold;
+    font-size: large;
+    margin: 20px;
+    margin-top: 30px;
+    color: rgb(59, 4, 4);
+}
+.order{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1em;
+    display: flex;
+    margin: 0;
+}

@@ -1,19 +1,19 @@
 <nav>
     <ul>
         @if(!isLoggedIn){
-        <li><a href="">Home</a></li>
-        <li><a href="">Login</a></li>
-        <li><a href="">Register</a></li>
+        <li><a routerLink="/home">Home</a></li>
+        <li><a routerLink="/login">Login</a></li>
+        <li><a routerLink="/register">Register</a></li>
         <li><a href="">About Us</a></li>
         <li><a href="">Help</a></li>
         } @else{
-        <li><a href="">Catalog</a></li>
-        <li><a href="">Profile</a></li>
-        <li><a href="">Logout</a></li>
+        <li><a routerLink="/catalog">Catalog</a></li>
+        <li><a routerLink="/profile">Profile</a></li>
+        <li><a routerLink="/logout">Logout</a></li>
         <li><a href="">About Us</a></li>
         <li><a href="">Help</a></li>
         <li><a href=""><i class="fa-solid fa-cart-shopping"></i></a></li>
-        <li><a href=""><i class="fa-solid fa-magnifying-glass"></i></a></li>
+        <li><a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
         }
     </ul>
 </nav>

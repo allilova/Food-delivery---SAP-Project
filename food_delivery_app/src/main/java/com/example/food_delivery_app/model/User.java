@@ -18,7 +18,7 @@ import java.util.List;
 
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
 
     private String name;
@@ -32,6 +32,7 @@ public class User {
 
     private String address;
 
+    @Enumerated(EnumType.STRING)
     private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
 
     @JsonIgnore

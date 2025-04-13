@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
@@ -30,7 +30,5 @@ public class CartItem {
     private double price;
 
     private List<String> ingredients;
-
-
 
 }

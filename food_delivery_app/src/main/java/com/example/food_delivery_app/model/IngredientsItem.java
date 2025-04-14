@@ -1,4 +1,4 @@
-//optinal (moje i da go nqma)
+
 package com.example.food_delivery_app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IngredientsItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredientID;
 
     private String ingredientName;

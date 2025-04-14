@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderID;
 
     @ManyToOne
@@ -40,7 +40,8 @@ public class Order {
     @OneToMany
     private List<OrderItem> items;
 
-    //private Payment payment;
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     private int itemsQuantity;
 

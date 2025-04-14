@@ -11,8 +11,13 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getItems(){
+  getRestaurants(){
     const {apiUrl} = environment;
-     return this.http.get<Restaurant[]>(`${apiUrl}/Restaurant`)
+     return this.http.get<Restaurant[]>(`${apiUrl}/Restaurant`);
+  }
+
+  getMenu(id:string){
+    const {apiUrl} = environment;
+    return this.http.get<Restaurant>(`${apiUrl}/Restaurant/${id}`);
   }
 }

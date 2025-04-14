@@ -3,10 +3,9 @@ h2{
     color: rgb(59, 4, 4);
 }
 img{
-    width: 300px;
+    width: 70%;
 }
 .img-card img{
-    width: 70%;
     border-radius: 20px;
 }
 .img-card{
@@ -30,7 +29,7 @@ img{
     
 }
 
-button{
+.button{
     background-color: rgb(59, 4, 4);
     color: white;
     font-weight: bold;

@@ -12,8 +12,8 @@
     <p><i class="fa-solid fa-star"></i>{{restaurant.rating}}</p>
     <p><time datetime="time"><i class="fa-solid fa-clock"></i> {{restaurant.timeDelivery}}</time></p>
     </div>
-    <button class="Order">View menu</button>
-    <button class="Order"><i class="fa-solid fa-heart"></i>Favorite</button>
+    <a class="button" [routerLink]="restaurant.restaurantId">View menu</a>
+    <a class="button"><i class="fa-solid fa-heart"></i>Favorite</a>
 </div>
 </div>
 }

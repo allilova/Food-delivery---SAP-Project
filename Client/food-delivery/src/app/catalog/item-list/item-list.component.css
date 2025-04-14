@@ -22,7 +22,7 @@ img{
     
 }
 
-button{
+.button{
     background-color: rgb(59, 4, 4);
     color: white;
     font-weight: bold;
@@ -46,7 +46,7 @@ button{
     gap: 1em;
     justify-content: center;
 }
-button i{
+.button i{
     color:white;
  }
 

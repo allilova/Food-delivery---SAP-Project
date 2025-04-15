@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItemComponent } from './menu-item/menu-item.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../api.service';
 import { Restaurant } from '../types/restaurants';
 
 @Component({
   selector: 'app-menu',
-  imports: [MenuItemComponent],
+  imports: [MenuItemComponent, RouterLink],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })

@@ -7,6 +7,9 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { ProfileComponent } from './user/profile/profile.component';
 import { SearchComponent } from './search/search.component';
 import { MenuComponent } from './menu/menu.component';
+import { EditMenuComponent } from './edit/edit-menu/edit-menu.component';
+import { EditRestaurantComponent } from './edit/edit-restaurant/edit-resturant.component';
+import { CreateMenuComponent } from './create-menu/create-menu.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -17,7 +20,9 @@ export const routes: Routes = [
         {path: '', component: CatalogComponent},
         {path: ':restaurantId', component:MenuComponent}
     ]},
-    {path: 'menu', component: MenuComponent},
+    {path: 'edit-restaurant', component: EditRestaurantComponent},
+    {path: 'edit-menu', component: EditMenuComponent},
+    {path: 'create-menu', component: CreateMenuComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'search', component: SearchComponent},
     {path: '404', component: ErrorComponent},

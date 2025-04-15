@@ -31,7 +31,6 @@ public class Restaurant {
     @Embedded
     private ContactInfo contactInfo;
 
-
     private String openingHours;
 
     private String closingHours;

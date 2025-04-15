@@ -30,7 +30,8 @@ public class Order {
 
     private Long totalAmount;
 
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     private Date orderDate;
 
@@ -47,4 +48,12 @@ public class Order {
 
     private float totalPrice;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private DeliveryInfo deliveryInfo;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 }

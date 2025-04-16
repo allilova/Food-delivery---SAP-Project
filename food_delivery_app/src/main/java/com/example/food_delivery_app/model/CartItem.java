@@ -28,7 +28,4 @@ public class CartItem {
     private int quantity;
 
     private double price;
-
-    private List<String> ingredients;
-
 }

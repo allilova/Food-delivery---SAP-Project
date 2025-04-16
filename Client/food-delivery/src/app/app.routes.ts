@@ -11,6 +11,7 @@ import { EditMenuComponent } from './edit/edit-menu/edit-menu.component';
 import { EditRestaurantComponent } from './edit/edit-restaurant/edit-resturant.component';
 import { CreateMenuComponent } from './create-menu/create-menu.component';
 import { ShopCartComponent } from './shop-cart/shop-cart.component';
+import { PaymentComponent } from './payment/payment.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -26,6 +27,7 @@ export const routes: Routes = [
     {path: 'create-menu', component: CreateMenuComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'shopCart', component: ShopCartComponent},
+    {path: 'payment', component: PaymentComponent},
     {path: 'search', component: SearchComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}

@@ -44,9 +44,6 @@ public class Restaurant {
 
     private boolean open; //kogato e closed , nqma da moje da se porucva
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
-    private List<Food> foods = new ArrayList<>();
-
-
+    @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Menu menu;
 }

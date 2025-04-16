@@ -25,8 +25,11 @@ public class Food {
 
     private int foodPrice;
 
+    private int preparationTime;
+
     @ManyToOne
-    private Category foodCategory;
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(length = 1000)
     @ElementCollection
@@ -35,9 +38,9 @@ public class Food {
     private boolean available;
 
     @ManyToOne
-    private Restaurant restaurant;
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 
     @ManyToMany
     private List<IngredientsItem> ingredients = new ArrayList<>();
-
 }

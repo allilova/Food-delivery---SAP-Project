@@ -43,4 +43,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> adresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<DriverRevenue> driverRevenues = new ArrayList<>();
 }

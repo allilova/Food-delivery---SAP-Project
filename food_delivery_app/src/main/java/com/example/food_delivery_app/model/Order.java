@@ -27,7 +27,6 @@ public class Order {
     @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurantID")
     private Restaurant restaurant;
 
-
     private Long totalAmount;
 
     @Enumerated(EnumType.STRING)

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -13,11 +15,14 @@ import lombok.NoArgsConstructor;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType. IDENTITY)
-    private int categoryItemID;
+    private int categoryID;
 
     private String categoryName;
 
-    @JsonIgnore
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Food> foods;
+
     @ManyToOne
-    private Restaurant restaurant;
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 }

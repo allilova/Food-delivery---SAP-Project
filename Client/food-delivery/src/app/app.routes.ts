@@ -10,6 +10,7 @@ import { MenuComponent } from './menu/menu.component';
 import { EditMenuComponent } from './edit/edit-menu/edit-menu.component';
 import { EditRestaurantComponent } from './edit/edit-restaurant/edit-resturant.component';
 import { CreateMenuComponent } from './create-menu/create-menu.component';
+import { ShopCartComponent } from './shop-cart/shop-cart.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -24,6 +25,7 @@ export const routes: Routes = [
     {path: 'edit-menu', component: EditMenuComponent},
     {path: 'create-menu', component: CreateMenuComponent},
     {path: 'profile', component: ProfileComponent},
+    {path: 'shopCart', component: ShopCartComponent},
     {path: 'search', component: SearchComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}

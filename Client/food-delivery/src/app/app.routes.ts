@@ -12,6 +12,7 @@ import { EditRestaurantComponent } from './edit/edit-restaurant/edit-resturant.c
 import { CreateMenuComponent } from './create-menu/create-menu.component';
 import { ShopCartComponent } from './shop-cart/shop-cart.component';
 import { PaymentComponent } from './payment/payment.component';
+import { SupplierComponent } from './supplier/supplier.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -29,6 +30,7 @@ export const routes: Routes = [
     {path: 'shopCart', component: ShopCartComponent},
     {path: 'payment', component: PaymentComponent},
     {path: 'search', component: SearchComponent},
+    {path: 'supplier', component: SupplierComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}
 ];

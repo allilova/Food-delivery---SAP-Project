@@ -1,0 +1,55 @@
+.supplier{
+    min-height: 27.5rem;
+    color: rgb(59, 4, 4);
+}
+h1 {
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  .section {
+    background-color:  #f8b6b6;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  .section h2 {
+    margin-top: 0;
+  }
+  .order {
+    border-bottom: 1px solid rgb(59, 4, 4);
+    padding: 10px 0;
+  }
+  .order:last-child {
+    border-bottom: none;
+  }
+  .order-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  select, button {
+    padding: 5px;
+    border-radius: 5px;
+  }
+  button {
+    margin-top: 10px;
+    background-color:  #f8b6b6;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color:  #f8b6b6;
+  }
+  .bonus {
+    background-color:  #f8b6b6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+  }

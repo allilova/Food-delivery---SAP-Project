@@ -1,0 +1,40 @@
+.order{
+    min-height: 27.5rem;
+    color: rgb(59, 4, 4);
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background:  #f8b6b6;;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .info p {
+    margin: 8px 0;
+  }
+  .btn {
+    margin-top: 30px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .btn-start {
+    background-color:  rgb(59, 4, 4);
+    color: white;
+  }
+  .btn-complete {
+    background-color:  rgb(59, 4, 4);
+    color: white;
+  }
+  .btn-done {
+    background-color:  rgb(59, 4, 4);
+    color: white;
+    cursor: default;
+  }

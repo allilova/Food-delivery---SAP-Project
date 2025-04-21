@@ -14,6 +14,7 @@ import { ShopCartComponent } from './shop-cart/shop-cart.component';
 import { PaymentComponent } from './payment/payment.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { OrdersComponent } from './supplier/orders/orders.component';
+import { RestaurantsComponent } from './restaurants/restaurants.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -35,6 +36,7 @@ export const routes: Routes = [
         {path: '', component: SupplierComponent},
         {path: 'order', component:OrdersComponent}
     ]},
+    {path: 'restaurants', component: RestaurantsComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}
 ];

@@ -1,0 +1,93 @@
+*{
+    color: rgb(59, 4, 4);
+}
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+  }
+  .dashboard-sections {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .dashboard-section {
+    flex: 1 1 45%;
+    min-width: 300px;
+    min-height: 23rem;
+  }
+  h2 {
+    font-size: 1.8rem;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    margin: 10px;
+  }
+  .order-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .order-card {
+    background: #FFDBDB;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+  .order-card:hover {
+    transform: translateY(-5px);
+  }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .order-components {
+    margin-top: 15px;
+  }
+  .order-components strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+  .order-components ul {
+    padding-left: 20px;
+    margin: 0;
+    list-style: disc;
+  }
+  .btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+  }
+  .accept-btn {
+    background-color: #28a745;
+    color: white;
+    margin-right: 8px;
+  }
+  .accept-btn:hover {
+    background-color: #218838;
+  }
+  .reject-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  .reject-btn:hover {
+    background-color: #c82333;
+  }
+  .notify-btn {
+    background-color: rgb(59, 4, 4);
+    color: white;
+    margin-top: 15px;
+  }
+  .order-details {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }

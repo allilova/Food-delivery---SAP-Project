@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class Food {
 
     private String foodImage;
 
-    private int foodPrice;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal foodPrice;
 
     private int preparationTime;
 

@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,9 @@ public class DeliveryInfo {
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
+    @JsonIgnore
     @OneToOne
+    @JoinColumn(name = "driver_id")
     private User driver;
 
     @Temporal(TemporalType.TIMESTAMP)

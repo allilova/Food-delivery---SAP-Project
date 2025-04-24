@@ -20,6 +20,7 @@ public class Order {
     private int orderID;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "userID")
     private User customer;
 
     @JsonIgnore

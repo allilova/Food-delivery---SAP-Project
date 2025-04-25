@@ -22,6 +22,12 @@ public class OrderItem {
 
     private double price;
 
+    @ElementCollection
+    @CollectionTable(name = "order_item_ingredients", joinColumns = @JoinColumn(name = "order_item_id"))
+    @Column(name = "ingredient")
     private List<String> ingredients;
+
+    @OneToMany(mappedBy = "orderItem")
+    private List<Rating> ratings;
 
 }

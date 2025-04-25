@@ -19,6 +19,7 @@ public class Payment {
     private int paymentID;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class Restaurant {
     private Long restaurantID;
 
     @OneToOne
+    @JoinColumn(name = "restaurant_user_id", referencedColumnName = "userID")
     private User restaurant;
 
     private String restaurantName;
@@ -25,6 +27,7 @@ public class Restaurant {
     private String type;
 
     @OneToOne
+    @JoinColumn(name = "restaurant_address_id", referencedColumnName = "addressID")
     private Address restaurantAddress;
 
     @Embedded
@@ -34,6 +37,7 @@ public class Restaurant {
 
     private String closingHours;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true) //tova e neshto kato foreign key; po tozi nacin sa svurzani orders and restaurants
     private List<Order> orders = new ArrayList<>();
 
@@ -43,6 +47,11 @@ public class Restaurant {
 
     private boolean open; //kogato e closed , nqma da moje da se porucva
 
+    @JsonIgnore
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Menu menu;
+
+    @OneToMany(mappedBy = "restaurant")
+    private List<Rating> ratings;
+
 }

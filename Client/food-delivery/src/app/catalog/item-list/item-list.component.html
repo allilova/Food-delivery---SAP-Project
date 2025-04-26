@@ -5,18 +5,16 @@
         <img src="Gourmet Restaurant.jpg">
     </div>
     <div class="text-card">
-    <h4>{{restaurant.name}}</h4>
-    <p><i class="fa-solid fa-location-dot"></i>{{restaurant.address}}</p>
-    <p>{{restaurant.foodType}}</p>
+    <h4>{{restaurant.restaurantName || 'Restaurant Name'}}</h4>
+    <p><i class="fa-solid fa-location-dot"></i>{{restaurant.restaurantAddress?.id || 'Address not available'}}</p>
+    <p>{{restaurant.type || 'Food Type not available'}}</p>
     <div class="ran-time">
-    <p><i class="fa-solid fa-star"></i>{{restaurant.rating}}</p>
-    <p><time datetime="time"><i class="fa-solid fa-clock"></i> {{restaurant.timeDelivery}}</time></p>
+    <p><i class="fa-solid fa-star"></i>{{restaurant.rating || '4.5'}}</p>
+    <p><time datetime="time"><i class="fa-solid fa-clock"></i> {{restaurant.openingHours + ' - ' + restaurant.closingHours || '30-45 min'}}</time></p>
     </div>
-    <a class="button" [routerLink]="restaurant.restaurantId"><button>View menu</button></a>
+    <a class="button" [routerLink]="['/catalog', restaurant.restaurantID]"><button>View menu</button></a>
     <a class="button"><button><i class="fa-solid fa-heart"></i> Favorite</button></a>
 </div>
 </div>
 }
 </div>
-
-

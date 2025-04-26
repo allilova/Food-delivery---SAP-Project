@@ -24,6 +24,7 @@ public class AppConfig {
         http.sessionManagement(managment ->managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
                         .requestMatchers("/api/admin/**").hasAnyAuthority("RESTAURANT", "ADMIN") //DOSTUP IMAT SAMO ROLITE RESTAURANT I ADMIN
+                        .requestMatchers("/api/restaurant/**").permitAll() // Allow public access to restaurant endpoints
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll() //all users
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)

@@ -13,11 +13,11 @@ export class ApiService {
 
   getRestaurants(){
     const {apiUrl} = environment;
-     return this.http.get<Restaurant[]>(`${apiUrl}/api/restaurant`);
+     return this.http.get<Restaurant[]>(`${apiUrl}/Restaurant`);
   }
 
-  getMenu(id: string){
+  getMenu(id:string){
     const {apiUrl} = environment;
-    return this.http.get<Restaurant>(`${apiUrl}/api/restaurant/${id}`);
+    return this.http.get<Restaurant>(`${apiUrl}/Restaurant/${id}`);
   }
 }

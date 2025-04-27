@@ -13,15 +13,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
-
 public class JwtTokenValidator extends OncePerRequestFilter {
+    
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private final List<String> excludedPaths = Arrays.asList("/auth/**", "/api/restaurants/**");
+    
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        return excludedPaths.stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path));
+    }
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -29,29 +40,24 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
         String jwt = request.getHeader(JwtConstant.JWT_HEADER);
 
-        //Bearer token
-
-        if(jwt != null){
-            jwt = jwt.substring(7);
-
+        if(jwt != null) {
             try {
+                jwt = jwt.substring(7);
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
                 String username = String.valueOf(claims.get("email"));
                 String authorities = String.valueOf(claims.get("authorities"));
-// gets role like ROLE_CUSTOMER, ROLE_ADMIN... IN STRING
+                
                 List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, auth);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            catch(Exception e){
+            catch(Exception e) {
                 throw new BadCredentialsException("Invalid token...");
             }
-
         }
         filterChain.doFilter(request, response);
     }
-
 }

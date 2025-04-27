@@ -21,26 +21,29 @@ import java.util.Collections;
 public class AppConfig {
     @Bean
     SecurityFilterChain chain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
-        http.sessionManagement(managment ->managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http.sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyAuthority("RESTAURANT", "ADMIN") //DOSTUP IMAT SAMO ROLITE RESTAURANT I ADMIN
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN") // Fixed role names
+                        .requestMatchers("/api/restaurants/**").permitAll() // Allow public access to restaurant listings
+                        .requestMatchers("/auth/**").permitAll() // Allow public access to auth endpoints
                         .requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll() //all users
+                        .anyRequest().permitAll() // all users
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource() {
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
 
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:4200"
-                      //tuk trqbva da se dobavqt front-end urls
+                        "http://localhost:4200",
+                        "http://localhost:4000" // Added Angular SSR server
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
@@ -51,7 +54,7 @@ public class AppConfig {
             }
         };
     }
-    //v bazata danni password shte se pazi v formata BCrypt(една и съща парола няма да изглежда еднакво в базата)
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

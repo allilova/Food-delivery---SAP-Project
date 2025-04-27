@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:18 as build
 
 WORKDIR /app
 
@@ -11,8 +11,23 @@ RUN npm install
 # Copy project files
 COPY . .
 
+# Set the environment for production build
+RUN echo "export const environment = { production: true, apiUrl: 'http://localhost:5454' };" > src/environments/environment.ts
+
+# Build the app
+RUN npm run build -- --configuration production
+
+# Use Nginx for serving the app
+FROM nginx:alpine
+
+# Copy the build output to the nginx server
+COPY --from=build /app/dist/food-delivery/browser /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port
 EXPOSE 4200
 
-# Start the app
-CMD ["npm", "start", "--", "--host", "0.0.0.0", "--disable-host-check"]
+# Run nginx in foreground
+CMD ["nginx", "-g", "daemon off;"]

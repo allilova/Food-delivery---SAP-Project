@@ -1,4 +1,5 @@
+// environment.ts - Production environment
 export const environment = {
-        apiUrl: 'http://food_delivery_backend:5454', // Using the container name
-    
+    production: true,
+    apiUrl: 'http://localhost:5454', // Use localhost for production
 };

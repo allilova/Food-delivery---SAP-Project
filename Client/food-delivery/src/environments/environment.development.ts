@@ -1,3 +1,5 @@
+// environment.development.ts - Local development environment
 export const environment = {
-    apiUrl: 'http://localhost:5454',
+    production: false,
+    apiUrl: 'http://localhost:5454', // Use localhost for local development
 };

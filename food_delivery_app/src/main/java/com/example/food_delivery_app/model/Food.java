@@ -33,10 +33,6 @@ public class Food {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(length = 1000)
-    @ElementCollection
-    private List<String> image;
-
     private boolean available;
 
     @ManyToOne

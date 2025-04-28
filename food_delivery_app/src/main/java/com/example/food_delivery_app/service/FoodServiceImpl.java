@@ -47,9 +47,9 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> getMenuFood(Long menuId, String foodCategory) {
+    public List<Food> getMenuFood(Menu menu, String foodCategory) {
 
-        List<Food> foods = foodRepository.findByMenu(menuId);
+        List<Food> foods = foodRepository.findByMenu(menu);
 
         if(foodCategory != null && !foodCategory.equals("")){
             foods = filterByCategory(foods, foodCategory);

@@ -26,7 +26,7 @@ export const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {path: 'catalog', children: [
         {path: '', component: CatalogComponent},
-        {path: ':restaurantId', component: MenuComponent}
+        {path: ':restaurantId', component:MenuComponent}
     ]},
     {
         path: 'edit-restaurant', 

@@ -12,7 +12,7 @@ public interface FoodService {
 
     public Food createFood(CreateFoodRequest req, Category category, Menu menu);
 
-    void deleteFood(Long foodId) throws Exception;
+    Food deleteFood(Long foodId) throws Exception;
 
     public List<Food> getMenuFood(Menu menu, String foodCategory);
 

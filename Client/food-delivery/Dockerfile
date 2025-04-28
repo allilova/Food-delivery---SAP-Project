@@ -8,8 +8,11 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy project files
+# NOW copy the rest of the application (src/, angular.json, etc.)
 COPY . .
+
+# Create the environments directory if it doesn't exist
+RUN mkdir -p src/environments
 
 # Set the environment for production build
 RUN echo "export const environment = { production: true, apiUrl: 'http://localhost:5454' };" > src/environments/environment.ts
@@ -24,7 +27,7 @@ FROM nginx:alpine
 COPY --from=build /app/dist/food-delivery/browser /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.config /etc/nginx/conf.d/default.conf
 
 # Expose port
 EXPOSE 4200

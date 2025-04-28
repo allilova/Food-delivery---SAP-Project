@@ -23,7 +23,7 @@ export const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {path: 'catalog', children: [
         {path: '', component: CatalogComponent},
-        {path: ':restaurantId', component:MenuComponent}
+        {path: 'menu', component:MenuComponent}
     ]},
     {path: 'edit-restaurant', component: EditRestaurantComponent},
     {path: 'edit-menu', component: EditMenuComponent},

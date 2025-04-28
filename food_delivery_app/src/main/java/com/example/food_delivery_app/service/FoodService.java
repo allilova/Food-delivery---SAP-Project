@@ -14,7 +14,7 @@ public interface FoodService {
 
     void deleteFood(Long foodId) throws Exception;
 
-    public List<Food> getMenuFood(Long menuId, String foodCategory);
+    public List<Food> getMenuFood(Menu menu, String foodCategory);
 
     public List<Food> getFoodByCategory(Category category);
 

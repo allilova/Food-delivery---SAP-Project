@@ -29,7 +29,6 @@ public class FoodServiceImpl implements FoodService {
         Food food = new Food();
 
         food.setCategory(category);
-        food.setMenu(menu);
         food.setFoodDescription(req.getFoodDescription());
         food.setFoodName(req.getFoodName());
         food.setFoodPrice(req.getFoodPrice());
@@ -60,13 +59,13 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<Food> getFoodByCategory(Category category) {
-        return List.of();
+        return foodRepository.findByCategory(category);
     }
 
     private List<Food> filterByCategory(List<Food> foods, String foodCategory) {
         return foods.stream().filter(food -> {
             if (food.getCategory() != null) {
-                return food.getCategory().equals(foodCategory);
+                return food.getCategory().getCategoryName().equals(foodCategory);
             }
             return false;
         }).collect(Collectors.toList());

@@ -1,11 +1,22 @@
-
 <div class="main">
     <div class="left">
         <div class="paragraph">
-            <h2>Bunny-Fast Bites, Anytime!</h2>
-            <p>Feeling hungry? We’ve got you covered!</p>
-            <p>Explore the menu, place your order, and enjoy fresh, hot, and tasty food in no time—no hassle, just great flavors.</p>
-            <p><b>Order now and let us handle the rest!</b></p>
+            @if (loading) {
+                <p>Loading content...</p>
+            } @else if (error) {
+                <p class="error">{{ error }}</p>
+            } @else if (homeData) {
+                <h2>{{ homeData.title }}</h2>
+                <p>{{ homeData.mainText }}</p>
+                <p>{{ homeData.description }}</p>
+                <p><b>{{ homeData.callToAction }}</b></p>
+            } @else {
+                <!-- Fallback content in case API is not available -->
+                <h2>Bunny-Fast Bites, Anytime!</h2>
+                <p>Feeling hungry? We've got you covered!</p>
+                <p>Explore the menu, place your order, and enjoy fresh, hot, and tasty food in no time—no hassle, just great flavors.</p>
+                <p><b>Order now and let us handle the rest!</b></p>
+            }
             <ul>
                 <li><a routerLink="/login">Login</a></li>
                 <li><a routerLink="/register">Register</a></li>
@@ -14,11 +25,10 @@
     </div>
     <div class="right">
         <div class="logo">
-            <img src="logo2.png" alt="" >
+            <img src="logo2.png" alt="BiteBunny Logo">
         </div>
         <div class="delivery">
-            <img src="home.png" alt="">
+            <img src="home.png" alt="Food Delivery Illustration">
         </div>
-
     </div>
 </div>

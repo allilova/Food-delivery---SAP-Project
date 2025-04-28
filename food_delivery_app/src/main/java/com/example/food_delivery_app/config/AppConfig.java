@@ -23,12 +23,12 @@ public class AppConfig {
     SecurityFilterChain chain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http.sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN")
-                        .requestMatchers("/api/restaurants/**").permitAll() 
-                        .requestMatchers("/api/home").permitAll() // Add this line to permit access to /api/home
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN") 
+                        .requestMatchers("/api/restaurants/**").permitAll() // Allow public access to restaurant listings
+                        .requestMatchers("/api/home").permitAll() // Allow public access to home data
+                        .requestMatchers("/auth/**").permitAll() // Allow public access to auth endpoints
                         .requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll()
+                        .anyRequest().permitAll() // all users
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));

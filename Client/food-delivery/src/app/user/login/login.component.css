@@ -1,6 +1,6 @@
 fieldset{
     width: 10cm;
-    height: 10cm;
+    min-height: 10cm;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -40,6 +40,7 @@ label{
     font-weight: bold;
     border-radius: 5px;
     height: 45px;
+    width: 100%;
 }
 
 label i{

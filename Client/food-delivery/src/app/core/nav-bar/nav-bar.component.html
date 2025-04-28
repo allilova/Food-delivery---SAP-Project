@@ -1,19 +1,29 @@
 <nav>
-    <ul>
-        @if(!isLoggedIn){
-        <li><a routerLink="/home">Home</a></li>
-        <li><a routerLink="/login">Login</a></li>
-        <li><a routerLink="/register">Register</a></li>
-        <li><a href="">About Us</a></li>
-        <li><a href="">Help</a></li>
-        } @else{
-        <li><a routerLink="/catalog">Catalog</a></li>
-        <li><a routerLink="/profile">Profile</a></li>
-        <li><a routerLink="/logout">Logout</a></li>
-        <li><a href="">About Us</a></li>
-        <li><a href="">Help</a></li>
-        <li><a routerLink="/shopCart"><i class="fa-solid fa-cart-shopping"></i></a></li>
-        <li><a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-        }
-    </ul>
+        <ul>
+            <li><a routerLink="/home">Home</a></li>
+            <li><a routerLink="/catalog">Restaurants</a></li>
+            
+            <!-- Restaurant owner specific links -->
+            <li *ngIf="isRestaurant()"><a routerLink="/supplier">Dashboard</a></li>
+            <li *ngIf="isRestaurant()"><a routerLink="/supplier/order">Orders</a></li>
+            
+            <!-- Customer specific links -->
+            <li *ngIf="isCustomer()"><a routerLink="/shopCart">Cart</a></li>
+            
+            <!-- Driver specific links -->
+            <li *ngIf="isDriver()"><a routerLink="/deliveries">Deliveries</a></li>
+            
+            <!-- Admin specific links -->
+            <li *ngIf="isAdmin()"><a routerLink="/admin">Admin Panel</a></li>
+            <!-- Not logged in -->
+            <li *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
+            <li *ngIf="!isLoggedIn"><a routerLink="/register">Register</a></li>
+            
+            <!-- Logged in -->
+            <li *ngIf="isLoggedIn"><a routerLink="/profile">Profile</a></li>
+            <li *ngIf="isLoggedIn"><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
+            
+            <!-- Always visible -->
+            <li><a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+        </ul>
 </nav>

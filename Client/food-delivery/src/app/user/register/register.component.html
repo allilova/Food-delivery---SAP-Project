@@ -1,50 +1,103 @@
-<form action=" " method="post">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <fieldset>
         <h2>Register</h2>
-        <p class="field">
+        
+        <div class="alert alert-danger" *ngIf="error">
+            {{ error }}
+        </div>
+        
+        <div class="field">
             <label for="firstName">First Name</label>
-            <input type="text" name="firstName" id="firstName">
-        </p>
-        <p class="field">
+            <input type="text" formControlName="firstName" id="firstName"
+                   [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }">
+            <div *ngIf="submitted && f['firstName'].errors" class="text-danger">
+                <legend *ngIf="f['firstName'].errors['required']">First name is required</legend>
+            </div>
+        </div>
+        
+        <div class="field">
             <label for="lastName">Last Name</label>
-            <input type="text" name="lastName" id="lastName">
-        </p>
+            <input type="text" formControlName="lastName" id="lastName"
+                   [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }">
+            <div *ngIf="submitted && f['lastName'].errors" class="text-danger">
+                <legend *ngIf="f['lastName'].errors['required']">Last name is required</legend>
+            </div>
+        </div>
+        
         <label for="gender">Choose your gender</label>
         <div class="gender-options">
-          <input type="radio" id="male" name="gender" value="male">
-          <label for="male">Male</label>
-          <input type="radio" id="female" name="gender" value="female">
-          <label for="female">Female</label>
+            <input type="radio" formControlName="gender" id="male" value="male">
+            <label for="male">Male</label>
+            <input type="radio" formControlName="gender" id="female" value="female">
+            <label for="female">Female</label>
         </div>
-        <p class="field">
+        <div *ngIf="submitted && f['gender'].errors" class="text-danger">
+            <legend *ngIf="f['gender'].errors['required']">Gender is required</legend>
+        </div>
+        
+        <div class="field">
             <label for="address"><i class="fa-solid fa-location-dot"></i>Address</label>
-            <input type="text" name="address" id="address">
-        </p>
-        <p class="field">
-            <label for="numPhone"><i class="fa-solid fa-phone"></i>Phone number</label>
-            <input type="tel" name="numPhone" id="numPhone">
-        </p>
-        <p class="field">
+            <input type="text" formControlName="address" id="address"
+                [ngClass]="{ 'is-invalid': submitted && f['address'].errors }">
+            <div *ngIf="submitted && f['address'].errors" class="text-danger">
+                <legend *ngIf="f['address'].errors['required']">Address is required</legend>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label for="phone_number"><i class="fa-solid fa-phone"></i>Phone number</label>
+            <input type="tel" formControlName="phone_number" id="phone_number"
+                   [ngClass]="{ 'is-invalid': submitted && f['phone_number'].errors }">
+            <div *ngIf="submitted && f['phone_number'].errors" class="text-danger">
+                <legend *ngIf="f['phone_number'].errors['required']">Phone number is required</legend>
+                <legend *ngIf="f['phone_number'].errors['pattern']">Phone number must be at least 10 digits</legend>
+            </div>
+        </div>
+        
+        <div class="field">
             <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
-            <input type="email" name="email" id="email">
-        </p>
-        <p class="field">
+            <input type="email" formControlName="email" id="email"
+                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+            <div *ngIf="submitted && f['email'].errors" class="text-danger">
+                <legend *ngIf="f['email'].errors['required']">Email is required</legend>
+                <legend *ngIf="f['email'].errors['email']">Email must be a valid email address</legend>
+            </div>
+        </div>
+        
+        <div class="field">
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" formControlName="password" id="password"
+                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
             <legend>at least 8 characters long, mix of upper/lowercase, numbers, symbols</legend>
-        </p>
-        <p class="field">
-            <label for="password-repeat"><i class="fa-solid fa-lock"></i>Repeat Password</label>
-            <input type="password" name="password-repeat" id="password-repeat">
-        </p>
-        <input type="submit" id="submit" value="Register">
+            <div *ngIf="submitted && f['password'].errors" class="text-danger">
+                <legend *ngIf="f['password'].errors['required']">Password is required</legend>
+                <legend *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters</legend>
+                <legend *ngIf="f['password'].errors['pattern']">Password must contain uppercase, lowercase, number and special character</legend>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label for="confirmPassword"><i class="fa-solid fa-lock"></i>Repeat Password</label>
+            <input type="password" formControlName="confirmPassword" id="confirmPassword"
+                   [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }">
+            <div *ngIf="submitted && f['confirmPassword'].errors" class="text-danger">
+                <legend *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required</legend>
+                <legend *ngIf="f['confirmPassword'].errors['passwordMismatch']">Passwords must match</legend>
+            </div>
+        </div>
+        
+        <button type="submit" id="submit" [disabled]="loading">
+            {{ loading ? 'Registering...' : 'Register' }}
+        </button>
+        
         <div class="socialRegister">
-        <p>or register with</p>
-        <ul>
-            <li><a href=" "><i class="fa-brands fa-facebook"></i></a></li>
-            <li><a href=" "><i class="fa-brands fa-google"></i></a></li>
-        </ul>
-    </div>
+            <p>or register with</p>
+            <ul>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook"></i></a></li>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-google"></i></a></li>
+            </ul>
+        </div>
+        
         <p class="center">Already have an account?<a routerLink="/login"><b> Login</b></a></p>
     </fieldset>
 </form>

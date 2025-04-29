@@ -1,12 +1,13 @@
 package com.example.food_delivery_app.controller;
 
-import com.example.food_delivery_app.dto.MessageResponse;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Restaurant;
 import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.request.CreateFoodRequest;
+import com.example.food_delivery_app.response.AuthResponse;
 import com.example.food_delivery_app.service.FoodService;
 import com.example.food_delivery_app.service.RestaurantService;
+import com.example.food_delivery_app.service.RestaurantServiceImpl;
 import com.example.food_delivery_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class AdminFoodController {
     public ResponseEntity<Food> createFood(@RequestBody CreateFoodRequest req,
                                            @RequestHeader("Authorization") String jwtT) throws Exception {
         User user = userService.findUserByJwtToken(jwtT);
-        //Restaurant restaurant = restaurantService.getRestaurantById(req.getRestaurantId());
+        Restaurant restaurant = restaurantService.findRestaurantById(req.getRestaurantId());
         //Menu menu = menuService.
         //Food food = foodService.createFood(req, req.getCategoryId(),menu);
         //return  new ResponseEntity<>(food, HttpStatus.CREATED);
@@ -38,13 +39,13 @@ public class AdminFoodController {
     }
 
     @DeleteMapping ("/{foodId}")
-    public ResponseEntity<MessageResponse> deleteFood(@PathVariable Long foodId,
-                                           @RequestHeader("Authorization") String jwtT) throws Exception {
+    public ResponseEntity<AuthResponse.MessageResponse> deleteFood(@PathVariable Long foodId,
+                                                                   @RequestHeader("Authorization") String jwtT) throws Exception {
         User user = userService.findUserByJwtToken(jwtT);
 
         foodService.deleteFood(foodId);
 
-        MessageResponse res = new MessageResponse();
+        AuthResponse.MessageResponse res = new AuthResponse.MessageResponse();
         res.setMessage("Successfully deleted food");
         return  new ResponseEntity<>(res, HttpStatus.OK);
     }

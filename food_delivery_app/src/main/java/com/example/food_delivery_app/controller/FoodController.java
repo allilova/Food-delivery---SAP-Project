@@ -1,12 +1,10 @@
 package com.example.food_delivery_app.controller;
 
-import com.example.food_delivery_app.dto.MessageResponse;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.User;
-import com.example.food_delivery_app.request.CreateFoodRequest;
 import com.example.food_delivery_app.service.FoodService;
-import com.example.food_delivery_app.service.RestaurantService;
+import com.example.food_delivery_app.service.RestaurantServiceImpl;
 import com.example.food_delivery_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,7 @@ public class FoodController {
     private UserService userService;
 
     @Autowired
-    private RestaurantService restaurantService;
+    private RestaurantServiceImpl restaurantServiceImpl;
 
     @GetMapping ("/search")
     public ResponseEntity<List<Food>> searchFood(@RequestParam String foodName,

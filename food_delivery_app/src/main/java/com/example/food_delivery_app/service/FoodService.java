@@ -20,9 +20,7 @@ public interface FoodService {
 
     public List<Food>searchFood(String keyword);
 
-    public Food getFoodById(Long id) throws Exception;
+    public Food findById(Long id) throws Exception;
 
     public Food updateAvailabilityStatus (Long foodId) throws Exception;
-
-
 }

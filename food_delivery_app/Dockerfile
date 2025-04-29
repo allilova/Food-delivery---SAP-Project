@@ -14,7 +14,7 @@ RUN echo 'spring.application.name=food_delivery_app\n\
 \n\
 server.port=5454\n\
 \n\
-spring.datasource.url=jdbc:mysql://db:3306/food_delivery_app\n\
+spring.datasource.url=jdbc:mysql://food_delivery_db:3306/food_delivery_app\n\
 spring.datasource.username=root\n\
 spring.datasource.password=root1234\n\
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver\n\

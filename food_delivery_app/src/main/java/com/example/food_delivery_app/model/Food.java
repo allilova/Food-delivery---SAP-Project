@@ -16,7 +16,7 @@ import java.util.List;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int foodID;
+    private Long foodID;
 
     private String foodName;
 

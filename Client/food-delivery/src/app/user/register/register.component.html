@@ -2,26 +2,42 @@
     <fieldset>
         <h2>Register</h2>
         
-        <div class="alert alert-danger" *ngIf="error">
-            {{ error }}
-        </div>
+        @if (error) {
+            <div class="error-message">
+                {{ error }}
+            </div>
+        }
+        
+        @if (successMessage) {
+            <div class="success-message">
+                {{ successMessage }}
+            </div>
+        }
         
         <div class="field">
             <label for="firstName">First Name</label>
             <input type="text" formControlName="firstName" id="firstName"
                    [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }">
-            <div *ngIf="submitted && f['firstName'].errors" class="text-danger">
-                <legend *ngIf="f['firstName'].errors['required']">First name is required</legend>
-            </div>
+            @if (submitted && f['firstName'].errors) {
+                <div class="text-danger">
+                    @if (f['firstName'].errors['required']) {
+                        <legend>First name is required</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="lastName">Last Name</label>
             <input type="text" formControlName="lastName" id="lastName"
                    [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }">
-            <div *ngIf="submitted && f['lastName'].errors" class="text-danger">
-                <legend *ngIf="f['lastName'].errors['required']">Last name is required</legend>
-            </div>
+            @if (submitted && f['lastName'].errors) {
+                <div class="text-danger">
+                    @if (f['lastName'].errors['required']) {
+                        <legend>Last name is required</legend>
+                    }
+                </div>
+            }
         </div>
         
         <label for="gender">Choose your gender</label>
@@ -31,63 +47,101 @@
             <input type="radio" formControlName="gender" id="female" value="female">
             <label for="female">Female</label>
         </div>
-        <div *ngIf="submitted && f['gender'].errors" class="text-danger">
-            <legend *ngIf="f['gender'].errors['required']">Gender is required</legend>
-        </div>
+        @if (submitted && f['gender'].errors) {
+            <div class="text-danger">
+                @if (f['gender'].errors['required']) {
+                    <legend>Gender is required</legend>
+                }
+            </div>
+        }
         
         <div class="field">
             <label for="address"><i class="fa-solid fa-location-dot"></i>Address</label>
             <input type="text" formControlName="address" id="address"
                 [ngClass]="{ 'is-invalid': submitted && f['address'].errors }">
-            <div *ngIf="submitted && f['address'].errors" class="text-danger">
-                <legend *ngIf="f['address'].errors['required']">Address is required</legend>
-            </div>
+            @if (submitted && f['address'].errors) {
+                <div class="text-danger">
+                    @if (f['address'].errors['required']) {
+                        <legend>Address is required</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="phone_number"><i class="fa-solid fa-phone"></i>Phone number</label>
             <input type="tel" formControlName="phone_number" id="phone_number"
                    [ngClass]="{ 'is-invalid': submitted && f['phone_number'].errors }">
-            <div *ngIf="submitted && f['phone_number'].errors" class="text-danger">
-                <legend *ngIf="f['phone_number'].errors['required']">Phone number is required</legend>
-                <legend *ngIf="f['phone_number'].errors['pattern']">Phone number must be at least 10 digits</legend>
-            </div>
+            @if (submitted && f['phone_number'].errors) {
+                <div class="text-danger">
+                    @if (f['phone_number'].errors['required']) {
+                        <legend>Phone number is required</legend>
+                    }
+                    @if (f['phone_number'].errors['pattern']) {
+                        <legend>Phone number must be at least 10 digits</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
             <input type="email" formControlName="email" id="email"
                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
-            <div *ngIf="submitted && f['email'].errors" class="text-danger">
-                <legend *ngIf="f['email'].errors['required']">Email is required</legend>
-                <legend *ngIf="f['email'].errors['email']">Email must be a valid email address</legend>
-            </div>
+            @if (submitted && f['email'].errors) {
+                <div class="text-danger">
+                    @if (f['email'].errors['required']) {
+                        <legend>Email is required</legend>
+                    }
+                    @if (f['email'].errors['email']) {
+                        <legend>Email must be a valid email address</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
             <input type="password" formControlName="password" id="password"
                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-            <legend>at least 8 characters long, mix of upper/lowercase, numbers, symbols</legend>
-            <div *ngIf="submitted && f['password'].errors" class="text-danger">
-                <legend *ngIf="f['password'].errors['required']">Password is required</legend>
-                <legend *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters</legend>
-                <legend *ngIf="f['password'].errors['pattern']">Password must contain uppercase, lowercase, number and special character</legend>
-            </div>
+            <legend>Must be at least 8 characters and include: uppercase letter, lowercase letter, number, and special character (e.g., &#64;, #, $, %)</legend>
+            @if (submitted && f['password'].errors) {
+                <div class="text-danger">
+                    @if (f['password'].errors['required']) {
+                        <legend>Password is required</legend>
+                    }
+                    @if (f['password'].errors['minlength']) {
+                        <legend>Password must be at least 8 characters</legend>
+                    }
+                    @if (f['password'].errors['pattern']) {
+                        <legend>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="confirmPassword"><i class="fa-solid fa-lock"></i>Repeat Password</label>
             <input type="password" formControlName="confirmPassword" id="confirmPassword"
                    [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }">
-            <div *ngIf="submitted && f['confirmPassword'].errors" class="text-danger">
-                <legend *ngIf="f['confirmPassword'].errors['required']">Confirm Password is required</legend>
-                <legend *ngIf="f['confirmPassword'].errors['passwordMismatch']">Passwords must match</legend>
-            </div>
+            @if (submitted && f['confirmPassword'].errors) {
+                <div class="text-danger">
+                    @if (f['confirmPassword'].errors['required']) {
+                        <legend>Confirm Password is required</legend>
+                    }
+                    @if (f['confirmPassword'].errors['passwordMismatch']) {
+                        <legend>Passwords must match</legend>
+                    }
+                </div>
+            }
         </div>
         
         <button type="submit" id="submit" [disabled]="loading">
-            {{ loading ? 'Registering...' : 'Register' }}
+            @if (loading) {
+                <app-loading-spinner></app-loading-spinner>
+            } @else {
+                Register
+            }
         </button>
         
         <div class="socialRegister">

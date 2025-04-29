@@ -1,8 +1,10 @@
 // src/app/interceptors/jwt-interceptor.function.ts
-import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 
 export const jwtInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>, 
@@ -10,9 +12,10 @@ export const jwtInterceptor: HttpInterceptorFn = (
 ) => {
   const platformId = inject(PLATFORM_ID);
   const authService = inject(AuthService);
+  const router = inject(Router);
   
-  // Only try to add token in browser environment or if auth service has a value
-  if ((isPlatformBrowser(platformId) || authService.currentUserValue) && authService.isLoggedIn) {
+  // Only try to add token in browser environment
+  if (isPlatformBrowser(platformId) && authService.isLoggedIn) {
     const token = authService.currentUserValue?.token;
     
     if (token) {
@@ -21,7 +24,18 @@ export const jwtInterceptor: HttpInterceptorFn = (
           Authorization: `Bearer ${token}`
         }
       });
-      return next(authReq);
+      
+      return next(authReq).pipe(
+        catchError((error: HttpErrorResponse) => {
+          // Handle 401 Unauthorized errors
+          if (error.status === 401) {
+            console.log('Authorization error. Logging out.');
+            authService.logout();
+            router.navigate(['/login']);
+          }
+          return throwError(() => error);
+        })
+      );
     }
   }
   

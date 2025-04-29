@@ -1,20 +1,18 @@
 // src/app/app.config.ts
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideClientHydration } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './interceptors/jwt-interceptor.function';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(
-      withFetch(),
       withInterceptors([jwtInterceptor])
     ),
-    provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideRouter(routes), 
-    provideClientHydration(withEventReplay())
+    provideClientHydration()
   ]
 };

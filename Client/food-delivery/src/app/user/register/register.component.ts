@@ -1,14 +1,16 @@
 // register.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { USER_ROLE } from '../../types/user-role.enum';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -17,12 +19,18 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   loading = false;
   error = '';
+  successMessage = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    // Redirect to home if already logged in
+    if (this.authService.isLoggedIn) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -35,23 +43,33 @@ export class RegisterComponent implements OnInit {
       password: ['', [
         Validators.required, 
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/)
       ]],
       confirmPassword: ['', Validators.required]
     }, {
-      validator: this.passwordMatchValidator
+      validators: this.passwordMatchValidator
     });
   }
 
   // Custom validator for password match
-  passwordMatchValidator(formGroup: FormGroup) {
-    const password = formGroup.get('password')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
 
     if (password !== confirmPassword) {
-      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+      control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     } else {
+      // Make sure to remove the passwordMismatch error if passwords match
+      const confirmPasswordControl = control.get('confirmPassword');
+      if (confirmPasswordControl?.errors) {
+        // Create new errors object without passwordMismatch
+        const errors = { ...confirmPasswordControl.errors };
+        delete errors['passwordMismatch'];
+        
+        // Set errors to null if no errors left, otherwise set the remaining errors
+        confirmPasswordControl.setErrors(Object.keys(errors).length ? errors : null);
+      }
       return null;
     }
   }
@@ -61,6 +79,8 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.error = '';
+    this.successMessage = '';
 
     // stop here if form is invalid
     if (this.registerForm.invalid) {
@@ -76,15 +96,20 @@ export class RegisterComponent implements OnInit {
       password: this.registerForm.value.password,
       phone_number: this.registerForm.value.phone_number,
       address: this.registerForm.value.address,
-      role: 'ROLE_CUSTOMER'
+      role: USER_ROLE.ROLE_CUSTOMER
     };
 
     // Register the user
     this.authService.register(userData)
       .subscribe({
-        next: () => {
-          // Navigate to login page after successful registration
-          this.router.navigate(['/login']);
+        next: (response) => {
+          this.successMessage = response.message || 'Registration successful! You can now log in.';
+          this.loading = false;
+          
+          // Redirect to login page after a short delay
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
         },
         error: error => {
           this.error = error?.error?.message || 'Registration failed. Please try again.';

@@ -2,34 +2,52 @@
     <fieldset>
         <h2>Login</h2>
         
-        <div class="alert alert-danger" *ngIf="error">
-            {{ error }}
-        </div>
+        @if (error) {
+            <div class="error-message">
+                {{ error }}
+            </div>
+        }
         
         <div class="field">
             <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
             <input type="email" formControlName="email" id="email" 
                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
-            <div *ngIf="submitted && f['email'].errors" class="text-danger">
-                <legend *ngIf="f['email'].errors['required']">Email is required</legend>
-                <legend *ngIf="f['email'].errors['email']">Email must be a valid email address</legend>
-            </div>
+            @if (submitted && f['email'].errors) {
+                <div class="text-danger">
+                    @if (f['email'].errors['required']) {
+                        <legend>Email is required</legend>
+                    }
+                    @if (f['email'].errors['email']) {
+                        <legend>Email must be a valid email address</legend>
+                    }
+                </div>
+            }
         </div>
         
         <div class="field">
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
             <input type="password" formControlName="password" id="password"
                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-            <div *ngIf="submitted && f['password'].errors" class="text-danger">
-                <legend *ngIf="f['password'].errors['required']">Password is required</legend>
-            </div>
-            <div *ngIf="!submitted && !f['password'].errors">
-                <legend>Forgot password?</legend>
-            </div>
+            @if (submitted && f['password'].errors) {
+                <div class="text-danger">
+                    @if (f['password'].errors['required']) {
+                        <legend>Password is required</legend>
+                    }
+                </div>
+            }
+            @if (!submitted && !f['password'].errors) {
+                <div>
+                    <legend>Forgot password?</legend>
+                </div>
+            }
         </div>
         
         <button type="submit" id="submit" [disabled]="loading">
-            {{ loading ? 'Loading...' : 'Login' }}
+            @if (loading) {
+                <app-loading-spinner></app-loading-spinner>
+            } @else {
+                Login
+            }
         </button>
         
         <div class="socialLogin">

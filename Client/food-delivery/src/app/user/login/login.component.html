@@ -1,23 +1,63 @@
-<form action=" " method="post">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <fieldset>
         <h2>Login</h2>
-        <p class="field">
+        
+        @if (error) {
+            <div class="error-message">
+                {{ error }}
+            </div>
+        }
+        
+        <div class="field">
             <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
-            <input type="email" name="email" id="email">
-        </p>
-        <p class="field">
+            <input type="email" formControlName="email" id="email" 
+                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+            @if (submitted && f['email'].errors) {
+                <div class="text-danger">
+                    @if (f['email'].errors['required']) {
+                        <legend>Email is required</legend>
+                    }
+                    @if (f['email'].errors['email']) {
+                        <legend>Email must be a valid email address</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
-            <input type="password" name="password" id="password">
-            <legend>Forgot password?</legend>
-        </p>
-        <input type="submit" id="submit" value="Login">
+            <input type="password" formControlName="password" id="password"
+                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+            @if (submitted && f['password'].errors) {
+                <div class="text-danger">
+                    @if (f['password'].errors['required']) {
+                        <legend>Password is required</legend>
+                    }
+                </div>
+            }
+            @if (!submitted && !f['password'].errors) {
+                <div>
+                    <legend>Forgot password?</legend>
+                </div>
+            }
+        </div>
+        
+        <button type="submit" id="submit" [disabled]="loading">
+            @if (loading) {
+                <app-loading-spinner></app-loading-spinner>
+            } @else {
+                Login
+            }
+        </button>
+        
         <div class="socialLogin">
-        <p>or login with</p>
-        <ul>
-            <li><a href=" "><i class="fa-brands fa-facebook"></i></a></li>
-            <li><a href=" "><i class="fa-brands fa-google"></i></a></li>
-        </ul>
-    </div>
+            <p>or login with</p>
+            <ul>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook"></i></a></li>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-google"></i></a></li>
+            </ul>
+        </div>
+        
         <p class="center">Don't have an account? <a routerLink="/register"><b>Register</b></a></p>
     </fieldset>
 </form>

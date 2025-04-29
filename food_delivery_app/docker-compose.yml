@@ -24,7 +24,7 @@ services:
     ports:
       - "5454:5454"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/food_delivery_app
+      SPRING_DATASOURCE_URL: jdbc:mysql://food_delivery_db:3306/food_delivery_app
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root1234
     depends_on:
@@ -36,7 +36,7 @@ services:
 
 networks:
   food_delivery_network:
-    driver: bridge
+    external: true
 
 volumes:
   db_data:

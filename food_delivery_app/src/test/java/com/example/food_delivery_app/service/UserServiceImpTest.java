@@ -4,9 +4,21 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserServiceTest {
+class UserServiceImpTest {
 
     @Test
     void registerUser() {
+    }
+
+    @Test
+    void findUserByJwtToken() {
+    }
+
+    @Test
+    void findByUsername() {
+    }
+
+    @Test
+    void findByEmail() {
     }
 }

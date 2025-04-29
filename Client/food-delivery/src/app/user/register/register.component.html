@@ -1,50 +1,157 @@
-<form action=" " method="post">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <fieldset>
         <h2>Register</h2>
-        <p class="field">
+        
+        @if (error) {
+            <div class="error-message">
+                {{ error }}
+            </div>
+        }
+        
+        @if (successMessage) {
+            <div class="success-message">
+                {{ successMessage }}
+            </div>
+        }
+        
+        <div class="field">
             <label for="firstName">First Name</label>
-            <input type="text" name="firstName" id="firstName">
-        </p>
-        <p class="field">
+            <input type="text" formControlName="firstName" id="firstName"
+                   [ngClass]="{ 'is-invalid': submitted && f['firstName'].errors }">
+            @if (submitted && f['firstName'].errors) {
+                <div class="text-danger">
+                    @if (f['firstName'].errors['required']) {
+                        <legend>First name is required</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
             <label for="lastName">Last Name</label>
-            <input type="text" name="lastName" id="lastName">
-        </p>
+            <input type="text" formControlName="lastName" id="lastName"
+                   [ngClass]="{ 'is-invalid': submitted && f['lastName'].errors }">
+            @if (submitted && f['lastName'].errors) {
+                <div class="text-danger">
+                    @if (f['lastName'].errors['required']) {
+                        <legend>Last name is required</legend>
+                    }
+                </div>
+            }
+        </div>
+        
         <label for="gender">Choose your gender</label>
         <div class="gender-options">
-          <input type="radio" id="male" name="gender" value="male">
-          <label for="male">Male</label>
-          <input type="radio" id="female" name="gender" value="female">
-          <label for="female">Female</label>
+            <input type="radio" formControlName="gender" id="male" value="male">
+            <label for="male">Male</label>
+            <input type="radio" formControlName="gender" id="female" value="female">
+            <label for="female">Female</label>
         </div>
-        <p class="field">
+        @if (submitted && f['gender'].errors) {
+            <div class="text-danger">
+                @if (f['gender'].errors['required']) {
+                    <legend>Gender is required</legend>
+                }
+            </div>
+        }
+        
+        <div class="field">
             <label for="address"><i class="fa-solid fa-location-dot"></i>Address</label>
-            <input type="text" name="address" id="address">
-        </p>
-        <p class="field">
-            <label for="numPhone"><i class="fa-solid fa-phone"></i>Phone number</label>
-            <input type="tel" name="numPhone" id="numPhone">
-        </p>
-        <p class="field">
+            <input type="text" formControlName="address" id="address"
+                [ngClass]="{ 'is-invalid': submitted && f['address'].errors }">
+            @if (submitted && f['address'].errors) {
+                <div class="text-danger">
+                    @if (f['address'].errors['required']) {
+                        <legend>Address is required</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
+            <label for="phone_number"><i class="fa-solid fa-phone"></i>Phone number</label>
+            <input type="tel" formControlName="phone_number" id="phone_number"
+                   [ngClass]="{ 'is-invalid': submitted && f['phone_number'].errors }">
+            @if (submitted && f['phone_number'].errors) {
+                <div class="text-danger">
+                    @if (f['phone_number'].errors['required']) {
+                        <legend>Phone number is required</legend>
+                    }
+                    @if (f['phone_number'].errors['pattern']) {
+                        <legend>Phone number must be at least 10 digits</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
             <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
-            <input type="email" name="email" id="email">
-        </p>
-        <p class="field">
+            <input type="email" formControlName="email" id="email"
+                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+            @if (submitted && f['email'].errors) {
+                <div class="text-danger">
+                    @if (f['email'].errors['required']) {
+                        <legend>Email is required</legend>
+                    }
+                    @if (f['email'].errors['email']) {
+                        <legend>Email must be a valid email address</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
-            <input type="password" name="password" id="password">
-            <legend>at least 8 characters long, mix of upper/lowercase, numbers, symbols</legend>
-        </p>
-        <p class="field">
-            <label for="password-repeat"><i class="fa-solid fa-lock"></i>Repeat Password</label>
-            <input type="password" name="password-repeat" id="password-repeat">
-        </p>
-        <input type="submit" id="submit" value="Register">
+            <input type="password" formControlName="password" id="password"
+                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
+            <legend>Must be at least 8 characters and include: uppercase letter, lowercase letter, number, and special character (e.g., &#64;, #, $, %)</legend>
+            @if (submitted && f['password'].errors) {
+                <div class="text-danger">
+                    @if (f['password'].errors['required']) {
+                        <legend>Password is required</legend>
+                    }
+                    @if (f['password'].errors['minlength']) {
+                        <legend>Password must be at least 8 characters</legend>
+                    }
+                    @if (f['password'].errors['pattern']) {
+                        <legend>Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <div class="field">
+            <label for="confirmPassword"><i class="fa-solid fa-lock"></i>Repeat Password</label>
+            <input type="password" formControlName="confirmPassword" id="confirmPassword"
+                   [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }">
+            @if (submitted && f['confirmPassword'].errors) {
+                <div class="text-danger">
+                    @if (f['confirmPassword'].errors['required']) {
+                        <legend>Confirm Password is required</legend>
+                    }
+                    @if (f['confirmPassword'].errors['passwordMismatch']) {
+                        <legend>Passwords must match</legend>
+                    }
+                </div>
+            }
+        </div>
+        
+        <button type="submit" id="submit" [disabled]="loading">
+            @if (loading) {
+                <app-loading-spinner></app-loading-spinner>
+            } @else {
+                Register
+            }
+        </button>
+        
         <div class="socialRegister">
-        <p>or register with</p>
-        <ul>
-            <li><a href=" "><i class="fa-brands fa-facebook"></i></a></li>
-            <li><a href=" "><i class="fa-brands fa-google"></i></a></li>
-        </ul>
-    </div>
+            <p>or register with</p>
+            <ul>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook"></i></a></li>
+                <li><a href="javascript:void(0)"><i class="fa-brands fa-google"></i></a></li>
+            </ul>
+        </div>
+        
         <p class="center">Already have an account?<a routerLink="/login"><b> Login</b></a></p>
     </fieldset>
 </form>

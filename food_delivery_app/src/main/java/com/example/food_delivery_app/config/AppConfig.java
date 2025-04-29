@@ -20,15 +20,17 @@ import java.util.Collections;
 @EnableWebSecurity
 public class AppConfig {
     @Bean
-    SecurityFilterChain chain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
-        http.sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN") // Fixed role names
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN") 
                         .requestMatchers("/api/restaurants/**").permitAll() // Allow public access to restaurant listings
+                        .requestMatchers("/api/home").permitAll() // Allow public access to home data
                         .requestMatchers("/auth/**").permitAll() // Allow public access to auth endpoints
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll() // all users
-                ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                )
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
@@ -40,10 +42,10 @@ public class AppConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
-
+    
                 cfg.setAllowedOrigins(Arrays.asList(
                         "http://localhost:4200",
-                        "http://localhost:4000" // Added Angular SSR server
+                        "http://localhost:4000" // Angular SSR server
                 ));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);

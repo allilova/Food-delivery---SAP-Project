@@ -1,6 +1,6 @@
 fieldset{
     width: 15cm;
-    height: 22.5cm;
+    min-height: 22.5cm;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -41,6 +41,13 @@ label{
     border-radius: 5px;
     height: 45px;
     font-size: large;
+    width: 100%;
+    cursor: pointer;
+}
+
+#submit:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }
 
 label i{
@@ -96,3 +103,25 @@ margin-bottom: 5px;
   .gender-options input {
     width: 80px;
   }
+
+.error-message {
+    background-color: #ffeeee;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ffcccc;
+}
+
+.success-message {
+    background-color: #eeffee;
+    color: #006600;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccffcc;
+}
+
+.is-invalid {
+    border-color: #cc0000 !important;
+}

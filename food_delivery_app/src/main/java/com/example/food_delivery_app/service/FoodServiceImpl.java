@@ -3,14 +3,12 @@ package com.example.food_delivery_app.service;
 import com.example.food_delivery_app.model.Category;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
-import com.example.food_delivery_app.model.Restaurant;
 import com.example.food_delivery_app.repository.FoodRepository;
 import com.example.food_delivery_app.repository.IngredientsItemRepository;
 import com.example.food_delivery_app.request.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,15 +39,16 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void deleteFood(Long foodId) throws Exception {
+    public Food deleteFood(Long foodId) throws Exception {
         Food food = getFoodById(foodId);
         foodRepository.delete(food);
+        return food;
     }
 
     @Override
-    public List<Food> getMenuFood(Long menuId, String foodCategory) {
+    public List<Food> getMenuFood(Menu menu, String foodCategory) {
 
-        List<Food> foods = foodRepository.findByMenu(menuId);
+        List<Food> foods = foodRepository.findByMenu(menu);
 
         if(foodCategory != null && !foodCategory.equals("")){
             foods = filterByCategory(foods, foodCategory);

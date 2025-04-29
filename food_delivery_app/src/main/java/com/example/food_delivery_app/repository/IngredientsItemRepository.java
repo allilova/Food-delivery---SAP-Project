@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface IngredientsItemRepository extends JpaRepository<IngredientsItem, Long>{
-    Optional<IngredientsItem> findByName(String name);
+    //Optional<IngredientsItem> findByName(String ingredientName);
 
 }

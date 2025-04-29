@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.service.impl;
+package com.example.food_delivery_app.service;
 
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
@@ -61,7 +61,7 @@ public class MenuServiceImpl implements MenuService {
     public Menu addFoodToMenu(Long menuId, int foodId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
-        Food food = foodRepository.findById(foodId)
+        Food food = foodRepository.findById((long) foodId)
                 .orElseThrow(() -> new RuntimeException("Food not found with id: " + foodId));
 
         menu.getFoods().add(food);
@@ -72,7 +72,7 @@ public class MenuServiceImpl implements MenuService {
     public Menu removeFoodFromMenu(Long menuId, int foodId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
-        Food food = foodRepository.findById(foodId)
+        Food food = foodRepository.findById((long) foodId)
                 .orElseThrow(() -> new RuntimeException("Food not found with id: " + foodId));
 
         menu.getFoods().remove(food);

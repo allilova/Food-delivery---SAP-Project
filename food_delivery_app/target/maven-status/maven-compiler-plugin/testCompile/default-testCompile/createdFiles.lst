@@ -1,0 +1,8 @@
+com\example\food_delivery_app\FoodDeliveryAppApplicationTests.class
+com\example\food_delivery_app\repository\RestaurantRepositoryTest.class
+com\example\food_delivery_app\repository\CartRepositoryTest.class
+com\example\food_delivery_app\controller\AuthControllerTest.class
+com\example\food_delivery_app\repository\UserRepositoryTest.class
+com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.class
+com\example\food_delivery_app\repository\PaymentRepositoryTest.class
+com\example\food_delivery_app\service\UserServiceTest.class

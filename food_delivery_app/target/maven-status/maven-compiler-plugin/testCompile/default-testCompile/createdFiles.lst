@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 com\example\food_delivery_app\controller\HomeControllerTest.class
 com\example\food_delivery_app\controller\RestaurantControllerTest.class
+<<<<<<< HEAD
+=======
 com\example\food_delivery_app\FoodDeliveryAppApplicationTests.class
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 com\example\food_delivery_app\controller\UserControllerTest.class
 com\example\food_delivery_app\repository\RestaurantRepositoryTest.class
 com\example\food_delivery_app\controller\AdminFoodControllerTest.class
@@ -8,10 +12,28 @@ com\example\food_delivery_app\service\RestaurantServiceTest.class
 com\example\food_delivery_app\service\UserServiceImpTest.class
 com\example\food_delivery_app\repository\UserRepositoryTest.class
 com\example\food_delivery_app\controller\FoodControllerTest.class
+<<<<<<< HEAD
+com\example\food_delivery_app\service\CartServiceTest.class
+=======
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 com\example\food_delivery_app\repository\CartRepositoryTest.class
 com\example\food_delivery_app\controller\AuthControllerTest.class
 com\example\food_delivery_app\service\FoodServiceImplTest.class
 com\example\food_delivery_app\repository\FoodRepositoryTest.class
 com\example\food_delivery_app\service\AuthenticationServiceTest.class
 com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.class
+<<<<<<< HEAD
+com\example\food_delivery_app\config\TestConfig.class
+=======
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 com\example\food_delivery_app\repository\PaymentRepositoryTest.class
+=======
+com\example\food_delivery_app\FoodDeliveryAppApplicationTests.class
+com\example\food_delivery_app\repository\RestaurantRepositoryTest.class
+com\example\food_delivery_app\repository\CartRepositoryTest.class
+com\example\food_delivery_app\controller\AuthControllerTest.class
+com\example\food_delivery_app\repository\UserRepositoryTest.class
+com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.class
+com\example\food_delivery_app\repository\PaymentRepositoryTest.class
+com\example\food_delivery_app\service\UserServiceTest.class
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5

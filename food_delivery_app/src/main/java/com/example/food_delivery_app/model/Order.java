@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "orders")
@@ -18,6 +19,18 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+<<<<<<< HEAD
+
+    @JsonIgnore
+    @ManyToOne
+<<<<<<< HEAD
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+=======
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User customer;
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
 
     @JsonIgnore
     @ManyToOne
@@ -35,12 +48,40 @@ public class Order {
     private OrderStatus orderStatus;
 
     private Date orderDate;
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 
     @ManyToOne
-    private Address deliveryAddress;
+<<<<<<< HEAD
+    @JoinColumn(name = "restaurant_id", nullable = false)
+=======
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+    private Restaurant restaurant;
 
-    @OneToMany
-    private List<OrderItem> items;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Column(nullable = false)
+    private double totalAmount;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @Column(name = "delivery_address", nullable = false)
+    private String deliveryAddress;
+
+    @Column(name = "contact_number", nullable = false)
+    private String contactNumber;
+
+    @Column(name = "special_instructions")
+    private String specialInstructions;
+
+    @Column(name = "created_at")
+    private java.time.LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private java.time.LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
@@ -52,9 +93,24 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private DeliveryInfo deliveryInfo;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = java.time.LocalDateTime.now();
+        updatedAt = createdAt;
+    }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = java.time.LocalDateTime.now();
+    }
+
+    public enum OrderStatus {
+        PENDING,
+        CONFIRMED,
+        PREPARING,
+        READY_FOR_DELIVERY,
+        OUT_FOR_DELIVERY,
+        DELIVERED,
+        CANCELLED
+    }
 }

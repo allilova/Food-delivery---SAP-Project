@@ -6,6 +6,8 @@ import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.Restaurant;
 import com.example.food_delivery_app.request.CreateFoodRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,11 +17,11 @@ public interface FoodService {
 
     Food deleteFood(Long foodId) throws Exception;
 
-    public List<Food> getMenuFood(Menu menu, String foodCategory);
+    public Page<Food> getMenuFood(Menu menu, String foodCategory, Pageable pageable);
 
     public List<Food> getFoodByCategory(Category category);
 
-    public List<Food>searchFood(String keyword);
+    public Page<Food> searchFood(String keyword, Pageable pageable);
 
     public Food findById(Long id) throws Exception;
 

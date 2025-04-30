@@ -4,42 +4,61 @@ import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.request.LoginRequest;
 import com.example.food_delivery_app.response.AuthResponse;
 import com.example.food_delivery_app.service.AuthenticationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:4000"})
 public class AuthController {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    public AuthController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) {
+    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody User user) {
         try {
+            logger.info("Attempting to register user: {}", user.getEmail());
             AuthResponse authResponse = authenticationService.register(user);
+            logger.info("User registered successfully: {}", user.getEmail());
             return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
-            // Return a proper error response instead of throwing an exception
+        } catch (IllegalArgumentException e) {
+            logger.warn("Invalid registration attempt: {}", e.getMessage());
             AuthResponse errorResponse = new AuthResponse();
-            errorResponse.setMessage(e.getMessage());
+            errorResponse.setMessage("Invalid registration data: " + e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            logger.error("Registration failed for user: {}", user.getEmail(), e);
+            AuthResponse errorResponse = new AuthResponse();
+            errorResponse.setMessage("Registration failed. Please try again later.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
+            logger.info("Login attempt for user: {}", loginRequest.getEmail());
             AuthResponse authResponse = authenticationService.login(loginRequest);
+            logger.info("User logged in successfully: {}", loginRequest.getEmail());
             return new ResponseEntity<>(authResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            // Return a proper error response instead of throwing an exception
+        } catch (IllegalArgumentException e) {
+            logger.warn("Invalid login attempt: {}", e.getMessage());
             AuthResponse errorResponse = new AuthResponse();
-            errorResponse.setMessage(e.getMessage());
+            errorResponse.setMessage("Invalid credentials");
             return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            logger.error("Login failed for user: {}", loginRequest.getEmail(), e);
+            AuthResponse errorResponse = new AuthResponse();
+            errorResponse.setMessage("Login failed. Please try again later.");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -8,6 +8,8 @@ import com.example.food_delivery_app.repository.FoodRepository;
 import com.example.food_delivery_app.repository.IngredientsItemRepository;
 import com.example.food_delivery_app.request.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,18 +24,25 @@ public class FoodServiceImpl implements FoodService {
     @Autowired
     private IngredientsItemRepository ingredientsItemRepository;
 
-
     @Override
     public Food createFood(CreateFoodRequest req, Category category, Menu menu) {
         Food food = new Food();
 
         food.setCategory(category);
+<<<<<<< HEAD
+        food.setDescription(req.getFoodDescription());
+        food.setName(req.getFoodName());
+        food.setPrice(req.getFoodPrice().doubleValue());
+        food.setRestaurant(menu.getRestaurant());
+        food.setIsAvailable(true);
+=======
         food.setFoodDescription(req.getFoodDescription());
         food.setFoodName(req.getFoodName());
         food.setFoodPrice(req.getFoodPrice());
         food.setMenu(menu);
         food.setPreparationTime(req.getPreparationTime());
         food.setAvailable(true);
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
         Food savedFood = foodRepository.save(food);
         menu.getFoods().add(savedFood);
         return savedFood;
@@ -47,14 +56,11 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<Food> getMenuFood(Menu menu, String foodCategory) {
-
-        List<Food> foods = foodRepository.findByMenu(menu);
-
+    public Page<Food> getMenuFood(Menu menu, String foodCategory, Pageable pageable) {
         if(foodCategory != null && !foodCategory.equals("")){
-            foods = filterByCategory(foods, foodCategory);
+            return foodRepository.findByMenuAndCategory_CategoryName(menu, foodCategory, pageable);
         }
-        return foods;
+        return foodRepository.findByMenu(menu, pageable);
     }
 
     @Override
@@ -62,19 +68,9 @@ public class FoodServiceImpl implements FoodService {
         return foodRepository.findByCategory(category);
     }
 
-    private List<Food> filterByCategory(List<Food> foods, String foodCategory) {
-        return foods.stream().filter(food -> {
-            if (food.getCategory() != null) {
-                return food.getCategory().getCategoryName().equals(foodCategory);
-            }
-            return false;
-        }).collect(Collectors.toList());
-    }
-
-
     @Override
-    public List<Food> searchFood(String keyword) {
-        return foodRepository.searchFood(keyword);
+    public Page<Food> searchFood(String keyword, Pageable pageable) {
+        return foodRepository.searchFood(keyword, pageable);
     }
 
     @Override
@@ -89,8 +85,16 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public Food updateAvailabilityStatus(Long foodId) throws Exception {
+<<<<<<< HEAD
+<<<<<<< HEAD
+        Food food = getFoodById(foodId);
+        food.setIsAvailable(!food.getIsAvailable());
+=======
+=======
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
         Food food = findById(foodId);
         food.setAvailable(!food.isAvailable());
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
         return foodRepository.save(food);
     }
     public FoodResponseDto convertToDto(Food food) {

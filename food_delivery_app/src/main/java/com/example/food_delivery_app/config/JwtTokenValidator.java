@@ -7,12 +7,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,10 +23,23 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class JwtTokenValidator extends OncePerRequestFilter {
     
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
+
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    private final List<String> excludedPaths = Arrays.asList("/auth/**", "/api/restaurants/**");
+    private final List<String> excludedPaths = Arrays.asList(
+        "/api/auth/**",
+        "/auth/**",
+        "/api/test",
+        "/api/home",
+        "/api/restaurants/**",
+        "/api/restaurants/search",
+        "/swagger-ui/**",
+        "/v3/api-docs/**"
+    );
     
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -38,12 +53,12 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+        String authHeader = request.getHeader(JwtConstant.JWT_HEADER);
 
-        if(jwt != null) {
+        if(authHeader != null && authHeader.startsWith("Bearer ")) {
             try {
-                jwt = jwt.substring(7);
-                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+                String jwt = authHeader.substring(7);
+                SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
                 String username = String.valueOf(claims.get("email"));

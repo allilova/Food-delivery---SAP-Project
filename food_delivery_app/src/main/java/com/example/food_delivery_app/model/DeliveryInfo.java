@@ -17,7 +17,7 @@ import java.util.Date;
 public class DeliveryInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long deliveryID;
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "order_id")

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class IngredientsItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ingredientID;
+    private Long id;
 
     private String ingredientName;
 

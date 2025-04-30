@@ -17,8 +17,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class RestaurantTurnover {
     @Id
-    @GeneratedValue()
-    private Long turnoverID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")

@@ -30,7 +30,7 @@ class PaymentRepositoryTest {
 
         paymentRepository.save(payment);
 
-        Optional<Payment> foundPayment = paymentRepository.findByOrder_OrderID(order.getOrderID());
+        Optional<Payment> foundPayment = paymentRepository.findByOrderId(order.getOrderID());
 
         assertThat(foundPayment).isPresent();
         assertThat(foundPayment.get().getPaymentAmount()).isEqualTo(20.00f);

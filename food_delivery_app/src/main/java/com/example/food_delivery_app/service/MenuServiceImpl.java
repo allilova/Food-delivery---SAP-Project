@@ -26,7 +26,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Menu getMenuByRestaurant(Long restaurantId) {
-        return menuRepository.findByRestaurantRestaurantID(restaurantId)
+        return menuRepository.findByRestaurantId(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Menu not found for restaurant id: " + restaurantId));
     }
 
@@ -58,7 +58,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu addFoodToMenu(Long menuId, int foodId) {
+    public Menu addFoodToMenu(Long menuId, Long foodId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
         Food food = foodRepository.findById((long) foodId)
@@ -69,7 +69,7 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public Menu removeFoodFromMenu(Long menuId, int foodId) {
+    public Menu removeFoodFromMenu(Long menuId,Long foodId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
         Food food = foodRepository.findById((long) foodId)
@@ -78,4 +78,11 @@ public class MenuServiceImpl implements MenuService {
         menu.getFoods().remove(food);
         return menuRepository.save(menu);
     }
+
+    @Override
+    public Menu getMenuById(Long menuId) throws Exception {
+        return menuRepository.findById(menuId)
+                .orElseThrow(() -> new Exception("Menu not found with id: " + menuId));
+    }
+
 }

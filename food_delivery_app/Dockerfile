@@ -29,7 +29,7 @@ spring.jpa.properties.hibernate.format_sql=true\n\
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect' > src/main/resources/application.properties
 
 # Build the application
-RUN mvn clean package -DskipTests
+RUN mvn clean install -DskipTests -Dmaven.test.skip=true
 
 # Use a smaller JRE image for the runtime
 FROM eclipse-temurin:17-jre-jammy

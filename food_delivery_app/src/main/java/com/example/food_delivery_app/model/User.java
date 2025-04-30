@@ -20,7 +20,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Long id;
 
     private String name;
 
@@ -44,7 +44,7 @@ public class User {
     private List<RestaurantDto>favourites = new ArrayList();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> adresses = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<DriverRevenue> driverRevenues = new ArrayList<>();

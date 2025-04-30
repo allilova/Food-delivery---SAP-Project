@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.service;
 
+import com.example.food_delivery_app.dto.FoodResponseDto;
 import com.example.food_delivery_app.model.Category;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
@@ -23,4 +24,6 @@ public interface FoodService {
     public Food findById(Long id) throws Exception;
 
     public Food updateAvailabilityStatus (Long foodId) throws Exception;
+
+    public FoodResponseDto convertToDto(Food food);
 }

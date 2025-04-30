@@ -39,10 +39,10 @@ class RestaurantRepositoryTest {
         restaurant.setType("Fast Food");
         restaurantRepository.save(restaurant);
 
-        Optional<Restaurant> foundRestaurant = restaurantRepository.findById(restaurant.getRestaurantID());
+        Optional<Restaurant> foundRestaurant = restaurantRepository.findById(restaurant.getId());
 
         assertThat(foundRestaurant).isPresent();
-        assertThat(foundRestaurant.get().getRestaurantID()).isEqualTo(restaurant.getRestaurantID());
+        assertThat(foundRestaurant.get().getId()).isEqualTo(restaurant.getId());
     }
 
 }

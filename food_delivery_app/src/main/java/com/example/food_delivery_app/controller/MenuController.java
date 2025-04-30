@@ -35,12 +35,12 @@ public class MenuController {
     }
 
     @PostMapping("/{menuId}/foods/{foodId}")
-    public ResponseEntity<Menu> addFoodToMenu(@PathVariable Long menuId, @PathVariable int foodId) {
+    public ResponseEntity<Menu> addFoodToMenu(@PathVariable Long menuId, @PathVariable Long foodId) {
         return ResponseEntity.ok(menuService.addFoodToMenu(menuId, foodId));
     }
 
     @DeleteMapping("/{menuId}/foods/{foodId}")
-    public ResponseEntity<Menu> removeFoodFromMenu(@PathVariable Long menuId, @PathVariable int foodId) {
+    public ResponseEntity<Menu> removeFoodFromMenu(@PathVariable Long menuId, @PathVariable Long foodId) {
         return ResponseEntity.ok(menuService.removeFoodFromMenu(menuId, foodId));
     }
 }

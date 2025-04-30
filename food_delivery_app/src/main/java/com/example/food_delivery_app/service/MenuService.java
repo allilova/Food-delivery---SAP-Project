@@ -7,6 +7,8 @@ public interface MenuService {
     Menu createMenu(Long restaurantId, Menu menu);
     Menu updateMenu(Long menuId, Menu menu);
     void deleteMenu(Long menuId);
-    Menu addFoodToMenu(Long menuId, int foodId);
-    Menu removeFoodFromMenu(Long menuId, int foodId);
+    Menu addFoodToMenu(Long menuId, Long foodId);
+    Menu removeFoodFromMenu(Long menuId, Long foodId);
+    Menu getMenuById(Long menuId) throws Exception;
+
 }

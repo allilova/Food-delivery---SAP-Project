@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.service;
 
+import com.example.food_delivery_app.dto.FoodResponseDto;
 import com.example.food_delivery_app.model.Category;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
@@ -30,7 +31,7 @@ public class FoodServiceImpl implements FoodService {
         food.setFoodDescription(req.getFoodDescription());
         food.setFoodName(req.getFoodName());
         food.setFoodPrice(req.getFoodPrice());
-        food.setMenu(menu.getRestaurant().getMenu());
+        food.setMenu(menu);
         food.setPreparationTime(req.getPreparationTime());
         food.setAvailable(true);
         Food savedFood = foodRepository.save(food);
@@ -92,4 +93,29 @@ public class FoodServiceImpl implements FoodService {
         food.setAvailable(!food.isAvailable());
         return foodRepository.save(food);
     }
+    public FoodResponseDto convertToDto(Food food) {
+        FoodResponseDto dto = new FoodResponseDto();
+        dto.setId(food.getId());
+        dto.setFoodName(food.getFoodName());
+        dto.setFoodDescription(food.getFoodDescription());
+        dto.setFoodImage(food.getFoodImage());
+        dto.setFoodPrice(food.getFoodPrice());
+        dto.setPreparationTime(food.getPreparationTime());
+        dto.setAvailable(food.isAvailable());
+
+        if (food.getCategory() != null) {
+            dto.setCategoryName(food.getCategory().getCategoryName());
+        }
+
+        if (food.getIngredients() != null) {
+            List<String> ingredientNames = food.getIngredients()
+                    .stream()
+                    .map(i -> i.getIngredientName())
+                    .toList();
+            dto.setIngredients(ingredientNames);
+        }
+
+        return dto;
+    }
+
 }

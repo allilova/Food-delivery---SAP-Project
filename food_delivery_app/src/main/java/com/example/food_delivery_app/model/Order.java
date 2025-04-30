@@ -17,15 +17,16 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderID;
+    private Long id;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "userID")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private User customer;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurantID")
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
     private Long totalAmount;

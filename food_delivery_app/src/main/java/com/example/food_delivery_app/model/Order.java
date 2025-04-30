@@ -19,6 +19,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+<<<<<<< HEAD
 
     @JsonIgnore
     @ManyToOne
@@ -29,6 +30,25 @@ public class Order {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private User customer;
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User customer;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
+    private Restaurant restaurant;
+
+    private Long totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
+    private Date orderDate;
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 
     @ManyToOne
 <<<<<<< HEAD

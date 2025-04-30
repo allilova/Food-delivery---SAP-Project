@@ -86,9 +86,12 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public Food updateAvailabilityStatus(Long foodId) throws Exception {
 <<<<<<< HEAD
+<<<<<<< HEAD
         Food food = getFoodById(foodId);
         food.setIsAvailable(!food.getIsAvailable());
 =======
+=======
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
         Food food = findById(foodId);
         food.setAvailable(!food.isAvailable());
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca

@@ -5,6 +5,7 @@ import com.example.food_delivery_app.dto.RestaurantResponseDto;
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.Restaurant;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.example.food_delivery_app.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -84,6 +85,13 @@ public class RestaurantService {
     }
 }
 =======
+=======
+import com.example.food_delivery_app.model.User;
+import com.example.food_delivery_app.request.CreateRestaurantRequest;
+
+import java.util.List;
+
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 public interface RestaurantService {
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user);
 
@@ -108,4 +116,7 @@ public interface RestaurantService {
     public List<RestaurantResponseDto> searchRestaurantsDto(String keyword);
 
 }
+<<<<<<< HEAD
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5

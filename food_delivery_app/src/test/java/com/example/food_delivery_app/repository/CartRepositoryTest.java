@@ -50,6 +50,7 @@ class CartRepositoryTest {
         cartRepository.save(cart);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         Optional<Cart> foundCart = cartRepository.findByUser_Id(user.getId());
 
         assertThat(foundCart).isPresent();
@@ -62,6 +63,14 @@ class CartRepositoryTest {
       //  assertThat(foundCart).isPresent();
       //  assertThat(foundCart.get().getCustomer().getUserID()).isEqualTo(user.getUserID());
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+
+
+       // Optional<Cart> foundCart = cartRepository.findByCustomer_UserID(user.getUserID());
+
+      //  assertThat(foundCart).isPresent();
+      //  assertThat(foundCart.get().getCustomer().getUserID()).isEqualTo(user.getUserID());
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
     }
 
     @Test

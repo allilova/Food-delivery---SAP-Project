@@ -41,6 +41,7 @@ public class Food {
     private Category category;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems = new HashSet<>();
 
@@ -64,6 +65,8 @@ public class Food {
             .orElse(0.0);
     }
 =======
+=======
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;

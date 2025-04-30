@@ -33,5 +33,8 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     Optional<Food> findById(Long id);
 
 
+<<<<<<< HEAD
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 }

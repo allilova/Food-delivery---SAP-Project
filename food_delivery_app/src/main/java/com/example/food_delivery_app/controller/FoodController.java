@@ -95,6 +95,7 @@ public class FoodController {
         List<FoodResponseDto> response = foods.stream()
                 .map(food -> foodService.convertToDto(food)) // ще трябва да направиш convertToDto публичен
                 .toList();
+<<<<<<< HEAD
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -116,4 +117,26 @@ public class FoodController {
 
 
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/menu/{menuId}")
+    public ResponseEntity<List<FoodResponseDto>> getMenuFood(@PathVariable Long menuId,
+                                                             @RequestParam(required = false) String foodCategory,
+                                                             @RequestHeader("Authorization") String jwt) throws Exception {
+        userService.findUserByJwtToken(jwt);
+        Menu menu = menuService.getMenuById(menuId);
+
+        List<Food> foods = foodService.getMenuFood(menu, foodCategory);
+        List<FoodResponseDto> response = foods.stream()
+                .map(food -> foodService.convertToDto(food))
+                .toList();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 }

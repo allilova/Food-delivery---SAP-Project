@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.example.food_delivery_app.service.CustomerUserDetailsServiceTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s -- in com.example.food_delivery_app.service.CustomerUserDetailsServiceTest
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in com.example.food_delivery_app.service.CustomerUserDetailsServiceTest
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5

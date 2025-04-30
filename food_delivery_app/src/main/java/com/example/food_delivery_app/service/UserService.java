@@ -11,6 +11,7 @@ public interface UserService {
     public User findByEmail(String jwt) throws Exception;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public User updateUserProfile(User user, UpdateProfileRequest updateRequest) throws Exception;
 
     public void updatePassword(User user, UpdatePasswordRequest passwordRequest) throws Exception;
@@ -19,4 +20,7 @@ public interface UserService {
 =======
     public User registerUser(User user);
 >>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+=======
+    public User registerUser(User user);
+>>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
 }

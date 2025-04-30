@@ -1,48 +1,33 @@
 package com.example.food_delivery_app.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "order_items")
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
-
-    @ManyToOne
-    @JoinColumn(name = "food_id", nullable = false)
     private Food food;
 
-    @Column(nullable = false)
-    private Integer quantity;
+    private int quantity;
 
-    @Column(nullable = false)
-    private Double price;
+    private double price;
 
-    @Column(name = "created_at")
-    private java.time.LocalDateTime createdAt;
+    @ElementCollection
+    @CollectionTable(name = "order_item_ingredients", joinColumns = @JoinColumn(name = "order_item_id"))
+    @Column(name = "ingredient")
+    private List<String> ingredients;
 
-    @Column(name = "updated_at")
-    private java.time.LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "orderItem")
+    private List<Rating> ratings;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = java.time.LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = java.time.LocalDateTime.now();
-    }
-
-    public void updatePrice() {
-        this.price = food.getPrice() * quantity;
-    }
 }

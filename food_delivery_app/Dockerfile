@@ -1,5 +1,5 @@
 # Use Maven with JDK 17 for building
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 # Set working directory for the build
 WORKDIR /app
@@ -8,8 +8,6 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-<<<<<<< HEAD
-=======
 # Create the updated application.properties
 RUN mkdir -p src/main/resources
 RUN echo 'spring.application.name=food_delivery_app\n\
@@ -30,20 +28,19 @@ spring.jpa.show-sql=true\n\
 spring.jpa.properties.hibernate.format_sql=true\n\
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect' > src/main/resources/application.properties
 
->>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 # Build the application
 RUN mvn clean install -DskipTests -Dmaven.test.skip=true
 
 # Use a smaller JRE image for the runtime
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
 # Copy the JAR from the builder stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
 # Expose the port the app runs on
-EXPOSE 8085
+EXPOSE 5454
 
 # Run the jar file
 ENTRYPOINT ["java", "-jar", "app.jar"]

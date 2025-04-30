@@ -61,7 +61,7 @@ public class AuthenticationService {
         // Create cart for customer users
         if (savedUser.getRole() == USER_ROLE.ROLE_CUSTOMER) {
             Cart cart = new Cart();
-            cart.setUser(savedUser);
+            cart.setCustomer(savedUser);
             cartRepository.save(cart);
         }
 

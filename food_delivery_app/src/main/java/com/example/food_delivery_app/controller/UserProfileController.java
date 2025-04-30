@@ -1,8 +1,8 @@
 package com.example.food_delivery_app.controller;
 
 import com.example.food_delivery_app.model.User;
-import com.example.food_delivery_app.dto.request.UpdateProfileRequest;
-import com.example.food_delivery_app.dto.request.UpdatePasswordRequest;
+import com.example.food_delivery_app.request.CreateAddressRequest;
+import com.example.food_delivery_app.request.CreateRestaurantRequest;
 import com.example.food_delivery_app.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,7 +36,7 @@ public class UserProfileController {
 
     @PutMapping
     public ResponseEntity<User> updateUserProfile(
-            @Valid @RequestBody UpdateProfileRequest updateRequest,
+            @Valid @RequestBody CreateAddressRequest.UpdateProfileRequest updateRequest,
             @RequestHeader("Authorization") String jwtToken) {
         try {
             User user = userService.findUserByJwtToken(jwtToken);
@@ -51,7 +51,7 @@ public class UserProfileController {
 
     @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(
-            @Valid @RequestBody UpdatePasswordRequest passwordRequest,
+            @Valid @RequestBody CreateRestaurantRequest.UpdatePasswordRequest passwordRequest,
             @RequestHeader("Authorization") String jwtToken) {
         try {
             User user = userService.findUserByJwtToken(jwtToken);

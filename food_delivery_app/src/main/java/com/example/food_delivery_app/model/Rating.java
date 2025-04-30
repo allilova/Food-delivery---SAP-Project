@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ratingID;
+    private Long id;
 
     // rating kum produkta w poruckata
     @ManyToOne

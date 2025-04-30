@@ -1,12 +1,11 @@
 package com.example.food_delivery_app.controller;
 
-import com.example.food_delivery_app.dto.MessageResponse;
+import com.example.food_delivery_app.dto.FoodResponseDto;
 import com.example.food_delivery_app.model.Food;
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.User;
-import com.example.food_delivery_app.request.CreateFoodRequest;
 import com.example.food_delivery_app.service.FoodService;
-import com.example.food_delivery_app.service.RestaurantService;
+import com.example.food_delivery_app.service.MenuService;
 import com.example.food_delivery_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,26 +24,36 @@ public class FoodController {
     private UserService userService;
 
     @Autowired
-    private RestaurantService restaurantService;
+    private MenuService menuService;
 
-    @GetMapping ("/search")
-    public ResponseEntity<List<Food>> searchFood(@RequestParam String foodName,
-                                           @RequestHeader("Authorization") String jwtT) throws Exception {
-        User user = userService.findUserByJwtToken(jwtT);
 
+    @GetMapping("/search")
+    public ResponseEntity<List<FoodResponseDto>> searchFood(@RequestParam String foodName,
+                                                            @RequestHeader("Authorization") String jwt) throws Exception {
+        userService.findUserByJwtToken(jwt);
         List<Food> foods = foodService.searchFood(foodName);
-        return  new ResponseEntity<>(foods, HttpStatus.OK);
 
+        List<FoodResponseDto> response = foods.stream()
+                .map(food -> foodService.convertToDto(food)) // ще трябва да направиш convertToDto публичен
+                .toList();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping ("/menu/{menuId}")
-    public ResponseEntity<List<Food>> getMenuFood(@PathVariable Menu menu,
-                                                 @RequestParam(required = false) String food_category,
-                                                 @RequestHeader("Authorization") String jwtT) throws Exception {
-        User user = userService.findUserByJwtToken(jwtT);
 
-        List<Food> foods = foodService.getMenuFood(menu, food_category);
-        return  new ResponseEntity<>(foods, HttpStatus.OK);
+    @GetMapping("/menu/{menuId}")
+    public ResponseEntity<List<FoodResponseDto>> getMenuFood(@PathVariable Long menuId,
+                                                             @RequestParam(required = false) String foodCategory,
+                                                             @RequestHeader("Authorization") String jwt) throws Exception {
+        userService.findUserByJwtToken(jwt);
+        Menu menu = menuService.getMenuById(menuId);
 
+        List<Food> foods = foodService.getMenuFood(menu, foodCategory);
+        List<FoodResponseDto> response = foods.stream()
+                .map(food -> foodService.convertToDto(food))
+                .toList();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

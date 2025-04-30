@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
 
@@ -18,4 +19,8 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 
     @Query("SELECT f FROM Food f WHERE f.foodName LIKE %:keyword% OR f.category.categoryName LIKE %:keyword%")
     List<Food> searchFood(@Param("keyword")String keyword);
+
+    Optional<Food> findById(Long id);
+
+
 }

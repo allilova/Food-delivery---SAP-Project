@@ -10,11 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestaurantResponseDto {
-    private String restaurantId;
+    private Long id;
     private String name;
     private String imgUrl;
     private String address;
-    private double rating;
+    private Double rating;
     private String foodType;
     private String timeDelivery;
     private List<String> menu;

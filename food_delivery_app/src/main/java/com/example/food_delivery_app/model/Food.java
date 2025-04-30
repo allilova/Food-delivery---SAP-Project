@@ -16,7 +16,7 @@ import java.util.List;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int foodID;
+    private Long id;
 
     private String foodName;
 
@@ -33,11 +33,11 @@ public class Food {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private boolean available;
-
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    private boolean available;
 
     @ManyToMany
     private List<IngredientsItem> ingredients = new ArrayList<>();

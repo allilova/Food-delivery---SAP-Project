@@ -13,6 +13,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     @Query("SELECT r FROM Restaurant r WHERE lower(r.restaurantName) LIKE lower(concat('%', :query, '%')) " +
             "OR lower(r.type) LIKE lower(concat('%', :query, '%'))")
     List<Restaurant> findBySearchQuery(@Param("query") String query);
-    
-    Optional<Restaurant> findById(Long id);
+
+    //Optional<Restaurant> findById(Long id);
 }

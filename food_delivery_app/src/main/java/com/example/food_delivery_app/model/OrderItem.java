@@ -13,7 +13,7 @@ import java.util.List;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderItemID;
+    private Long id;
 
     @ManyToOne
     private Food food;

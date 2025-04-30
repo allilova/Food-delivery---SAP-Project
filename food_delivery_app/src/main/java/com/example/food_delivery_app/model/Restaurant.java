@@ -16,10 +16,10 @@ import java.util.List;
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long restaurantID;
+    private Long id;
 
     @OneToOne
-    @JoinColumn(name = "restaurant_user_id", referencedColumnName = "userID")
+    @JoinColumn(name = "restaurant_user_id", referencedColumnName = "id")
     private User restaurant;
 
     private String restaurantName;
@@ -27,7 +27,7 @@ public class Restaurant {
     private String type;
 
     @OneToOne
-    @JoinColumn(name = "restaurant_address_id", referencedColumnName = "addressID")
+    @JoinColumn(name = "restaurant_address_id", referencedColumnName = "id")
     private Address restaurantAddress;
 
     @Embedded

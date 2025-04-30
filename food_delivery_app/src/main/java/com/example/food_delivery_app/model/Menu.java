@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +15,9 @@ import java.util.List;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long menuID;
+    private Long id;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;

@@ -3,6 +3,7 @@ package com.example.food_delivery_app.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -15,17 +16,25 @@ import java.util.HashSet;
 
 @Service
 public class JwtProvider {
-    private SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${app.jwt.expiration}")
+    private long jwtExpiration;
+
+    private SecretKey getKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
 
     public String generateToken(Authentication auth) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
 
         String jwt = Jwts.builder().setIssuedAt(new Date())
-                .setExpiration((new Date(new Date().getTime()+86400000)))
+                .setExpiration(new Date(new Date().getTime() + jwtExpiration))
                 .claim("email", auth.getName())
                 .claim("authorities", roles)
-                .signWith(key)
+                .signWith(getKey())
                 .compact();
 
         return jwt;
@@ -33,12 +42,10 @@ public class JwtProvider {
 
     public String getEmailFromToken(String jwt) {
         jwt = jwt.substring(7);
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
 
         String email = String.valueOf(claims.get("email"));
         return email;
-
-
     }
 
     private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
@@ -49,5 +56,4 @@ public class JwtProvider {
         }
         return String.join(",", auths);
     }
-
 }

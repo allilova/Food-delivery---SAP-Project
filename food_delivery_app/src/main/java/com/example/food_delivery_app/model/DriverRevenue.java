@@ -18,17 +18,17 @@ import java.util.Date;
 public class DriverRevenue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long revenueID;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "driver_id")
     private User driver;
 
-    private Long totalRevenue;  // Приходи на доставчика
+    private Long totalRevenue;
 
     @Temporal(TemporalType.DATE)
-    private Date startDate;  // Начална дата на отчетния период
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    private Date endDate;  // Крайна дата на отчетния период
+    private Date endDate;
 }

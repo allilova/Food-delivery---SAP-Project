@@ -1,5 +1,6 @@
 package com.example.food_delivery_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +15,11 @@ import java.util.Date;
 public class Bonus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bonuusID;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "driver_id")
+    @JsonIgnore
     private User driver;
 
     private Long bonusAmount;
@@ -32,5 +34,5 @@ public class Bonus {
 
     @ManyToOne
     @JoinColumn(name = "turnover_id")
-    private RestaurantTurnover turnover;  // Съответния оборот, който е довел до бонуса
+    private RestaurantTurnover turnover;
 }

@@ -1,10 +1,19 @@
 package com.example.food_delivery_app.controller;
 
+import com.example.food_delivery_app.dto.RestaurantDto;
 import com.example.food_delivery_app.dto.RestaurantResponseDto;
+import com.example.food_delivery_app.model.Restaurant;
+import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.service.RestaurantService;
+<<<<<<< HEAD
+=======
+import com.example.food_delivery_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -13,23 +22,58 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:4000"}) // Adding explicit CORS configuration
 public class RestaurantController {
 
-    @Autowired
-    private RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
 
-    @GetMapping
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantService.getAllRestaurants());
+    public RestaurantController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
     }
 
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(
+            @RequestHeader("Authorization") String jwt) throws Exception {
+
+        userService.findUserByJwtToken(jwt); // валидация на потребителя
+
+        List<RestaurantResponseDto> response = restaurantService.getAllRestaurantsDto();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantResponseDto> getRestaurantById(@PathVariable Long id) {
-        return restaurantService.getRestaurantById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<RestaurantResponseDto> findRestaurantById(@PathVariable Long id,
+                                                                    @RequestHeader ("Authorization")String jwt) throws Exception {
+
+        userService.findUserByJwtToken(jwt);
+        Restaurant restaurant = restaurantService.findById(id);
+        RestaurantResponseDto dto = restaurantService.convertToDto(restaurant); // трябва да бъде public
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/search")
+<<<<<<< HEAD
     public ResponseEntity<List<RestaurantResponseDto>> searchRestaurants(@RequestParam String query) {
+        if (!StringUtils.hasText(query)) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(restaurantService.searchRestaurants(query));
+=======
+    public ResponseEntity<List<RestaurantResponseDto>> searchRestaurants(@RequestParam String keyword,
+                                                                         @RequestHeader("Authorization") String jwt) throws Exception {
+        userService.findUserByJwtToken(jwt); // за валидация
+        List<RestaurantResponseDto> results = restaurantService.searchRestaurantsDto(keyword);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/add-favourites")
+    public ResponseEntity<RestaurantDto> addToFavourites(@PathVariable Long id,
+                                                      @RequestHeader ("Authorization")String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        RestaurantDto restaurant = restaurantService.addToFavourites(id, user);
+
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+>>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
     }
 }

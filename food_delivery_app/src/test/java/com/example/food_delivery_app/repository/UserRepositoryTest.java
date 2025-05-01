@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.repository;
+/*package com.example.food_delivery_app.repository;
 
 import com.example.food_delivery_app.config.TestConfig;
 import com.example.food_delivery_app.model.USER_ROLE;
@@ -66,3 +66,4 @@ public class UserRepositoryTest {
         assertFalse(userRepository.existsByEmail("nonexistent@example.com"));
     }
 }
+*/

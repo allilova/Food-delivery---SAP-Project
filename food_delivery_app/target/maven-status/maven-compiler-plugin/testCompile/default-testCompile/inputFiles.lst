@@ -1,47 +1,20 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\CartRepositoryTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\RestaurantRepositoryTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\FoodServiceImplTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\FoodControllerTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\FoodRepositoryTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\UserServiceImpTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\RestaurantServiceTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\CartServiceTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\PaymentRepositoryTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\RestaurantControllerTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\config\TestConfig.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\HomeControllerTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\AuthControllerTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\AuthenticationServiceTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\UserControllerTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\UserRepositoryTest.java
-C:\Users\acer\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\AdminFoodControllerTest.java
-=======
+C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\config\TestConfig.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\AdminFoodControllerTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\AuthControllerTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\FoodControllerTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\HomeControllerTest.java
+C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\MenuControllerTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\RestaurantControllerTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\UserControllerTest.java
-=======
-C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\controller\AuthControllerTest.java
->>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
-C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\FoodDeliveryAppApplicationTests.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\CartRepositoryTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\FoodRepositoryTest.java
-C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\PaymentRepositoryTest.java
+C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\MenuRepositoryTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\RestaurantRepositoryTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\repository\UserRepositoryTest.java
-<<<<<<< HEAD
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\AuthenticationServiceTest.java
+C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\CartServiceTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\FoodServiceImplTest.java
+C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\MenuServiceImplTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\RestaurantServiceTest.java
 C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\UserServiceImpTest.java
->>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
-=======
-C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\CustomerUserDetailsServiceTest.java
-C:\Users\lilov\Documents\GitHub\Food-delivery---SAP-Project\food_delivery_app\src\test\java\com\example\food_delivery_app\service\UserServiceTest.java
->>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5

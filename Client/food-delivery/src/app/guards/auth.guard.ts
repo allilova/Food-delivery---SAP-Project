@@ -3,42 +3,26 @@ import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
+import { AuthService } from '../services/auth.service';
 
-// Function to check if user is logged in
-const isLoggedIn = (): boolean => {
-  return !!localStorage.getItem('jwt_token');
-};
-
-// Function to get user role
-const getUserRole = (): string | null => {
-  const userData = localStorage.getItem('currentUser');
-  if (!userData) return null;
-  
-  try {
-    const user = JSON.parse(userData);
-    return user.role;
-  } catch (e) {
-    console.error('Error parsing user data:', e);
-    return null;
-  }
-};
-
-// Auth guard for protected routes
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
+  const authService = inject(AuthService);
   
   // If we're on the server during SSR, allow navigation
   if (isPlatformServer(platformId)) {
     return true;
   }
   
-  if (isLoggedIn()) {
-    // User is logged in, allow access
+  // Check if the user is logged in
+  if (authService.isLoggedIn) {
+    console.log('Auth guard: User is logged in, allowing access');
     return true;
   }
 
   // Not logged in, redirect to login page with return URL
+  console.log('Auth guard: User not logged in, redirecting to login');
   router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };
@@ -48,25 +32,31 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
   return (route, state) => {
     const router = inject(Router);
     const platformId = inject(PLATFORM_ID);
+    const authService = inject(AuthService);
     
     // If we're on the server during SSR, allow navigation
     if (isPlatformServer(platformId)) {
       return true;
     }
     
-    if (isLoggedIn()) {
+    // First check if user is logged in
+    if (authService.isLoggedIn) {
       // Check if the user has one of the required roles
-      const userRole = getUserRole();
+      const userRole = authService.userRole;
+      console.log('Role guard: Checking if user role', userRole, 'is in allowed roles', allowedRoles);
+      
       if (userRole && allowedRoles.includes(userRole)) {
         return true;
       }
       
       // User doesn't have the required role, redirect to home
+      console.log('Role guard: User does not have required role, redirecting to home');
       router.navigate(['/home']);
       return false;
     }
     
     // Not logged in, redirect to login
+    console.log('Role guard: User not logged in, redirecting to login');
     router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
   };
@@ -76,23 +66,30 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
 export const customerOnlyGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
+  const authService = inject(AuthService);
   
   // If we're on the server during SSR, allow navigation
   if (isPlatformServer(platformId)) {
     return true;
   }
   
-  if (isLoggedIn()) {
-    const userRole = getUserRole();
+  // First check if user is logged in
+  if (authService.isLoggedIn) {
+    const userRole = authService.userRole;
+    
     // Block restaurant owners, allow all other roles
     if (userRole === 'ROLE_RESTAURANT') {
+      console.log('Customer only guard: Blocking restaurant owner from customer page');
       router.navigate(['/supplier']);
       return false;
     }
+    
+    console.log('Customer only guard: Allowing access for non-restaurant user');
     return true;
   }
   
   // Not logged in, redirect to login
+  console.log('Customer only guard: User not logged in, redirecting to login');
   router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };

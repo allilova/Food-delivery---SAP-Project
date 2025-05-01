@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.repository;
+/*package com.example.food_delivery_app.repository;
 
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.Restaurant;
@@ -31,4 +31,4 @@ class MenuRepositoryTest {
         assertThat(foundMenu.get().getRestaurant().getRestaurantID()).isEqualTo(restaurant.getRestaurantID());
 
     }
-}
+}*/

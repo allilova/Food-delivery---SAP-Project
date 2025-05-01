@@ -34,7 +34,9 @@ export class ItemListComponent implements OnInit, OnChanges {
     this.isLoggedIn = this.authService.isLoggedIn;
     this.isAdmin = this.authService.userRole === USER_ROLE.ROLE_ADMIN;
     this.loadRestaurants();
-    this.loadFavorites();
+    if (this.isLoggedIn) {
+      this.loadFavorites();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,10 +52,10 @@ export class ItemListComponent implements OnInit, OnChanges {
 
     this.restaurantService.getAllRestaurants().subscribe({
       next: (restaurants) => {
-        this.restaurants = restaurants;
+        this.restaurants = restaurants || [];
         
         // Client-side filtering if a category is selected
-        if (this.category) {
+        if (this.category && this.restaurants.length > 0) {
           this.restaurants = this.restaurants.filter(r => 
             r.foodType && r.foodType.toLowerCase() === this.category?.toLowerCase()
           );
@@ -65,6 +67,7 @@ export class ItemListComponent implements OnInit, OnChanges {
         console.error('Error loading restaurants:', err);
         this.error = 'Failed to load restaurants. Please try again later.';
         this.loading = false;
+        this.restaurants = []; // Empty array when there's an error
       }
     });
   }

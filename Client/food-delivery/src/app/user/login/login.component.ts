@@ -7,13 +7,12 @@ import { AuthService } from "../../services/auth.service";
 import { LoadingSpinnerComponent } from "../../components/loading-spinner.component";
 
 @Component({
-    selector: 'login-root',
+    selector: 'app-login',
     standalone: true,
     imports: [RouterLink, ReactiveFormsModule, CommonModule, LoadingSpinnerComponent],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
-
 export class LoginComponent implements OnInit {
     loginForm!: FormGroup;
     submitted = false;

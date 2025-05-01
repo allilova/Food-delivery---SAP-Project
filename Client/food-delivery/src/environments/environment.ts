@@ -1,5 +1,5 @@
 // environment.ts - Production environment
 export const environment = {
-    production: false,
-    apiUrl: 'http://localhost:5454', // Use localhost for production
+    production: true,
+    apiUrl: 'http://localhost:5454', // Change this to your production API URL when deploying
 };

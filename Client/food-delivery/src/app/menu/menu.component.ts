@@ -2,10 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ApiService } from '../api.service';
 import { RestaurantService } from '../services/restaurant.service';
+import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
-import { MenuItemComponent } from './menu-item/menu-item.component';
 import { Restaurant } from '../types/restaurants';
 import { Food } from '../types/food';
 import { USER_ROLE } from '../types/user-role.enum';
@@ -14,7 +13,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [MenuItemComponent, RouterLink, CommonModule, LoadingSpinnerComponent],
+  imports: [RouterLink, CommonModule, LoadingSpinnerComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
@@ -30,18 +29,20 @@ export class MenuComponent implements OnInit {
     restaurant: '',
     menu: ''
   };
+  isLoggedIn = false;
   isRestaurantOwner = false;
   isAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService,
     private restaurantService: RestaurantService,
+    private cartService: CartService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Check user role to enable restaurant owner features
+    // Get authentication status and user roles
+    this.isLoggedIn = this.authService.isLoggedIn;
     const userRole = this.authService.userRole;
     this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
     this.isAdmin = userRole === USER_ROLE.ROLE_ADMIN;
@@ -60,7 +61,7 @@ export class MenuComponent implements OnInit {
 
   loadRestaurantDetails(id: string): void {
     this.loading.restaurant = true;
-    this.apiService.getMenu(id).subscribe({
+    this.restaurantService.getRestaurantById(id).subscribe({
       next: (restaurant) => {
         this.restaurant = restaurant;
         this.loading.restaurant = false;
@@ -93,19 +94,28 @@ export class MenuComponent implements OnInit {
 
   // Add restaurant to favorites
   addToFavorites(): void {
-    if (!this.authService.isLoggedIn) {
-      // Redirect to login or show login prompt
+    if (!this.isLoggedIn) {
       return;
     }
     
     this.restaurantService.toggleFavorite(this.restaurantId).subscribe({
       next: () => {
         // Show success message or update UI
-        console.log('Restaurant added to favorites');
+        console.log('Restaurant favorite status toggled');
       },
       error: (err) => {
-        console.error('Error adding to favorites:', err);
+        console.error('Error toggling favorite status:', err);
       }
     });
+  }
+
+  // Add menu item to cart
+  addToCart(food: Food): void {
+    if (!this.isLoggedIn) {
+      return;
+    }
+    
+    this.cartService.addToCart(food);
+    // Could show a success notification here
   }
 }

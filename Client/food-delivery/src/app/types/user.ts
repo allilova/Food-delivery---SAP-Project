@@ -1,4 +1,3 @@
-// src/app/types/user.ts
 import { USER_ROLE } from './user-role.enum';
 import { Restaurant } from './restaurants';
 

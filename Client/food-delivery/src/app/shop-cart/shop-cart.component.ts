@@ -1,7 +1,7 @@
 // src/app/shop-cart/shop-cart.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
@@ -26,13 +26,16 @@ export class ShopCartComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     // Check if user is logged in, redirect if not
     if (!this.authService.isLoggedIn) {
-      // Redirect to login or show message
+      this.router.navigate(['/login'], { 
+        queryParams: { returnUrl: '/shopCart' } 
+      });
       return;
     }
 
@@ -88,7 +91,7 @@ export class ShopCartComponent implements OnInit {
 
   // Proceed to checkout/payment
   proceedToPayment(): void {
-    // Navigate to payment page
-    // This is handled by the routerLink in the template
+    // Navigate to payment page using router
+    this.router.navigate(['/payment']);
   }
 }

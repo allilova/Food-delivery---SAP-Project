@@ -17,6 +17,7 @@ export const jwtInterceptor: HttpInterceptorFn = (
     const token = localStorage.getItem('jwt_token');
     
     if (token) {
+      // Clone the request and add Authorization header
       const authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
@@ -33,6 +34,13 @@ export const jwtInterceptor: HttpInterceptorFn = (
             localStorage.removeItem('jwt_token');
             router.navigate(['/login']);
           }
+          
+          // Handle 403 Forbidden errors
+          if (error.status === 403) {
+            console.log('Permission denied. Redirecting to home.');
+            router.navigate(['/home']);
+          }
+          
           return throwError(() => error);
         })
       );

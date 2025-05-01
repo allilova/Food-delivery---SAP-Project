@@ -26,6 +26,24 @@ public class AuthController {
     public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody User user) {
         try {
             logger.info("Attempting to register user: {}", user.getEmail());
+            logger.debug("Registration data: name={}, phoneNumber={}, address={}", 
+                      user.getName(), user.getPhoneNumber(), user.getAddress());
+            
+            // Validate required fields
+            if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+                logger.warn("Registration failed: Phone number is missing");
+                AuthResponse errorResponse = new AuthResponse();
+                errorResponse.setMessage("Phone number is required");
+                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (user.getAddress() == null || user.getAddress().isEmpty()) {
+                logger.warn("Registration failed: Address is missing");
+                AuthResponse errorResponse = new AuthResponse();
+                errorResponse.setMessage("Address is required");
+                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            }
+            
             AuthResponse authResponse = authenticationService.register(user);
             logger.info("User registered successfully: {}", user.getEmail());
             return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
@@ -37,7 +55,7 @@ public class AuthController {
         } catch (Exception e) {
             logger.error("Registration failed for user: {}", user.getEmail(), e);
             AuthResponse errorResponse = new AuthResponse();
-            errorResponse.setMessage("Registration failed. Please try again later.");
+            errorResponse.setMessage("Registration failed: " + e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

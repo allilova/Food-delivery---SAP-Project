@@ -11,15 +11,18 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtProvider {
-    @Value("${app.jwt.secret}")
+    
+    // Using the constant as a fallback if environment variable is not set
+    @Value("${app.jwt.secret:${JwtConstant.SECRET_KEY}}")
     private String jwtSecret;
 
-    @Value("${app.jwt.expiration}")
+    // One day expiration by default
+    @Value("${app.jwt.expiration:86400000}")
     private long jwtExpiration;
 
     private SecretKey getKey() {
@@ -30,28 +33,38 @@ public class JwtProvider {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
 
-        String jwt = Jwts.builder().setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + jwtExpiration))
+        return Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .claim("email", auth.getName())
                 .claim("authorities", roles)
                 .signWith(getKey())
                 .compact();
-
-        return jwt;
     }
 
     public String getEmailFromToken(String jwt) {
-        jwt = jwt.substring(7);
-        Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
+        // Remove "Bearer " prefix if present
+        if (jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+        }
+        
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody();
 
-        String email = String.valueOf(claims.get("email"));
-        return email;
+            return String.valueOf(claims.get("email"));
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JWT token", e);
+        }
     }
 
     private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();
 
-        for(GrantedAuthority authority: authorities) {
+        for (GrantedAuthority authority : authorities) {
             auths.add(authority.getAuthority());
         }
         return String.join(",", auths);

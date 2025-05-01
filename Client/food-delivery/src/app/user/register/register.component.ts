@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
       name: `${this.registerForm.value.firstName} ${this.registerForm.value.lastName}`,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
-      phone_number: this.registerForm.value.phone_number,
+      phoneNumber: this.registerForm.value.phone_number, // Changed from phone_number to phoneNumber
       address: this.registerForm.value.address,
       role: USER_ROLE.ROLE_CUSTOMER
     };

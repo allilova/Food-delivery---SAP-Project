@@ -1,6 +1,5 @@
 package com.example.food_delivery_app.config;
 
-import com.example.food_delivery_app.config.JwtTokenValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +14,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +31,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/auth/**", "/api/test", "/api/home", "/api/restaurants/**", "/api/restaurants/search", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/auth/**", "/auth/**", "/api/test", "/api/home", "/api/restaurants", "/api/restaurants/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -85,4 +83,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-} 
+}

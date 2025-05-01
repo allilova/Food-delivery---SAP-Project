@@ -1,6 +1,5 @@
 package com.example.food_delivery_app.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +19,10 @@ public class Payment {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user; // Changed to match User.payments mappedBy="user"
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
@@ -32,5 +34,4 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
-
 }

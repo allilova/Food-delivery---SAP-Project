@@ -5,11 +5,13 @@ import lombok.Data;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Data
 @Entity
+@Data
 @Table(name = "foods")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Food {
@@ -20,7 +22,7 @@ public class Food {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
 
     @Column(nullable = false)
@@ -32,48 +34,65 @@ public class Food {
     @Column(nullable = false)
     private Boolean isAvailable = true;
 
+    @Column(nullable = false)
+    private Integer preparationTime = 30; // Default to 30 minutes
+
     @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+    @JsonIgnore
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems = new HashSet<>();
-
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
 
     @Column(nullable = false)
     private Double averageRating = 0.0;
 
-    public void updateAverageRating() {
-        if (reviews.isEmpty()) {
-            this.averageRating = 0.0;
-            return;
-        }
-        this.averageRating = reviews.stream()
-            .mapToDouble(Review::getRating)
-            .average()
-            .orElse(0.0);
-    }
-=======
-=======
->>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
 
-    private boolean available;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "food_ingredients",
+        joinColumns = @JoinColumn(name = "food_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+    )
     private List<IngredientsItem> ingredients = new ArrayList<>();
->>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
+
+    // Convenience methods needed by other parts of the application
+    public int getPreparationTime() {
+        return preparationTime != null ? preparationTime : 30;
+    }
+
+    public void setPreparationTime(int preparationTime) {
+        this.preparationTime = preparationTime;
+    }
+
+    public String getFoodImage() {
+        return imageUrl;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable != null ? isAvailable : false;
+    }
+
+    public void setAvailable(boolean available) {
+        this.isAvailable = available;
+    }
+
+   
+
+    // Alias for imageUrl used in some parts of the code
+    public String getFoodImagee() {
+        return imageUrl != null ? imageUrl : "";
+    }
 }

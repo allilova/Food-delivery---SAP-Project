@@ -29,7 +29,6 @@ public class UserController {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhone_number());
         dto.setAddress(user.getAddress());
         dto.setRole(user.getRole());
 

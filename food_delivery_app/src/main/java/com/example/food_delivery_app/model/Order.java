@@ -19,12 +19,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private User customer;
+    private User user; // Changed from 'customer' to 'user' to match User.orders mappedBy
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;

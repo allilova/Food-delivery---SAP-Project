@@ -38,20 +38,34 @@ public class Restaurant {
     private String closingHours;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true) //tova e neshto kato foreign key; po tozi nacin sa svurzani orders and restaurants
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     @ElementCollection
     @Column(length = 1000)
-    private List<String>images;
+    private List<String> images = new ArrayList<>();
 
-    private boolean open; //kogato e closed , nqma da moje da se porucva
+    private boolean open = true; // Default to open
 
     @JsonIgnore
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private Menu menu;
 
     @OneToMany(mappedBy = "restaurant")
-    private List<Rating> ratings;
-
+    private List<Rating> ratings = new ArrayList<>();
+    
+    // Convenience method needed for some parts of the application
+    public Long getRestaurantID() {
+        return id;
+    }
+    
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", restaurantName='" + restaurantName + '\'' +
+                ", type='" + type + '\'' +
+                ", open=" + open +
+                '}';
+    }
 }

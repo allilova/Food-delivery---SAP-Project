@@ -16,9 +16,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AuthenticationService {
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -36,6 +39,11 @@ public class AuthenticationService {
     private CustomerUserDetailsService customerUserDetailsService;
 
     public AuthResponse register(User user) throws Exception {
+        // Log the incoming user data for debugging
+        logger.debug("Registering user: {}", user.getEmail());
+        logger.debug("User data: name={}, phoneNumber={}, address={}, role={}", 
+                     user.getName(), user.getPhoneNumber(), user.getAddress(), user.getRole());
+
         // Check if email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new Exception("A user with this email already exists.");
@@ -46,10 +54,22 @@ public class AuthenticationService {
             user.setRole(USER_ROLE.ROLE_CUSTOMER);
         }
 
-        // Simple password validation - removing complex regex for now
-        // This will allow the registration to work while still enforcing basic security
+        // Simple password validation
         if (user.getPassword() == null || user.getPassword().length() < 8) {
             throw new Exception("Password must be at least 8 characters long");
+        }
+
+        // Check for required fields
+        if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+            throw new Exception("Phone number is required");
+        }
+
+        if (user.getAddress() == null || user.getAddress().isEmpty()) {
+            throw new Exception("Address is required");
+        }
+
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new Exception("Name is required");
         }
 
         // Encode password
@@ -57,12 +77,14 @@ public class AuthenticationService {
 
         // Save user
         User savedUser = userRepository.save(user);
+        logger.debug("User saved successfully: {}", savedUser.getId());
 
         // Create cart for customer users
         if (savedUser.getRole() == USER_ROLE.ROLE_CUSTOMER) {
             Cart cart = new Cart();
-            cart.setCustomer(savedUser);
+            cart.setUser(savedUser);
             cartRepository.save(cart);
+            logger.debug("Cart created for user: {}", savedUser.getId());
         }
 
         // Create authentication object

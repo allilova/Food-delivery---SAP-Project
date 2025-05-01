@@ -2,6 +2,7 @@ package com.example.food_delivery_app.controller;
 
 import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.request.LoginRequest;
+import com.example.food_delivery_app.request.RegisterRequest;
 import com.example.food_delivery_app.response.AuthResponse;
 import com.example.food_delivery_app.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -23,11 +24,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody User user) {
+    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest request) {
+        System.out.println(">>> ВЛЕЗНА В МЕТОДА REGISTER <<<");
         try {
-            logger.info("Attempting to register user: {}", user.getEmail());
-            AuthResponse authResponse = authenticationService.register(user);
-            logger.info("User registered successfully: {}", user.getEmail());
+            logger.info("Attempting to register user: {}", request.getEmail());
+            AuthResponse authResponse = authenticationService.register(request);
+            logger.info("User registered successfully: {}", request.getEmail());
             return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             logger.warn("Invalid registration attempt: {}", e.getMessage());
@@ -35,7 +37,7 @@ public class AuthController {
             errorResponse.setMessage("Invalid registration data: " + e.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            logger.error("Registration failed for user: {}", user.getEmail(), e);
+            logger.error("Registration failed for user: {}", request.getEmail(), e);
             AuthResponse errorResponse = new AuthResponse();
             errorResponse.setMessage("Registration failed. Please try again later.");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -34,6 +34,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User findUserByJwtToken(String jwt) throws Exception {
+        if (jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7); // Премахва "Bearer "
+        }
         // Extract email from token
         String email = jwtProvider.getEmailFromToken(jwt);
         

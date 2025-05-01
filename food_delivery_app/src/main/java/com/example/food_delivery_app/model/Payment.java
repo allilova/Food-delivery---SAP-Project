@@ -1,36 +1,27 @@
 package com.example.food_delivery_app.model;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-
+@Entity
+@Table(name = "payments")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
-
-    @Temporal(TemporalType.TIMESTAMP)
+    private Double amount;
+    private PaymentType paymentType;
     private Date paymentDate;
 
-    private Float paymentAmount;
-
-    @Enumerated(EnumType.STRING)
-    private PaymentType paymentType;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

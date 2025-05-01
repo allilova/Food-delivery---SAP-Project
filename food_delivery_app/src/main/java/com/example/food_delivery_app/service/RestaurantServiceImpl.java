@@ -157,7 +157,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (restaurant.getMenu() != null && restaurant.getMenu().getFoods() != null) {
             dto.setMenu(
                     restaurant.getMenu().getFoods().stream()
-                            .map(food -> food.getFoodName())
+                            .map(food -> food.getName())
                             .collect(Collectors.toList())
             );
         }
@@ -165,37 +165,3 @@ public class RestaurantServiceImpl implements RestaurantService {
         return dto;
     }
 }
-//    public Optional<RestaurantResponseDto> getRestaurantById(Long id) {
-//        return restaurantRepository.findById(id)
-//                .map(this::convertToDto);
-//    }
-//}
-//
-//    private RestaurantResponseDto convertToDto(Restaurant restaurant) {
-//        RestaurantResponseDto dto = new RestaurantResponseDto();
-//        dto.setRestaurantId(restaurant.getRestaurantID().toString());
-//        dto.setName(restaurant.getRestaurantName());
-//        // Use the first image from the images list or a default
-//        dto.setImgUrl(restaurant.getImages() != null && !restaurant.getImages().isEmpty()
-//                ? restaurant.getImages().get(0)
-//                : "default-restaurant.jpg");
-//        dto.setAddress(restaurant.getRestaurantAddress() != null
-//                ? restaurant.getRestaurantAddress().toString()
-//                : "");
-//        // Since rating isn't directly in the model, we could calculate it or use a default
-//        dto.setRating(4.5); // Default or could be calculated from ratings
-//        dto.setFoodType(restaurant.getType());
-//        // Calculate or set a default delivery time
-//        dto.setTimeDelivery("30-45 min");
-//
-//        // Extract menu items if available
-//        List<String> menuItems = new ArrayList<>();
-//        if (restaurant.getMenu() != null && restaurant.getMenu().getFoods() != null) {
-//            menuItems = restaurant.getMenu().getFoods().stream()
-//                    .map(food -> food.getFoodName())
-//                    .collect(Collectors.toList());
-//        }
-//        dto.setMenu(menuItems);
-//
-//        return dto;
-//    }

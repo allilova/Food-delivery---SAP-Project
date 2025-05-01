@@ -1,10 +1,6 @@
 package com.example.food_delivery_app.repository;
 
-import com.example.food_delivery_app.model.Cart;
-import com.example.food_delivery_app.model.Order;
-import com.example.food_delivery_app.model.Payment;
-import com.example.food_delivery_app.model.User;
-import com.example.food_delivery_app.model.USER_ROLE;
+import com.example.food_delivery_app.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,12 +32,18 @@ class CartRepositoryTest {
 
     @Test
     void ItShouldFindCartByUserId() {
+        // Create address
+        Address address = new Address();
+        address.setStreet("123 Test St");
+        address.setCity("Test City");
+
+        // Create user
         User user = new User();
         user.setEmail("test@example.com");
         user.setPassword("password");
         user.setRole(USER_ROLE.ROLE_CUSTOMER);
         user.setName("Test User");
-        user.setAddress("123 Test St");
+        user.setAddress(address);
         user.setPhoneNumber("1234567890");
         user = userRepository.save(user);
 
@@ -49,38 +51,26 @@ class CartRepositoryTest {
         cart.setUser(user);
         cartRepository.save(cart);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Optional<Cart> foundCart = cartRepository.findByUser_Id(user.getId());
+        Optional<Cart> foundCart = cartRepository.findByUserId(user.getId());
 
         assertThat(foundCart).isPresent();
         assertThat(foundCart.get().getUser().getId()).isEqualTo(user.getId());
-=======
-
-
-       // Optional<Cart> foundCart = cartRepository.findByCustomer_UserID(user.getUserID());
-
-      //  assertThat(foundCart).isPresent();
-      //  assertThat(foundCart.get().getCustomer().getUserID()).isEqualTo(user.getUserID());
->>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
-=======
-
-
-       // Optional<Cart> foundCart = cartRepository.findByCustomer_UserID(user.getUserID());
-
-      //  assertThat(foundCart).isPresent();
-      //  assertThat(foundCart.get().getCustomer().getUserID()).isEqualTo(user.getUserID());
->>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
     }
 
     @Test
     void ItShouldFindCartByUserEmail() {
+        // Create address
+        Address address = new Address();
+        address.setStreet("123 Test St");
+        address.setCity("Test City");
+
+        // Create user
         User user = new User();
         user.setEmail("Sezer@gmail.com");
         user.setPassword("password");
         user.setRole(USER_ROLE.ROLE_CUSTOMER);
         user.setName("Sezer");
-        user.setAddress("123 Test St");
+        user.setAddress(address);
         user.setPhoneNumber("1234567890");
         user = userRepository.save(user);
 
@@ -88,7 +78,7 @@ class CartRepositoryTest {
         cart.setUser(user);
         cartRepository.save(cart);
 
-        Optional<Cart> foundCart = cartRepository.findByUser_Email("Sezer@gmail.com");
+        Optional<Cart> foundCart = cartRepository.findByUserEmail("Sezer@gmail.com");
 
         assertThat(foundCart).isPresent();
         assertThat(foundCart.get().getUser().getEmail()).isEqualTo("Sezer@gmail.com");

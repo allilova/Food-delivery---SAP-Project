@@ -54,4 +54,6 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     private List<Rating> ratings;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<RestaurantTurnover> turnovers = new ArrayList<>();
 }

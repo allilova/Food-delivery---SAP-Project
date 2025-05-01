@@ -40,33 +40,6 @@ public class Food {
     @JoinColumn(name = "category_id")
     private Category category;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
-    private Set<CartItem> cartItems = new HashSet<>();
-
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
-    private Set<OrderItem> orderItems = new HashSet<>();
-
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
-
-    @Column(nullable = false)
-    private Double averageRating = 0.0;
-
-    public void updateAverageRating() {
-        if (reviews.isEmpty()) {
-            this.averageRating = 0.0;
-            return;
-        }
-        this.averageRating = reviews.stream()
-            .mapToDouble(Review::getRating)
-            .average()
-            .orElse(0.0);
-    }
-=======
-=======
->>>>>>> 1db6b8e08a5a54e3b88a36b81c018b3860e2aaf5
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -75,5 +48,4 @@ public class Food {
 
     @ManyToMany
     private List<IngredientsItem> ingredients = new ArrayList<>();
->>>>>>> 3b97e188d54bd0a20c3391ce1ad1a3d3dc0fb7ca
 }

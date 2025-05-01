@@ -31,14 +31,17 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
     private final List<String> excludedPaths = Arrays.asList(
-        "/api/auth/**",
-        "/auth/**",
-        "/api/test",
-        "/api/home",
-        "/api/restaurants/**",
-        "/api/restaurants/search",
-        "/swagger-ui/**",
-        "/v3/api-docs/**"
+            "/auth/register",
+            "/auth/login",
+            "/api/user/profile",
+            "/api/auth/**",
+            "/auth/**",
+            "/api/test",
+            "/api/home",
+            "/api/restaurants/**",
+            "/api/restaurants/search",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     );
     
     @Override

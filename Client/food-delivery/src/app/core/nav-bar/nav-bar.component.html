@@ -1,29 +1,42 @@
 <nav>
-        <ul>
-            <li><a routerLink="/home">Home</a></li>
-            <li><a routerLink="/catalog">Restaurants</a></li>
-            
-            <!-- Restaurant owner specific links -->
-            <li *ngIf="isRestaurant()"><a routerLink="/supplier">Dashboard</a></li>
-            <li *ngIf="isRestaurant()"><a routerLink="/supplier/order">Orders</a></li>
-            
-            <!-- Customer specific links -->
-            <li *ngIf="isCustomer()"><a routerLink="/shopCart">Cart</a></li>
-            
-            <!-- Driver specific links -->
-            <li *ngIf="isDriver()"><a routerLink="/deliveries">Deliveries</a></li>
-            
-            <!-- Admin specific links -->
-            <li *ngIf="isAdmin()"><a routerLink="/admin">Admin Panel</a></li>
-            <!-- Not logged in -->
-            <li *ngIf="!isLoggedIn"><a routerLink="/login">Login</a></li>
-            <li *ngIf="!isLoggedIn"><a routerLink="/register">Register</a></li>
-            
-            <!-- Logged in -->
-            <li *ngIf="isLoggedIn"><a routerLink="/profile">Profile</a></li>
-            <li *ngIf="isLoggedIn"><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
-            
-            <!-- Always visible -->
-            <li><a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-        </ul>
+    <ul>
+        <li><a routerLink="/home">Home</a></li>
+        
+        <!-- Always visible for all users -->
+        <li><a routerLink="/catalog">Catalog</a></li>
+        
+        <!-- Only visible when logged in as a restaurant owner -->
+        <ng-container *ngIf="isLoggedIn && isRestaurant()">
+            <li><a routerLink="/supplier">Dashboard</a></li>
+            <li><a routerLink="/supplier/order">Orders</a></li>
+        </ng-container>
+        
+        <!-- Only visible when logged in as an admin -->
+        <ng-container *ngIf="isLoggedIn && isAdmin()">
+            <li><a routerLink="/admin">Admin Panel</a></li>
+        </ng-container>
+        
+        <!-- Authentication links -->
+        <ng-container *ngIf="!isLoggedIn">
+            <li><a routerLink="/login">Login</a></li>
+            <li><a routerLink="/register">Register</a></li>
+        </ng-container>
+        
+        <!-- Only visible when logged in (any role) -->
+        <ng-container *ngIf="isLoggedIn">
+            <li><a routerLink="/profile">Profile</a></li>
+            <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
+        </ng-container>
+        
+        <!-- Cart icon with basket icon (always visible but only functional for customers) -->
+        <li class="cart-icon">
+            <a routerLink="{{ isLoggedIn && isCustomer() ? '/shopCart' : '/login' }}">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <span *ngIf="isLoggedIn && isCustomer() && cartItemsCount > 0" class="cart-badge">{{cartItemsCount}}</span>
+            </a>
+        </li>
+        
+        <!-- Search icon always at the end -->
+        <li class="search-icon"><a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i></a></li>
+    </ul>
 </nav>

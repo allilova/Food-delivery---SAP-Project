@@ -16,7 +16,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { OrdersComponent } from './supplier/orders/orders.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
-import { authGuard, roleGuard } from './guards/auth.guard';
+import { authGuard, roleGuard, customerOnlyGuard } from './guards/auth.guard';
 import { USER_ROLE } from './types/user-role.enum';
 
 export const routes: Routes = [
@@ -24,17 +24,21 @@ export const routes: Routes = [
     {path: 'home', component: HomeComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
-    {path: 'catalog', children: [
-        {path: '', component: CatalogComponent},
-        {path: ':restaurantId', component: MenuComponent}
-    ]},
     {
-        path: 'edit-restaurant', 
-        component: EditRestaurantComponent, 
-        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT, USER_ROLE.ROLE_ADMIN])]
+        path: 'catalog', 
+        canActivate: [customerOnlyGuard], // Prevent restaurant owners from accessing
+        children: [
+            {path: '', component: CatalogComponent},
+            {path: ':restaurantId', component: MenuComponent}
+        ]
     },
     {
-        path: 'edit-menu', 
+        path: 'edit-restaurant/:id', 
+        component: EditRestaurantComponent, 
+        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])]
+    },
+    {
+        path: 'edit-menu/:id', 
         component: EditMenuComponent, 
         canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT, USER_ROLE.ROLE_ADMIN])]
     },
@@ -51,14 +55,18 @@ export const routes: Routes = [
     {
         path: 'shopCart', 
         component: ShopCartComponent, 
-        canActivate: [authGuard]
+        canActivate: [customerOnlyGuard] // Only customers can access cart
     },
     {
         path: 'payment', 
         component: PaymentComponent, 
-        canActivate: [authGuard]
+        canActivate: [customerOnlyGuard] // Only customers can access payment
     },
-    {path: 'search', component: SearchComponent},
+    {
+        path: 'search', 
+        component: SearchComponent, 
+        canActivate: [customerOnlyGuard] // Only customers can access search
+    },
     {
         path: 'supplier', 
         canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])],
@@ -68,7 +76,11 @@ export const routes: Routes = [
             {path: 'order/:id', component: OrdersComponent}
         ]
     },
-    {path: 'restaurants', component: RestaurantsComponent},
+    {
+        path: 'restaurants', 
+        component: RestaurantsComponent, 
+        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])] // Only admin can access all restaurants
+    },
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}
 ];

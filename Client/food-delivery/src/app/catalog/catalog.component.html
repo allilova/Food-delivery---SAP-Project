@@ -1,45 +1,23 @@
 <div class="search-menu">
     <h2>Filters:</h2>
     <ul>
+        @for (category of categories; track category.name) {
+            <li>
+                <div class="category-card" [class.active]="selectedCategory === category.name">
+                    <a href="javascript:void(0)" (click)="filterByCategory(category.name)">
+                        <img [src]="category.img" [alt]="category.name">
+                        {{category.name}}
+                    </a>
+                </div>
+            </li>
+        }
         <li>
             <div class="category-card">
-            <a href=""><img src="burgers.png" alt="">burgers</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="pizza.png" alt="">pizza</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="passta.png" alt="">pasta</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="healty.png" alt="">healthy</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="assian.png" alt="">asian</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="desserts.png" alt="">desserts</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i>search more</a>
-        </div>
+                <a routerLink="/search"><i class="fa-solid fa-magnifying-glass"></i>search more</a>
+            </div>
         </li>
     </ul>
 </div>
 <div class="item-list">
-    <app-item-list></app-item-list>
+    <app-item-list [category]="selectedCategory"></app-item-list>
 </div>
-
-

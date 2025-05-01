@@ -2,7 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment.development';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
@@ -132,14 +132,27 @@ export class AuthService {
     this.router.navigate(['/home']);
   }
 
-  // Get user profile
-  getUserProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${this.apiUrl}/api/user/profile`, {
-      headers: { 
-        'Authorization': `Bearer ${this.getToken()}`
+// Get user profile
+getUserProfile(): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/api/user/profile`, {
+    headers: { 
+      'Authorization': `Bearer ${this.getToken()}`
+    }
+  }).pipe(
+    map(response => {
+      // Transform the response if needed
+      // Add a property for favorites if it doesn't exist
+      if (response && !response.favorites && response.favourites) {
+        response.favorites = response.favourites;
       }
-    });
-  }
+      return response;
+    }),
+    catchError(error => {
+      console.error('Error fetching user profile:', error);
+      return throwError(() => error);
+    })
+  );
+}
 
   // Update user profile
   updateUserProfile(profileData: any): Observable<UserProfile> {
@@ -157,4 +170,6 @@ export class AuthService {
     }
     return null;
   }
+
+  
 }

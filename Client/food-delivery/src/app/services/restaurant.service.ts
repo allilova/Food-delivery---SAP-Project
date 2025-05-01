@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Restaurant } from '../types/restaurants';
 import { Food } from '../types/food';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -102,4 +104,44 @@ export class RestaurantService {
       headers: this.getHeaders()
     });
   }
+// Method to delete a restaurant (for admins)
+deleteRestaurant(restaurantId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/admin/restaurants/${restaurantId}`, {
+      headers: this.getHeaders()
+    });
+  }
+  
+  // Method to get restaurant details with full menu
+  getRestaurantWithMenu(restaurantId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/restaurants/${restaurantId}?includeMenu=true`, {
+      headers: this.getHeaders()
+    });
+  }
+  
+  // Method to rate a restaurant
+  rateRestaurant(restaurantId: string, rating: number, comment?: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/restaurants/${restaurantId}/rate`, 
+      { rating, comment }, 
+      { headers: this.getHeaders() }
+    );
+  }
+  
+  // Get user's favorite restaurants
+  getUserFavorites(): Observable<Restaurant[]> {
+    // If the API endpoint doesn't exist, we can use the profile endpoint and extract favorites
+    return this.http.get<any>(`${this.apiUrl}/api/users/profile`, {
+      headers: this.getHeaders()
+    }).pipe(
+      map(profile => {
+        // Extract favorites from profile using either property name
+        return profile?.favorites || profile?.favourites || [];
+      }),
+      catchError(error => {
+        console.error('Error fetching user favorites:', error);
+        return of([]);
+      })
+    );
+  };
 }
+
+

@@ -2,11 +2,11 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ApiService } from '../../api.service';
 import { RestaurantService } from '../../services/restaurant.service';
 import { AuthService } from '../../services/auth.service';
 import { Restaurant } from '../../types/restaurants';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner.component';
+import { USER_ROLE } from '../../types/user-role.enum';
 
 @Component({
   selector: 'app-item-list',
@@ -19,19 +19,22 @@ export class ItemListComponent implements OnInit, OnChanges {
   @Input() category: string | null = null;
   
   restaurants: Restaurant[] = [];
+  favoriteRestaurantIds: Set<string> = new Set();
   loading = false;
   error = '';
   isLoggedIn = false;
+  isAdmin = false;
 
   constructor(
-    private apiService: ApiService,
     private restaurantService: RestaurantService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn;
+    this.isAdmin = this.authService.userRole === USER_ROLE.ROLE_ADMIN;
     this.loadRestaurants();
+    this.loadFavorites();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -45,13 +48,11 @@ export class ItemListComponent implements OnInit, OnChanges {
     this.loading = true;
     this.error = '';
 
-    // If category is selected, we could use it to filter
-    // This might require a different endpoint or query parameter
-    this.apiService.getRestaurants().subscribe({
+    this.restaurantService.getAllRestaurants().subscribe({
       next: (restaurants) => {
         this.restaurants = restaurants;
         
-        // Client-side filtering if backend doesn't support category filtering
+        // Client-side filtering if a category is selected
         if (this.category) {
           this.restaurants = this.restaurants.filter(r => 
             r.foodType && r.foodType.toLowerCase() === this.category?.toLowerCase()
@@ -68,24 +69,77 @@ export class ItemListComponent implements OnInit, OnChanges {
     });
   }
 
-  // Add restaurant to favorites
-  addToFavorites(event: Event, restaurantId: string): void {
+  // Load user's favorite restaurants
+  loadFavorites(): void {
+    if (!this.isLoggedIn) {
+      return;
+    }
+
+    // Use the restaurant service to get user favorites
+    this.restaurantService.getUserFavorites().subscribe({
+      next: (favorites) => {
+        if (favorites && favorites.length) {
+          this.favoriteRestaurantIds = new Set(
+            favorites.map(restaurant => restaurant.id.toString())
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Error loading favorites:', err);
+        // Create empty set if there was an error
+        this.favoriteRestaurantIds = new Set();
+      }
+    });
+  }
+
+  // Check if a restaurant is in favorites
+  isFavorite(restaurantId: string): boolean {
+    return this.favoriteRestaurantIds.has(restaurantId);
+  }
+
+  // Add or remove restaurant from favorites
+  toggleFavorite(event: Event, restaurantId: string): void {
     event.preventDefault(); // Prevent navigation
     event.stopPropagation(); // Prevent event bubbling
     
     if (!this.isLoggedIn) {
-      // Redirect to login or show login prompt
       return;
     }
     
     this.restaurantService.toggleFavorite(restaurantId).subscribe({
       next: () => {
-        // Show success message or update UI
-        console.log('Restaurant added to favorites');
+        // Toggle in local state
+        if (this.favoriteRestaurantIds.has(restaurantId)) {
+          this.favoriteRestaurantIds.delete(restaurantId);
+        } else {
+          this.favoriteRestaurantIds.add(restaurantId);
+        }
       },
       error: (err) => {
-        console.error('Error adding to favorites:', err);
+        console.error('Error toggling favorite status:', err);
       }
     });
+  }
+
+  // Delete restaurant (Admin only)
+  deleteRestaurant(event: Event, restaurantId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (!this.isAdmin) {
+      return;
+    }
+    
+    if (confirm('Are you sure you want to delete this restaurant?')) {
+      this.restaurantService.deleteRestaurant(restaurantId).subscribe({
+        next: () => {
+          // Remove from local array
+          this.restaurants = this.restaurants.filter(r => r.id !== restaurantId);
+        },
+        error: (err) => {
+          console.error('Error deleting restaurant:', err);
+        }
+      });
+    }
   }
 }

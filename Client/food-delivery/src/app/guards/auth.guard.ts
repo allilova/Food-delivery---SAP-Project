@@ -71,3 +71,28 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     return false;
   };
 };
+
+// Guard to prevent restaurant owners from accessing customer pages
+export const customerOnlyGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
+  
+  // If we're on the server during SSR, allow navigation
+  if (isPlatformServer(platformId)) {
+    return true;
+  }
+  
+  if (isLoggedIn()) {
+    const userRole = getUserRole();
+    // Block restaurant owners, allow all other roles
+    if (userRole === 'ROLE_RESTAURANT') {
+      router.navigate(['/supplier']);
+      return false;
+    }
+    return true;
+  }
+  
+  // Not logged in, redirect to login
+  router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+  return false;
+};

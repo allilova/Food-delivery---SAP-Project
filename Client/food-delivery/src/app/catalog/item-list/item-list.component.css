@@ -1,53 +1,125 @@
-
-img{
+img {
     width: 100%;
+    border-radius: 10px 10px 0 0;
+    height: 180px;
+    object-fit: cover;
 }
 
-.card{
-    width: 8cm;
-    height: 9.6cm;
+.card {
+    width: 300px;
+    height: auto;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     max-width: 50ch;
-    margin-bottom:1cm ;
+    margin-bottom: 1cm;
     background-color: #FFDBDB;
     border: solid 2px white;
     color: rgb(59, 4, 4);
     text-align: center;
-}
-.text-card{
-    width: 8cm;
-    height: 4cm;
-    
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-button{
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.text-card {
+    width: 100%;
+    padding: 15px;
+}
+
+.text-card h4 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+button {
     background-color: rgb(59, 4, 4);
     text-decoration: none;
     color: white;
     font-weight: bold;
     border-radius: 5px;
-    height: 45px;
-    width: 100px;
-    margin-top: 10px;
+    height: 40px;
+    padding: 0 15px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.cards{
+button:hover {
+    background-color: #7a1414;
+}
+
+.cards {
     gap: 2em;
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: row;
     flex-wrap: wrap;
     padding: 1em;
     display: flex;
+    justify-content: center;
     margin: 0;
 }
-.ran-time{
+
+.ran-time {
     display: flex;
     gap: 1em;
     justify-content: center;
+    margin-bottom: 15px;
 }
-button i{
-    color:white;
- }
 
+button i {
+    color: white;
+    margin-right: 5px;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.view-btn {
+    background-color: rgb(59, 4, 4);
+}
+
+.favorite-btn {
+    background-color: #e74c3c;
+}
+
+.unfavorite-btn {
+    background-color: #7f8c8d;
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.edit-btn {
+    background-color: #2980b9;
+}
+
+.delete-btn {
+    background-color: #c0392b;
+}
+
+.loading-container, .error-message, .no-restaurants {
+    width: 100%;
+    text-align: center;
+    padding: 40px 0;
+    color: rgb(59, 4, 4);
+}
+
+.error-message {
+    color: #c0392b;
+    font-weight: bold;
+}

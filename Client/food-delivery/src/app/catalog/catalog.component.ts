@@ -1,9 +1,11 @@
 // src/app/catalog/catalog.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ItemListComponent } from './item-list/item-list.component';
 import { RestaurantService } from '../services/restaurant.service';
+import { AuthService } from '../services/auth.service';
+import { USER_ROLE } from '../types/user-role.enum';
 
 @Component({
   selector: 'app-catalog',
@@ -24,23 +26,44 @@ export class CatalogComponent implements OnInit {
   selectedCategory: string | null = null;
   loading = false;
   error = '';
+  isLoggedIn = false;
+  isRestaurantOwner = false;
 
-  constructor(private restaurantService: RestaurantService) {}
+  constructor(
+    private restaurantService: RestaurantService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    // You could pre-load category data from the backend if needed
+    // Check if user is logged in
+    this.isLoggedIn = this.authService.isLoggedIn;
+    
+    // If not logged in, redirect to login page
+    if (!this.isLoggedIn) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: '/catalog' } });
+      return;
+    }
+    
+    // Check if user is a restaurant owner
+    const userRole = this.authService.userRole;
+    this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
+    
+    // If user is a restaurant owner, redirect to their dashboard
+    if (this.isRestaurantOwner) {
+      this.router.navigate(['/supplier']);
+      return;
+    }
   }
 
   // Method to filter restaurants by category
   filterByCategory(category: string): void {
-    this.selectedCategory = category;
-    // Trigger filtering in child component
-    // This would require some communication mechanism with the ItemListComponent
-    // For example, using a shared service or @Input binding
-  }
-
-  // Reset category filter
-  resetFilter(): void {
-    this.selectedCategory = null;
+    if (this.selectedCategory === category) {
+      // If clicking the already selected category, clear the filter
+      this.selectedCategory = null;
+    } else {
+      // Otherwise set the new category filter
+      this.selectedCategory = category;
+    }
   }
 }

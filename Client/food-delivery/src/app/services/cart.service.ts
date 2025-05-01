@@ -1,10 +1,11 @@
 // src/app/services/cart.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Cart, CartItem } from '../types/cart';
 import { Food } from '../types/food';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,23 @@ export class CartService {
   public cartItems = this.cartItemsSubject.asObservable();
   
   private apiUrl = environment.apiUrl;
+  private isBrowser: boolean;
   
-  constructor(private http: HttpClient) {
-    // Load cart from localStorage initially
-    this.loadCartFromLocalStorage();
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    
+    // Only load from localStorage in browser environment
+    if (this.isBrowser) {
+      this.loadCartFromLocalStorage();
+    }
   }
 
   // Helper method to get auth token from localStorage
   private getAuthToken(): string | null {
+    if (!this.isBrowser) return null;
     return localStorage.getItem('jwt_token');
   }
 
@@ -41,6 +51,8 @@ export class CartService {
 
   // Load cart from localStorage
   private loadCartFromLocalStorage() {
+    if (!this.isBrowser) return;
+    
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
@@ -55,6 +67,8 @@ export class CartService {
 
   // Save cart to localStorage
   private saveCartToLocalStorage() {
+    if (!this.isBrowser) return;
+    
     localStorage.setItem('cart', JSON.stringify(this.cartItemsSubject.value));
   }
 
@@ -80,8 +94,10 @@ export class CartService {
       this.cartItemsSubject.next([...currentItems, newItem]);
     }
     
-    this.saveCartToLocalStorage();
-    this.syncWithBackend();
+    if (this.isBrowser) {
+      this.saveCartToLocalStorage();
+      this.syncWithBackend();
+    }
   }
 
   // Remove item from cart
@@ -89,8 +105,11 @@ export class CartService {
     const currentItems = this.cartItemsSubject.value;
     const updatedItems = currentItems.filter(item => item.food.id !== foodId);
     this.cartItemsSubject.next(updatedItems);
-    this.saveCartToLocalStorage();
-    this.syncWithBackend();
+    
+    if (this.isBrowser) {
+      this.saveCartToLocalStorage();
+      this.syncWithBackend();
+    }
   }
 
   // Update item quantity
@@ -113,15 +132,21 @@ export class CartService {
     });
     
     this.cartItemsSubject.next(updatedItems);
-    this.saveCartToLocalStorage();
-    this.syncWithBackend();
+    
+    if (this.isBrowser) {
+      this.saveCartToLocalStorage();
+      this.syncWithBackend();
+    }
   }
 
   // Clear cart
   clearCart(): void {
     this.cartItemsSubject.next([]);
-    localStorage.removeItem('cart');
-    this.syncWithBackend();
+    
+    if (this.isBrowser) {
+      localStorage.removeItem('cart');
+      this.syncWithBackend();
+    }
   }
 
   // Get cart total
@@ -136,6 +161,8 @@ export class CartService {
 
   // Sync cart with backend if user is logged in
   private syncWithBackend(): void {
+    if (!this.isBrowser) return;
+    
     if (this.getAuthToken()) {
       const cartData = {
         items: this.cartItemsSubject.value.map(item => ({
@@ -161,6 +188,8 @@ export class CartService {
 
   // Load cart from backend and update local cart
   loadCartFromBackend(): void {
+    if (!this.isBrowser) return;
+    
     if (this.getAuthToken()) {
       this.fetchCartFromBackend().subscribe({
         next: (cart) => {

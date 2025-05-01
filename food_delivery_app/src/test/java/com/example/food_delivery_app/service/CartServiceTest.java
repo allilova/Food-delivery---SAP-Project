@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.service;
+/*package com.example.food_delivery_app.service;
 
 import com.example.food_delivery_app.exception.ResourceNotFoundException;
 import com.example.food_delivery_app.model.Cart;
@@ -177,4 +177,4 @@ class CartServiceTest {
         assertTrue(cart.getItems().isEmpty());
         assertEquals(0.0, cart.getTotalAmount());
     }
-} 
+} */

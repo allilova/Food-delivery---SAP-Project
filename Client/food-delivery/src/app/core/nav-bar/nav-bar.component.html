@@ -6,33 +6,35 @@
         <li><a routerLink="/catalog">Catalog</a></li>
         
         <!-- Only visible when logged in as a restaurant owner -->
-        <ng-container *ngIf="isLoggedIn && isRestaurant()">
+        @if (isLoggedIn && isRestaurant()) {
             <li><a routerLink="/supplier">Dashboard</a></li>
             <li><a routerLink="/supplier/order">Orders</a></li>
-        </ng-container>
+        }
         
         <!-- Only visible when logged in as an admin -->
-        <ng-container *ngIf="isLoggedIn && isAdmin()">
-            <li><a routerLink="/admin">Admin Panel</a></li>
-        </ng-container>
+        @if (isLoggedIn && isAdmin()) {
+            <li><a routerLink="/restaurants">Admin Panel</a></li>
+        }
         
         <!-- Authentication links -->
-        <ng-container *ngIf="!isLoggedIn">
+        @if (!isLoggedIn) {
             <li><a routerLink="/login">Login</a></li>
             <li><a routerLink="/register">Register</a></li>
-        </ng-container>
+        }
         
         <!-- Only visible when logged in (any role) -->
-        <ng-container *ngIf="isLoggedIn">
+        @if (isLoggedIn) {
             <li><a routerLink="/profile">Profile</a></li>
             <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
-        </ng-container>
+        }
         
         <!-- Cart icon with basket icon (always visible but only functional for customers) -->
         <li class="cart-icon">
             <a routerLink="{{ isLoggedIn && isCustomer() ? '/shopCart' : '/login' }}">
                 <i class="fa-solid fa-basket-shopping"></i>
-                <span *ngIf="isLoggedIn && isCustomer() && cartItemsCount > 0" class="cart-badge">{{cartItemsCount}}</span>
+                @if (isLoggedIn && isCustomer() && cartItemsCount > 0) {
+                    <span class="cart-badge">{{cartItemsCount}}</span>
+                }
             </a>
         </li>
         

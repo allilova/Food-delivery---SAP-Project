@@ -1,4 +1,3 @@
-// src/app/types/user-role.enum.ts
 export enum USER_ROLE {
     ROLE_ADMIN = 'ROLE_ADMIN',
     ROLE_RESTAURANT = 'ROLE_RESTAURANT',

@@ -1,10 +1,11 @@
 // src/app/core/nav-bar/nav-bar.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { USER_ROLE } from '../../types/user-role.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'nav-bar-root',
@@ -13,10 +14,12 @@ import { USER_ROLE } from '../../types/user-role.enum';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav.bar.component.css'
 })
-export class NavigationBarComponent implements OnInit {
+export class NavigationBarComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
-  userRole: string | null = null;
+  userRole: USER_ROLE | null = null;
   cartItemsCount = 0;
+  private userSubscription: Subscription | null = null;
+  private cartSubscription: Subscription | null = null;
 
   constructor(
     private authService: AuthService,
@@ -25,19 +28,42 @@ export class NavigationBarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Get initial auth state
+    this.isLoggedIn = this.authService.isLoggedIn;
+    this.userRole = this.authService.userRole;
+    
     // Subscribe to auth state changes
-    this.authService.currentUser.subscribe(user => {
+    this.userSubscription = this.authService.currentUser.subscribe(user => {
+      console.log('Auth state changed:', user);
       this.isLoggedIn = !!user;
-      this.userRole = user ? user.role : null;
+      this.userRole = user ? user.role as USER_ROLE : null;
     });
 
     // Subscribe to cart updates for badge count
-    this.cartService.cartItems.subscribe(items => {
-      this.cartItemsCount = items.length;
+    this.cartSubscription = this.cartService.cartItems.subscribe(items => {
+      this.cartItemsCount = items.reduce((count, item) => count + item.quantity, 0);
     });
+
+    // Load cart from backend if logged in
+    if (this.isLoggedIn) {
+      this.cartService.loadCartFromBackend();
+    }
+    
+    console.log('Nav bar initialized, logged in:', this.isLoggedIn, 'role:', this.userRole);
+  }
+  
+  ngOnDestroy(): void {
+    // Clean up subscriptions to prevent memory leaks
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
   }
 
   logout(): void {
+    console.log('Logging out...');
     this.authService.logout();
     this.router.navigate(['/']);
   }

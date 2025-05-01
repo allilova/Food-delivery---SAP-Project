@@ -1,30 +1,58 @@
 <h1><i class="fa-solid fa-cart-shopping"></i> Your Shopping Cart </h1>
-<p class="headline">Hey there!</p>
-<p class="headline">Here’s what you’ve picked so far. We hope you love it!</p>
-<div class="shop-cart">
-    <div class="cards">
-            <div class="card">
-                <div class="img-card">
-                    <img src="food1.jpg">
+
+@if (loading) {
+    <div class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+        <p>Loading your cart...</p>
+    </div>
+} @else if (error) {
+    <div class="error-message">{{ error }}</div>
+} @else if (cartItems.length === 0) {
+    <div class="empty-cart">
+        <p>Your cart is empty. Browse our restaurants to add some delicious items!</p>
+        <a routerLink="/catalog"><button class="Browse">Browse Restaurants</button></a>
+    </div>
+} @else {
+    <p class="headline">Hey there!</p>
+    <p class="headline">Here's what you've picked so far. We hope you love it!</p>
+    <div class="shop-cart">
+        <div class="cards">
+            @for (item of cartItems; track item.id) {
+                <div class="card">
+                    <div class="img-card">
+                        <img [src]="item.food.imageUrl || 'assets/images/default-food.jpg'" [alt]="item.food.name">
+                    </div>
+                    <div class="text-card">
+                        <a href="javascript:void(0)" (click)="removeItem(item.food.id)">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>    
+                        <h4>{{ item.food.name }}</h4>
+                        <p>{{ item.food.description || 'No description available' }}</p>
+                        @if (item.food.ingredients && item.food.ingredients.length > 0) {
+                            <p>{{ item.food.ingredients.join(', ') }}</p>
+                        }
+                        <p>{{ item.food.price.toFixed(2) }} BGN</p>
+                        <label for="count-{{ item.id }}">Quantity: </label>
+                        <input 
+                            type="number" 
+                            id="count-{{ item.id }}" 
+                            name="count-{{ item.id }}" 
+                            min="1" 
+                            [value]="item.quantity"
+                            (change)="updateQuantity(item.food.id, $event)"
+                        />
+                    </div>
                 </div>
-                <div class="text-card">
-                <a href=""><i class="fa-solid fa-xmark"></i></a>    
-                <h4>Grilled Pork Neck Steak</h4>
-                <p>Tender and juicy pork neck, grilled to perfection and seasoned with a house spice blend.
-                     Served with a side of fresh seasonal garnish.</p>
-                <p>300g</p>
-                <p>14.90 BGN</p>
-                <label for="count">Quantity: </label>
-                <input type="number" id="count" name="count" min="0"/>
-            </div>
-            </div>
+            }
+        </div>
+        <div class="shop-info">
+            <p><b>Subtotal: {{ subtotal.toFixed(2) }} BGN</b></p>
+            <p>Service fee: {{ serviceFee.toFixed(2) }} BGN</p>
+            <p>Delivery fee: {{ deliveryFee.toFixed(2) }} BGN</p>
+            <h4>Total items: {{ cartItems.length }}</h4>
+            <h4>Total price: {{ totalPrice.toFixed(2) }} BGN</h4>
+            <button class="Buy" (click)="proceedToPayment()">Checkout</button>
+            <button class="Clear" (click)="clearCart()">Clear Cart</button>
+        </div>
     </div>
-    <div class="shop-info">
-        <p><b>Subtotal: 29.99 lv</b></p>
-        <p>Service fee: 1.00 lv</p>
-        <p>Delivery fee: 2.05 lv</p>
-        <h4>Total items: 1</h4>
-        <h4>Total price: 33.04 lv</h4>
-        <a routerLink="/payment"><button class="Buy">Buy</button></a>
-    </div>
-</div>
+}

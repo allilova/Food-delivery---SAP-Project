@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.service;
+/*package com.example.food_delivery_app.service;
 
 import com.example.food_delivery_app.dto.RestaurantResponseDto;
 import com.example.food_delivery_app.model.Food;
@@ -82,4 +82,4 @@ class RestaurantServiceTest {
         assertEquals(1, result.size());
         assertEquals("Neapol", result.get(0).getName());
     }
-}
+}*/

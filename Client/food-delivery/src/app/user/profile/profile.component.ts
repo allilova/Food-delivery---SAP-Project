@@ -61,12 +61,9 @@ export class ProfileComponent implements OnInit {
 
   loadFavoriteRestaurants(): void {
     this.loading.favorites = true;
-    // Depending on your API, you might need to adjust this to get user favorites
-    this.restaurantService.getAllRestaurants().subscribe({
+    this.restaurantService.getUserFavorites().subscribe({
       next: (restaurants) => {
-        // This is just a placeholder - your backend might have a specific endpoint for favorites
-        // or you might need to filter the restaurants based on user favorites
-        this.favoriteRestaurants = restaurants.slice(0, 3); // Just showing 3 for example
+        this.favoriteRestaurants = restaurants;
         this.loading.favorites = false;
       },
       error: (err) => {
@@ -79,9 +76,17 @@ export class ProfileComponent implements OnInit {
 
   loadPreviousOrders(): void {
     this.loading.orders = true;
-    this.orderService.getUserOrders().subscribe({
-      next: (orders) => {
-        this.previousOrders = orders;
+    this.orderService.getUserOrders(0, 5).subscribe({
+      next: (response) => {
+        // Check if response has content property (paginated response)
+        if (response && response.content) {
+          this.previousOrders = response.content;
+        } else if (Array.isArray(response)) {
+          // If response is an array, use it directly
+          this.previousOrders = response;
+        } else {
+          this.previousOrders = [];
+        }
         this.loading.orders = false;
       },
       error: (err) => {

@@ -2,7 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { Cart, CartItem } from '../types/cart';
 import { Food } from '../types/food';
 import { isPlatformBrowser } from '@angular/common';
@@ -171,7 +171,7 @@ export class CartService {
         }))
       };
       
-      this.http.post(`${this.apiUrl}/api/cart`, cartData, {
+      this.http.post(`${this.apiUrl}/api/cart/items`, cartData, {
         headers: this.getHeaders()
       }).subscribe({
         error: err => console.error('Error syncing cart with backend:', err)

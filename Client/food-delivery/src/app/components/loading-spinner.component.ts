@@ -19,11 +19,11 @@ import { CommonModule } from '@angular/common';
     }
     
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(59, 4, 4, 0.1);
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
-      border-top: 4px solid rgb(59, 4, 4);
+      border-top: 3px solid #fff;
       animation: spin 1s linear infinite;
     }
     

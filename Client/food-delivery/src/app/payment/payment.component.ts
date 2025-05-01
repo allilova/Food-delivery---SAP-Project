@@ -17,9 +17,12 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
 })
 export class PaymentComponent implements OnInit {
   paymentForm!: FormGroup;
-  paymentMethod: 'card' | 'cash' = 'card';
+  paymentMethod: 'CARD' | 'CASH' = 'CARD';
   cartItems: any[] = [];
-  totalAmount = 0;
+  subtotal = 0;
+  serviceFee = 1.00;
+  deliveryFee = 2.05;
+  totalPrice = 0;
   loading = false;
   error = '';
   successMessage = '';
@@ -43,7 +46,8 @@ export class PaymentComponent implements OnInit {
 
     // Initialize form
     this.paymentForm = this.formBuilder.group({
-      paymentMethod: ['card', Validators.required],
+      paymentMethod: ['CARD', Validators.required],
+      deliveryAddress: ['', Validators.required],
       cardName: ['', Validators.required],
       cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       expiryDate: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\/[0-9]{2}$')]],
@@ -63,7 +67,7 @@ export class PaymentComponent implements OnInit {
       // Conditionally require card fields
       const cardControls = ['cardName', 'cardNumber', 'expiryDate', 'cvv'];
       
-      if (value === 'card') {
+      if (value === 'CARD') {
         cardControls.forEach(control => {
           this.paymentForm.get(control)?.setValidators([Validators.required]);
           this.paymentForm.get(control)?.updateValueAndValidity();
@@ -79,14 +83,14 @@ export class PaymentComponent implements OnInit {
 
   // Calculate total amount from cart items
   calculateTotal(): void {
-    this.totalAmount = this.cartService.getCartTotal();
+    this.subtotal = this.cartService.getCartTotal();
     // Add service fee and delivery fee
-    this.totalAmount += 3.05; // 1.00 service fee + 2.05 delivery fee
+    this.totalPrice = this.subtotal + this.serviceFee + this.deliveryFee;
   }
 
   // Process payment and create order
   onSubmit(): void {
-    if (this.paymentForm.invalid && this.paymentMethod === 'card') {
+    if (this.paymentForm.invalid && this.paymentMethod === 'CARD') {
       return;
     }
 
@@ -98,8 +102,8 @@ export class PaymentComponent implements OnInit {
         foodId: item.food.id,
         quantity: item.quantity
       })),
-      paymentType: this.paymentMethod.toUpperCase(),
-      deliveryAddress: 'Use default address' // In a real app, you would get this from a form or user profile
+      deliveryAddress: this.paymentForm.get('deliveryAddress')?.value,
+      paymentMethod: this.paymentMethod
     };
 
     // Create order via API

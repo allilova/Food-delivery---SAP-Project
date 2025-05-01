@@ -9,7 +9,7 @@
     } @else {
         <div class="info-restaurant">
             <div class="img">
-                <img [src]="restaurant.imgUrl || 'Gourmet Restaurant.jpg'" [alt]="restaurant.name">
+                <img [src]="restaurant.imgUrl || 'assets/images/default-restaurant.jpg'" [alt]="restaurant.name">
             </div>
             <div class="text">
                 <h3>{{ restaurant.name }}</h3>
@@ -19,9 +19,9 @@
                 <p><i class="fa-solid fa-clock"></i><b> Delivery Time:</b> {{ restaurant.timeDelivery }}</p>
             </div>
             @if (isRestaurantOwner || isAdmin) {
-                <a routerLink="/edit-restaurant"><button class="Edit">Edit</button></a>
+                <a [routerLink]="['/edit-restaurant', restaurantId]"><button class="Edit">Edit</button></a>
             } @else {
-                <button type="submit" (click)="addToFavorites()"><i class="fa-solid fa-heart"></i> Favorite</button>
+                <button type="button" (click)="addToFavorites()"><i class="fa-solid fa-heart"></i> Favorite</button>
             }
         </div>
 
@@ -30,7 +30,9 @@
             
             @if (isRestaurantOwner || isAdmin) {
                 <div class="adminAdd">
-                    <a routerLink="/create-menu"><i class="fa-solid fa-plus"></i></a>
+                    <a [routerLink]="['/create-menu']" [queryParams]="{restaurantId: restaurantId}">
+                        <i class="fa-solid fa-plus"></i> Add new menu item
+                    </a>
                 </div>
             }
             
@@ -44,7 +46,40 @@
             } @else if (menuItems.length === 0) {
                 <p>No menu items available yet.</p>
             } @else {
-                <app-menu-item [menuItems]="menuItems" [restaurantId]="restaurantId"></app-menu-item>
+                <div class="menu-cards">
+                    <div class="cards">
+                        @for (food of menuItems; track food.id) {
+                            <div class="card">
+                                <div class="img-card">
+                                    <img [src]="food.imageUrl || 'assets/images/default-food.jpg'" [alt]="food.name">
+                                </div>
+                                <div class="text-card">
+                                    <h4>{{ food.name }}</h4>
+                                    <p>{{ food.description }}</p>
+                                    <p>{{ food.ingredients?.join(', ') }}</p>
+                                    <p><b>{{ food.price.toFixed(2) }} BGN</b></p>
+                                    
+                                    <!-- Different buttons based on user role -->
+                                    @if (isRestaurantOwner || isAdmin) {
+                                        <div class="adminBtn">
+                                            <a [routerLink]="['/edit-menu', food.id]">
+                                                <button class="Edit">Edit</button>
+                                            </a>
+                                            <button class="Delete">Delete</button>
+                                            <button [class]="food.isAvailable ? 'Available' : 'Unavailable'">
+                                                {{ food.isAvailable ? 'Available' : 'Unavailable' }}
+                                            </button>
+                                        </div>
+                                    } @else {
+                                        <button class="Add" (click)="addToCart(food)" [disabled]="!food.isAvailable">
+                                            {{ food.isAvailable ? 'Add to Cart' : 'Unavailable' }}
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
             }
         </div>
     }

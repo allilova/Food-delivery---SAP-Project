@@ -5,6 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root1234
       MYSQL_DATABASE: food_delivery_app
+      APP_JWT_SECRET: mySuperSecretKey
     ports:
       - "3307:3306"
     volumes:

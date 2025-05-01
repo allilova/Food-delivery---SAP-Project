@@ -157,7 +157,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         if (restaurant.getMenu() != null && restaurant.getMenu().getFoods() != null) {
             dto.setMenu(
                     restaurant.getMenu().getFoods().stream()
-                            .map(food -> food.getFoodName())
+                            .map(food -> food.getName())
                             .collect(Collectors.toList())
             );
         }

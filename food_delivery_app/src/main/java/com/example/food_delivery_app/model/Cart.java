@@ -65,7 +65,7 @@ public class Cart {
 
     private void updateTotalAmount() {
         totalAmount = items.stream()
-                .mapToDouble(CartItem::getPrice)
+                .mapToDouble(item -> item.getQuantity() * item.getFood().getPrice())
                 .sum();
     }
 

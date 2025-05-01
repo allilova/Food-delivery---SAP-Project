@@ -29,17 +29,15 @@ public class Order {
     @JoinColumn(name = "restaurant_id", referencedColumnName = "id")
     private Restaurant restaurant;
 
-    private Long totalAmount;
-
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     private Date orderDate;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     private Address deliveryAddress;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.example.food_delivery_app.model.Review;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,17 +36,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-
     @Column(nullable = false)
     private String phoneNumber;
-
-    @Column(nullable = false)
-    private String address;
 
     @Enumerated(EnumType.STRING)
     private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -60,9 +57,13 @@ public class User {
     @ElementCollection
     private List<RestaurantDto> favourites = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Address address;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<DriverRevenue> driverRevenues = new ArrayList<>();
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<Bonus> bonuses = new ArrayList<>();
+
 }

@@ -10,6 +10,7 @@ import com.example.food_delivery_app.request.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,11 +29,11 @@ public class FoodServiceImpl implements FoodService {
         Food food = new Food();
 
         food.setCategory(category);
-        food.setFoodDescription(req.getFoodDescription());
-        food.setFoodName(req.getFoodName());
-        food.setFoodPrice(req.getFoodPrice());
+        food.setDescription(req.getFoodDescription());
+        food.setName(req.getFoodName());
+        food.setPrice(req.getFoodPrice().doubleValue());
         food.setMenu(menu);
-        food.setPreparationTime(req.getPreparationTime());
+        food.setImageUrl(req.getFoodImage());
         food.setAvailable(true);
         Food savedFood = foodRepository.save(food);
         menu.getFoods().add(savedFood);
@@ -96,11 +97,10 @@ public class FoodServiceImpl implements FoodService {
     public FoodResponseDto convertToDto(Food food) {
         FoodResponseDto dto = new FoodResponseDto();
         dto.setId(food.getId());
-        dto.setFoodName(food.getFoodName());
-        dto.setFoodDescription(food.getFoodDescription());
-        dto.setFoodImage(food.getFoodImage());
-        dto.setFoodPrice(food.getFoodPrice());
-        dto.setPreparationTime(food.getPreparationTime());
+        dto.setFoodName(food.getName());
+        dto.setFoodDescription(food.getDescription());
+        dto.setFoodImage(food.getImageUrl());
+        dto.setFoodPrice(BigDecimal.valueOf(food.getPrice()));
         dto.setAvailable(food.isAvailable());
 
         if (food.getCategory() != null) {

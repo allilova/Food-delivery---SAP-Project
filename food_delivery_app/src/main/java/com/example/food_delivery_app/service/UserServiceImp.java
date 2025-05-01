@@ -4,6 +4,8 @@ import com.example.food_delivery_app.config.JwtProvider;
 import com.example.food_delivery_app.model.USER_ROLE;
 import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.repository.UserRepository;
+import com.example.food_delivery_app.request.CreateAddressRequest;
+import com.example.food_delivery_app.request.CreateRestaurantRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,5 +55,36 @@ public class UserServiceImp implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public User updateUserProfile(User user, CreateAddressRequest.UpdateProfileRequest updateRequest) {
+        user.setName(updateRequest.getFirstName() + " " + updateRequest.getLastName());
+        user.setEmail(updateRequest.getEmail());
+        user.setPhoneNumber(updateRequest.getPhoneNumber());
+        
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void updatePassword(User user, CreateRestaurantRequest.UpdatePasswordRequest passwordRequest) {
+        // Verify current password
+        if (!passwordEncoder.matches(passwordRequest.getCurrentPassword(), user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        // Verify new password matches confirmation
+        if (!passwordRequest.getNewPassword().equals(passwordRequest.getConfirmPassword())) {
+            throw new RuntimeException("New password and confirmation do not match");
+        }
+
+        // Update password
+        user.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }

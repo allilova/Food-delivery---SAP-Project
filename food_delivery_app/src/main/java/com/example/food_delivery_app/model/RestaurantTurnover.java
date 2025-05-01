@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "restaurant_turnover", indexes = {
@@ -31,4 +33,8 @@ public class RestaurantTurnover {
 
     @Temporal(TemporalType.DATE)
     private Date endDate;  // Крайна дата на отчетния период
+
+    @OneToMany(mappedBy = "turnover", cascade = CascadeType.ALL)
+    private List<Bonus> bonuses = new ArrayList<>();
+
 }

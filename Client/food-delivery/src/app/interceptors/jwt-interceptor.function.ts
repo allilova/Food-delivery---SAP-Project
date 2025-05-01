@@ -2,7 +2,6 @@
 import { HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
@@ -11,12 +10,11 @@ export const jwtInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn
 ) => {
   const platformId = inject(PLATFORM_ID);
-  const authService = inject(AuthService);
   const router = inject(Router);
   
   // Only try to add token in browser environment
-  if (isPlatformBrowser(platformId) && authService.isLoggedIn) {
-    const token = authService.currentUserValue?.token;
+  if (isPlatformBrowser(platformId)) {
+    const token = localStorage.getItem('jwt_token');
     
     if (token) {
       const authReq = req.clone({
@@ -30,7 +28,9 @@ export const jwtInterceptor: HttpInterceptorFn = (
           // Handle 401 Unauthorized errors
           if (error.status === 401) {
             console.log('Authorization error. Logging out.');
-            authService.logout();
+            // Clear stored tokens
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('jwt_token');
             router.navigate(['/login']);
           }
           return throwError(() => error);

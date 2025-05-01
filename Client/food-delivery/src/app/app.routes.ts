@@ -26,7 +26,7 @@ export const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {path: 'catalog', children: [
         {path: '', component: CatalogComponent},
-        {path: ':restaurantId', component:MenuComponent}
+        {path: ':restaurantId', component: MenuComponent}
     ]},
     {
         path: 'edit-restaurant', 
@@ -64,7 +64,8 @@ export const routes: Routes = [
         canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])],
         children: [
             {path: '', component: SupplierComponent},
-            {path: 'order', component: OrdersComponent}
+            {path: 'order', component: OrdersComponent},
+            {path: 'order/:id', component: OrdersComponent}
         ]
     },
     {path: 'restaurants', component: RestaurantsComponent},

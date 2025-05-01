@@ -1,16 +1,16 @@
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+// src/app/api.service.ts
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment.development';
 import { Restaurant } from './types/restaurants';
-import { Observable, throwError, TimeoutError } from 'rxjs';
-import { catchError, timeout, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Food } from './types/food';
+import { Order } from './types/order';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly REQUEST_TIMEOUT = 10000; // 10 seconds
-  private readonly MAX_RETRIES = 3;
 
   constructor(private http: HttpClient) { }
 
@@ -33,62 +33,110 @@ export class ApiService {
     return headers;
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else if (error instanceof TimeoutError) {
-      errorMessage = 'Request timed out. Please try again.';
-    } else {
-      // Server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
-  }
-
+  // Get all restaurants
   getRestaurants(): Observable<Restaurant[]> {
     const { apiUrl } = environment;
-    return this.http.get<Restaurant[]>(`${apiUrl}/api/restaurants`)
-      .pipe(
-        timeout(this.REQUEST_TIMEOUT),
-        retry(this.MAX_RETRIES),
-        catchError(this.handleError)
-      );
+    // Public endpoint, but we'll send the token if available
+    return this.http.get<Restaurant[]>(`${apiUrl}/api/restaurants`, { 
+      headers: this.getHeaders() 
+    });
   }
 
+  // Get restaurant menu by ID
   getMenu(id: string): Observable<Restaurant> {
     const { apiUrl } = environment;
-    return this.http.get<Restaurant>(`${apiUrl}/api/restaurants/${id}`)
-      .pipe(
-        timeout(this.REQUEST_TIMEOUT),
-        retry(this.MAX_RETRIES),
-        catchError(this.handleError)
-      );
+    return this.http.get<Restaurant>(`${apiUrl}/api/restaurants/${id}`, { 
+      headers: this.getHeaders() 
+    });
   }
 
-  // Methods that require authentication would use the headers
+  // Search restaurants
+  searchRestaurants(keyword: string): Observable<Restaurant[]> {
+    const { apiUrl } = environment;
+    return this.http.get<Restaurant[]>(`${apiUrl}/api/restaurants/search?keyword=${keyword}`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // Get food items by menu ID
+  getFoodByMenu(menuId: string, category?: string): Observable<Food[]> {
+    const { apiUrl } = environment;
+    let url = `${apiUrl}/api/food/menu/${menuId}`;
+    if (category) {
+      url += `?foodCategory=${category}`;
+    }
+    return this.http.get<Food[]>(url, { headers: this.getHeaders() });
+  }
+
+  // Search food items
+  searchFood(keyword: string): Observable<Food[]> {
+    const { apiUrl } = environment;
+    return this.http.get<Food[]>(`${apiUrl}/api/food/search?foodName=${keyword}`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // Add restaurant to favorites
+  addToFavorites(restaurantId: string): Observable<any> {
+    const { apiUrl } = environment;
+    return this.http.put(`${apiUrl}/api/restaurants/${restaurantId}/add-favourites`, {}, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // Get user profile
   getUserProfile(): Observable<any> {
     const { apiUrl } = environment;
-    return this.http.get(`${apiUrl}/api/user/profile`, { headers: this.getHeaders() })
-      .pipe(
-        timeout(this.REQUEST_TIMEOUT),
-        retry(this.MAX_RETRIES),
-        catchError(this.handleError)
-      );
+    return this.http.get(`${apiUrl}/api/user/profile`, { 
+      headers: this.getHeaders() 
+    });
   }
 
-  // Example of POST with authentication
-  placeOrder(orderData: any): Observable<any> {
+  // Place order
+  placeOrder(orderData: any): Observable<Order> {
     const { apiUrl } = environment;
-    return this.http.post(`${apiUrl}/api/orders`, orderData, { headers: this.getHeaders() })
-      .pipe(
-        timeout(this.REQUEST_TIMEOUT),
-        retry(this.MAX_RETRIES),
-        catchError(this.handleError)
-      );
+    return this.http.post<Order>(`${apiUrl}/api/orders`, orderData, { 
+      headers: this.getHeaders() 
+    });
+  }
+
+  // Get user orders
+  getUserOrders(): Observable<Order[]> {
+    const { apiUrl } = environment;
+    return this.http.get<Order[]>(`${apiUrl}/api/orders/user`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // For restaurant owners: get restaurant orders
+  getRestaurantOrders(): Observable<Order[]> {
+    const { apiUrl } = environment;
+    return this.http.get<Order[]>(`${apiUrl}/api/supplier/orders`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  // Update order status (for restaurant owners)
+  updateOrderStatus(orderId: string, status: string): Observable<Order> {
+    const { apiUrl } = environment;
+    return this.http.put<Order>(`${apiUrl}/api/supplier/orders/${orderId}/status`, { status }, {
+      headers: this.getHeaders()
+    });
+  }
+  
+  // Create a menu item (for restaurant owners)
+  createMenuItem(menuData: any): Observable<any> {
+    const { apiUrl } = environment;
+    return this.http.post(`${apiUrl}/api/admin/food`, menuData, {
+      headers: this.getHeaders()
+    });
+  }
+  
+  // Update a restaurant (for restaurant owners)
+  updateRestaurant(restaurantId: string, restaurantData: any): Observable<any> {
+    const { apiUrl } = environment;
+    return this.http.put(`${apiUrl}/api/admin/restaurants/${restaurantId}`, restaurantData, {
+      headers: this.getHeaders()
+    });
   }
 }

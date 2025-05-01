@@ -1,16 +1,17 @@
 // src/app/services/auth.service.ts
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment.development';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
+import { USER_ROLE } from '../types/user-role.enum';
 
 export interface AuthResponse {
   jwt: string;
   message: string;
-  role: string;
+  role: USER_ROLE;
 }
 
 export interface LoginCredentials {
@@ -24,7 +25,16 @@ export interface RegisterUser {
   password: string;
   phone_number: string;
   address: string;
-  role: string;
+  role: USER_ROLE;
+}
+
+export interface UserProfile {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  role: USER_ROLE;
 }
 
 @Injectable({
@@ -70,7 +80,7 @@ export class AuthService {
     return !!this.currentUserValue;
   }
 
-  public get userRole(): string | null {
+  public get userRole(): USER_ROLE | null {
     return this.currentUserValue?.role || null;
   }
 
@@ -88,19 +98,26 @@ export class AuthService {
             // Only access localStorage in browser environment
             if (this.isBrowser) {
               localStorage.setItem('currentUser', JSON.stringify(userData));
+              localStorage.setItem('jwt_token', response.jwt);
             }
             
             this.currentUserSubject.next(userData);
           }
         }),
-        catchError(this.handleError)
+        catchError(error => {
+          console.error('Login error:', error);
+          return throwError(() => error);
+        })
       );
   }
 
   register(user: RegisterUser): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
       .pipe(
-        catchError(this.handleError)
+        catchError(error => {
+          console.error('Registration error:', error);
+          return throwError(() => error);
+        })
       );
   }
 
@@ -108,46 +125,36 @@ export class AuthService {
     // Only access localStorage in browser environment
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('jwt_token');
     }
     
     this.currentUserSubject.next(null);
     this.router.navigate(['/home']);
   }
 
-  // Improved error handling
-  private handleError(error: HttpErrorResponse) {
-    console.error('API Error:', error);
-    
-    let errorMessage = 'An unknown error occurred';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else if (error.error && error.error.message) {
-      // Server returned error message
-      errorMessage = error.error.message;
-    } else if (error.status === 0) {
-      errorMessage = 'Cannot connect to server. Please check your internet connection or try again later.';
-    } else if (error.status === 401) {
-      errorMessage = 'Invalid credentials. Please check your email and password.';
-    } else if (error.status === 400) {
-      if (error.error && typeof error.error === 'object') {
-        // Try to extract validation errors
-        const validationErrors = Object.values(error.error).join(', ');
-        if (validationErrors) {
-          errorMessage = validationErrors;
-        } else {
-          errorMessage = 'Invalid input. Please check your data and try again.';
-        }
-      } else {
-        errorMessage = 'Invalid input. Please check your data and try again.';
+  // Get user profile
+  getUserProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/api/user/profile`, {
+      headers: { 
+        'Authorization': `Bearer ${this.getToken()}`
       }
-    } else if (error.status === 404) {
-      errorMessage = 'Resource not found.';
-    } else if (error.status === 500) {
-      errorMessage = 'Server error. Please try again later or contact support.';
+    });
+  }
+
+  // Update user profile
+  updateUserProfile(profileData: any): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.apiUrl}/api/user/profile`, profileData, {
+      headers: { 
+        'Authorization': `Bearer ${this.getToken()}`
+      }
+    });
+  }
+
+  // Get the auth token
+  private getToken(): string | null {
+    if (this.isBrowser) {
+      return localStorage.getItem('jwt_token');
     }
-    
-    return throwError(() => ({ error: { message: errorMessage }, status: error.status }));
+    return null;
   }
 }

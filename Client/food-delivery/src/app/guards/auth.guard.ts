@@ -1,24 +1,40 @@
 // src/app/guards/auth.guard.ts
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 
-// Modern Angular guard using functional approach
+// Function to check if user is logged in
+const isLoggedIn = (): boolean => {
+  return !!localStorage.getItem('jwt_token');
+};
+
+// Function to get user role
+const getUserRole = (): string | null => {
+  const userData = localStorage.getItem('currentUser');
+  if (!userData) return null;
+  
+  try {
+    const user = JSON.parse(userData);
+    return user.role;
+  } catch (e) {
+    console.error('Error parsing user data:', e);
+    return null;
+  }
+};
+
+// Auth guard for protected routes
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const authService = inject(AuthService);
   const platformId = inject(PLATFORM_ID);
   
   // If we're on the server during SSR, allow navigation
-  // This prevents auth redirection during SSR which can cause issues
   if (isPlatformServer(platformId)) {
     return true;
   }
   
-  if (authService.isLoggedIn) {
-    // User is logged in, so return true
+  if (isLoggedIn()) {
+    // User is logged in, allow access
     return true;
   }
 
@@ -31,18 +47,16 @@ export const authGuard: CanActivateFn = (route, state) => {
 export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
   return (route, state) => {
     const router = inject(Router);
-    const authService = inject(AuthService);
     const platformId = inject(PLATFORM_ID);
     
     // If we're on the server during SSR, allow navigation
-    // This prevents auth redirection during SSR which can cause issues
     if (isPlatformServer(platformId)) {
       return true;
     }
     
-    if (authService.isLoggedIn) {
+    if (isLoggedIn()) {
       // Check if the user has one of the required roles
-      const userRole = authService.userRole;
+      const userRole = getUserRole();
       if (userRole && allowedRoles.includes(userRole)) {
         return true;
       }

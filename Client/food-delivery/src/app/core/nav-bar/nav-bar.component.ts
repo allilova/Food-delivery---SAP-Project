@@ -1,7 +1,10 @@
+// src/app/core/nav-bar/nav-bar.component.ts
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
+import { USER_ROLE } from '../../types/user-role.enum';
 
 @Component({
   selector: 'nav-bar-root',
@@ -13,9 +16,11 @@ import { CommonModule } from '@angular/common';
 export class NavigationBarComponent implements OnInit {
   isLoggedIn = false;
   userRole: string | null = null;
+  cartItemsCount = 0;
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {}
 
@@ -24,6 +29,11 @@ export class NavigationBarComponent implements OnInit {
     this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
       this.userRole = user ? user.role : null;
+    });
+
+    // Subscribe to cart updates for badge count
+    this.cartService.cartItems.subscribe(items => {
+      this.cartItemsCount = items.length;
     });
   }
 
@@ -34,18 +44,18 @@ export class NavigationBarComponent implements OnInit {
 
   // Helper methods for UI
   isCustomer(): boolean {
-    return this.userRole === 'ROLE_CUSTOMER';
+    return this.userRole === USER_ROLE.ROLE_CUSTOMER;
   }
 
   isRestaurant(): boolean {
-    return this.userRole === 'ROLE_RESTAURANT';
+    return this.userRole === USER_ROLE.ROLE_RESTAURANT;
   }
 
   isAdmin(): boolean {
-    return this.userRole === 'ROLE_ADMIN';
+    return this.userRole === USER_ROLE.ROLE_ADMIN;
   }
 
   isDriver(): boolean {
-    return this.userRole === 'ROLE_DRIVER';
+    return this.userRole === USER_ROLE.ROLE_DRIVER;
   }
 }

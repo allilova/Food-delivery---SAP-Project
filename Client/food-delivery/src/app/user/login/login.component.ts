@@ -1,4 +1,4 @@
-// login.component.ts
+// src/app/user/login/login.component.ts
 import { Component, OnInit } from "@angular/core";
 import { RouterLink, Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";

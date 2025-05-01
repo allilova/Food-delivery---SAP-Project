@@ -45,7 +45,10 @@ public class MenuServiceImpl implements MenuService {
                 .orElseThrow(() -> new RuntimeException("Menu not found with id: " + menuId));
 
         existingMenu.setCategoryName(menuRequest.getCategoryName());
-        existingMenu.setCategories(menuRequest.getCategories());
+        existingMenu.getCategories().clear();
+        if (menuRequest.getCategories() != null) {
+            existingMenu.getCategories().addAll(menuRequest.getCategories());
+        }
         return menuRepository.save(existingMenu);
     }
 

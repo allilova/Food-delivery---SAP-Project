@@ -1,0 +1,100 @@
+<div class="container">
+    <form [formGroup]="menuForm" (ngSubmit)="onSubmit()">
+        <fieldset>
+            <h2>Create Menu Item</h2>
+            
+            @if (error) {
+                <div class="error-message">{{ error }}</div>
+            }
+            
+            @if (successMessage) {
+                <div class="success-message">{{ successMessage }}</div>
+            }
+            
+            <p class="field">
+                <label for="name">Food Name</label>
+                <input type="text" formControlName="name" id="name" placeholder="Food name">
+                @if (menuForm.get('name')?.invalid && menuForm.get('name')?.touched) {
+                    <legend class="error">Name is required</legend>
+                }
+            </p>
+            
+            <p class="field">
+                <label for="price">Price</label>
+                <input type="number" step="0.01" min="0.01" formControlName="price" id="price" placeholder="Price">
+                @if (menuForm.get('price')?.invalid && menuForm.get('price')?.touched) {
+                    <legend class="error">
+                        @if (menuForm.get('price')?.errors?.['required']) {
+                            Price is required
+                        } @else if (menuForm.get('price')?.errors?.['min']) {
+                            Price must be greater than 0
+                        }
+                    </legend>
+                }
+            </p>
+            
+            <p class="field">
+                <label for="description">Description <span class="char-count">{{ characterCount }}/{{ maxCharacters }}</span></label>
+                <textarea formControlName="description" id="description" rows="4" maxlength="500" placeholder="Enter description..."></textarea>
+                @if (menuForm.get('description')?.invalid && menuForm.get('description')?.touched) {
+                    <legend class="error">
+                        @if (menuForm.get('description')?.errors?.['required']) {
+                            Description is required
+                        } @else if (menuForm.get('description')?.errors?.['maxlength']) {
+                            Description cannot exceed 500 characters
+                        }
+                    </legend>
+                }
+            </p>
+            
+            <p class="field">
+                <label for="category">Category</label>
+                <input type="text" formControlName="category" id="category" placeholder="Food category">
+                @if (menuForm.get('category')?.invalid && menuForm.get('category')?.touched) {
+                    <legend class="error">Category is required</legend>
+                }
+            </p>
+            
+            <p class="field">
+                <label for="preparationTime">Preparation Time (minutes)</label>
+                <input type="number" min="1" formControlName="preparationTime" id="preparationTime" placeholder="Preparation time in minutes">
+                @if (menuForm.get('preparationTime')?.invalid && menuForm.get('preparationTime')?.touched) {
+                    <legend class="error">
+                        @if (menuForm.get('preparationTime')?.errors?.['required']) {
+                            Preparation time is required
+                        } @else if (menuForm.get('preparationTime')?.errors?.['min']) {
+                            Preparation time must be at least 1 minute
+                        }
+                    </legend>
+                }
+            </p>
+            
+            <p class="field">
+                <label for="ingredients">Ingredients (comma-separated)</label>
+                <input type="text" formControlName="ingredients" id="ingredients" placeholder="Ingredient 1, Ingredient 2, ...">
+            </p>
+            
+            <p class="field">
+                <label for="img"><i class="fa-solid fa-image"></i>Choose Image</label>
+                <input type="file" name="img" id="img" accept="image/png, image/jpeg" (change)="onFileSelected($event)">
+                @if (imagePreview) {
+                    <div class="image-preview">
+                        <img [src]="imagePreview" alt="Food preview" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
+                    </div>
+                }
+            </p>
+            
+            <button type="submit" id="submit" [disabled]="loading || menuForm.invalid">
+                @if (loading) {
+                    <app-loading-spinner></app-loading-spinner>
+                } @else {
+                    Create
+                }
+            </button>
+            
+            <div class="button-group">
+                <a [routerLink]="['/catalog', restaurantId]" class="secondary-button">Cancel</a>
+            </div>
+        </fieldset>
+    </form>
+</div>

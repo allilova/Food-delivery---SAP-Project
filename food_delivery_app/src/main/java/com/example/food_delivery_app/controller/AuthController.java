@@ -3,22 +3,14 @@ package com.example.food_delivery_app.controller;
 import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.request.LoginRequest;
 import com.example.food_delivery_app.request.RegisterRequest;
-import com.example.food_delivery_app.request.RefreshTokenRequest;
 import com.example.food_delivery_app.response.AuthResponse;
 import com.example.food_delivery_app.service.AuthenticationService;
-import com.example.food_delivery_app.config.JwtProvider;
-import com.example.food_delivery_app.service.CustomerUserDetailsService;
-import com.example.food_delivery_app.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,15 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private final AuthenticationService authenticationService;
-    
-    @Autowired
-    private JwtProvider jwtProvider;
-    
-    @Autowired
-    private CustomerUserDetailsService customerUserDetailsService;
-    
-    @Autowired
-    private UserRepository userRepository;
 
     public AuthController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -78,58 +61,6 @@ public class AuthController {
             AuthResponse errorResponse = new AuthResponse();
             errorResponse.setMessage("Login failed. Please try again later.");
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    
-    @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-        try {
-            logger.info("Token refresh attempt");
-            String refreshToken = request.getRefreshToken();
-            
-            // Validate the refresh token
-            if (refreshToken == null || refreshToken.isEmpty()) {
-                logger.warn("Refresh token is missing");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-            
-            // Remove "Bearer " prefix if present
-            if (refreshToken.startsWith("Bearer ")) {
-                refreshToken = refreshToken.substring(7);
-            }
-            
-            // Validate the token
-            if (!jwtProvider.validateToken(refreshToken)) {
-                logger.warn("Invalid refresh token");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-            
-            // Get username from token
-            String email = jwtProvider.getEmailFromToken(refreshToken);
-            
-            // Load user details
-            UserDetails userDetails = customerUserDetailsService.loadUserByUsername(email);
-            
-            // Create authentication object
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            
-            // Generate new JWT token
-            String jwt = jwtProvider.generateToken(authentication);
-            
-            // Create response
-            AuthResponse response = new AuthResponse();
-            response.setJwt(jwt);
-            response.setMessage("Token refreshed successfully");
-            
-            User user = userRepository.findByEmail(email);
-            response.setRole(user.getRole());
-            
-            logger.info("Token refreshed successfully for user: {}", email);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            logger.error("Token refresh failed", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }

@@ -38,15 +38,22 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register",
-                                "/auth/login","/auth/**", "/api/auth/**", "/api/test", "/api/home", "/api/restaurants/**", "/api/restaurants/search", "/swagger-ui/**", "/v3/api-docs/**"
+                                "/auth/login","/auth/**", "/api/auth/**", "/api/test", "/api/home", 
+                                "/api/restaurants/**", "/api/restaurants/search", 
+                                "/swagger-ui/**", "/v3/api-docs/**",
+                                "/api/auth/debug"
                         ).permitAll()
-                        .requestMatchers("/api/user/**").hasRole("CUSTOMER")
+                        .requestMatchers("/api/user/**").authenticated()
+                        .requestMatchers("/api/supplier/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(jwtTokenValidator, BasicAuthenticationFilter.class);
+                .addFilterBefore(jwtTokenValidator, BasicAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(accessDeniedHandler)
+                );
 
         return http.build();
     }

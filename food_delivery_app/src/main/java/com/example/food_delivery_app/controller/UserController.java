@@ -55,39 +55,35 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/profile")
-public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String authHeader) {
-    try {
-        // Ensure consistent handling of the Bearer token
-        String jwt = authHeader;
-        if (jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
+    public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String authHeader) {
+        try {
+            // Log for debugging
+            System.out.println("Received auth header: " + authHeader.substring(0, Math.min(20, authHeader.length())) + "...");
+            
+            User user = userService.findUserByJwtToken(authHeader);
+            System.out.println("Found user: " + user.getEmail());
+
+            UserProfileDto dto = new UserProfileDto();
+            dto.setId(user.getId());
+            dto.setName(user.getName());
+            dto.setEmail(user.getEmail());
+            dto.setPhoneNumber(user.getPhoneNumber());
+            dto.setRole(user.getRole());
+
+            if (user.getAddress() != null) {
+                dto.setAddress(user.getAddress().getStreet() + ", " + user.getAddress().getCity());
+            } else {
+                dto.setAddress("No address provided");
+            }
+
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Bad request error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing or invalid Authorization header");
+        } catch (Exception e) {
+            System.out.println("Auth error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
         }
-        User user = userService.findUserByJwtToken(jwt);
-
-        UserProfileDto dto = new UserProfileDto();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setRole(user.getRole());
-
-        if (user.getAddress() != null) {
-            dto.setAddress(user.getAddress().getStreet() + ", " + user.getAddress().getCity());
-        } else {
-            dto.setAddress("No address provided");
-        }
-
-        return ResponseEntity.ok(dto);
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
-    }
-}
-
-    private String extractJwt(String header) {
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new IllegalArgumentException("Invalid Authorization header");
-        }
-        return header.substring(7);
     }
 }
 

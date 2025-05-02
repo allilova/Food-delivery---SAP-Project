@@ -25,32 +25,38 @@ public class RestaurantController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants(
-            @RequestHeader("Authorization") String jwt) throws Exception {
-
-        userService.findUserByJwtToken(jwt); // валидация на потребителя
-
-        List<RestaurantResponseDto> response = restaurantService.getAllRestaurantsDto();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
+        try {
+            List<RestaurantResponseDto> response = restaurantService.getAllRestaurantsDto();
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantResponseDto> findRestaurantById(@PathVariable Long id,
-                                                                    @RequestHeader ("Authorization")String jwt) throws Exception {
-
-        userService.findUserByJwtToken(jwt);
-        Restaurant restaurant = restaurantService.findById(id);
-        RestaurantResponseDto dto = restaurantService.convertToDto(restaurant); // трябва да бъде public
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+    public ResponseEntity<RestaurantResponseDto> findRestaurantById(@PathVariable Long id) {
+        try {
+            Restaurant restaurant = restaurantService.findById(id);
+            RestaurantResponseDto dto = restaurantService.convertToDto(restaurant);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RestaurantResponseDto>> searchRestaurants(@RequestParam String keyword,
-                                                                         @RequestHeader("Authorization") String jwt) throws Exception {
-        userService.findUserByJwtToken(jwt); // за валидация
-        List<RestaurantResponseDto> results = restaurantService.searchRestaurantsDto(keyword);
-        return new ResponseEntity<>(results, HttpStatus.OK);
+    public ResponseEntity<List<RestaurantResponseDto>> searchRestaurants(@RequestParam String keyword) {
+        try {
+            List<RestaurantResponseDto> results = restaurantService.searchRestaurantsDto(keyword);
+            return new ResponseEntity<>(results, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}/add-favourites")

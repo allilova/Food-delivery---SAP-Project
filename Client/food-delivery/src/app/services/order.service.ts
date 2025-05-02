@@ -80,7 +80,7 @@ export class OrderService {
     this.notificationService.info('Loading order details...', true, 1500);
     
     // Use supplier endpoint for restaurant users
-    const endpoint = this.authService.userRole === 'ROLE_RESTAURANT' 
+    const endpoint = this.authService.userRole === 'ROLE_DRIVER' 
       ? `${this.apiUrl}/api/supplier/orders/${orderId}` 
       : `${this.apiUrl}/api/orders/${orderId}`;
     
@@ -186,7 +186,7 @@ export class OrderService {
     let params = new HttpParams().set('status', status);
     
     // Use supplier endpoint for restaurant users
-    const endpoint = this.authService.userRole === 'ROLE_RESTAURANT' 
+    const endpoint = this.authService.userRole === 'ROLE_DRIVER' 
       ? `${this.apiUrl}/api/supplier/orders/${orderId}/status` 
       : `${this.apiUrl}/api/orders/${orderId}/status`;
     

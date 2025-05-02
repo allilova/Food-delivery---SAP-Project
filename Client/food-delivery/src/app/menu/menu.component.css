@@ -56,7 +56,79 @@ a i{
     font-size: 20px;
 }
 
+
+img{
+    width: 70%;
+}
+.img-card img{
+    border-radius: 20px;
+}
+.img-card{
+    width: 300px;
+}
+
+.card{
+    display: flex;
+    background-color:  #f8b6b6;
+    height: 200px;
+   margin: 4px 8px;
+   padding: 8px;
+   border-radius: 20px;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+   width: 55%;
+   color: rgb(59, 4, 4);
+}
+.text-card{
+    width: 500px;
+    padding-top: 10px;
+    
+}
+
+.Add{
+    background-color: rgb(59, 4, 4);
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 35px;
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 280px;
+}
+
+.cards{
+    gap: 2em;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 1em;
+    display: flex;
+    margin: 0;
+}
+
+.adminBtn{
+    display: flex;
+    gap: 5px;
+}
+
 .Edit{
     background-color: rgb(10, 185, 10);
     border: none;
+    margin-left: 0px;
+    margin: 0px;
+    margin-top: 5px;
+    
+}
+
+.Delete{
+    background-color: rgb(201, 9, 9);
+    border: none;
+    margin-left: 0px;
+    margin: 0px;
+    margin-top: 5px;
+}
+
+.Available{
+    margin: 0px;
+    margin-top: 5px;
 }

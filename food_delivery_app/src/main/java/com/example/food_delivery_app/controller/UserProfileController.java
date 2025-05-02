@@ -25,11 +25,15 @@ public class UserProfileController {
     @GetMapping
     public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             logger.info("Retrieved profile for user: {}", user.getEmail());
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to retrieve user profile", e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -39,12 +43,16 @@ public class UserProfileController {
             @Valid @RequestBody CreateAddressRequest.UpdateProfileRequest updateRequest,
             @RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             User updatedUser = userService.updateUserProfile(user, updateRequest);
             logger.info("Updated profile for user: {}", user.getEmail());
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to update user profile", e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -54,12 +62,16 @@ public class UserProfileController {
             @Valid @RequestBody CreateRestaurantRequest.UpdatePasswordRequest passwordRequest,
             @RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             userService.updatePassword(user, passwordRequest);
             logger.info("Updated password for user: {}", user.getEmail());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to update password", e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -67,12 +79,16 @@ public class UserProfileController {
     @DeleteMapping
     public ResponseEntity<Void> deleteUserProfile(@RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             userService.deleteUser(user);
             logger.info("Deleted profile for user: {}", user.getEmail());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             logger.error("Failed to delete user profile", e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

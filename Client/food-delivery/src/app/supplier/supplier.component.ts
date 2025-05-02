@@ -44,7 +44,7 @@ export class SupplierComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if user is logged in and is a restaurant owner
-    if (!this.authService.isLoggedIn || this.authService.userRole !== 'ROLE_RESTAURANT') {
+    if (!this.authService.isLoggedIn || this.authService.userRole !== 'ROLE_DRIVER') {
       this.notificationService.warning('You must be logged in as a restaurant owner to access this page.');
       return;
     }

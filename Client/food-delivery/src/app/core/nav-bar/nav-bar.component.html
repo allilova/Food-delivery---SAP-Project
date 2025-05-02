@@ -7,7 +7,6 @@
         
         <!-- Only visible when logged in as an admin -->
         @if (isLoggedIn && isAdmin()) {
-            <li><a routerLink="/restaurants">Admin Panel</a></li>
             <li><a routerLink="/admin/create-restaurant">Create Restaurant</a></li>
         }
 

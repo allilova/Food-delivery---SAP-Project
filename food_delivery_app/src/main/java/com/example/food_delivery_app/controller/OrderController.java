@@ -33,30 +33,42 @@ public class OrderController {
             @Valid @RequestBody CreateOrderRequest orderRequest,
             @RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             Order order = orderService.createOrder(orderRequest, user);
             logger.info("Order created successfully for user: {}", user.getEmail());
             return new ResponseEntity<>(order, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("Failed to create order", e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Page<Order>> getUserOrders(
+    public ResponseEntity<?> getUserOrders(
             @RequestHeader("Authorization") String jwtToken,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
+            logger.info("Received request for user orders with token: {}", jwtToken.substring(0, Math.min(20, jwtToken.length())) + "...");
             User user = userService.findUserByJwtToken(jwtToken);
+            logger.info("Found user: {}", user.getEmail());
+            
             Pageable pageable = PageRequest.of(page, size);
             Page<Order> orders = orderService.getUserOrders(user, pageable);
-            logger.info("Retrieved orders for user: {}", user.getEmail());
+            logger.info("Retrieved {} orders for user: {}", orders.getContent().size(), user.getEmail());
+            
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Failed to retrieve user orders", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error("Failed to retrieve user orders: {}", e.getMessage());
+            e.printStackTrace();
+            if (e.getMessage().contains("Invalid JWT token") || e.getMessage().contains("User not found")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not authorized to view these orders");
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to retrieve orders due to a server error");
         }
     }
 
@@ -65,12 +77,16 @@ public class OrderController {
             @PathVariable Long orderId,
             @RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             Order order = orderService.getOrderById(orderId, user);
             logger.info("Retrieved order: {}", orderId);
             return new ResponseEntity<>(order, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to retrieve order: {}", orderId, e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -81,12 +97,16 @@ public class OrderController {
             @RequestParam String status,
             @RequestHeader("Authorization") String jwtToken) {
         try {
+            if (jwtToken.startsWith("Bearer ")) {
+                jwtToken = jwtToken.substring(7);
+            }
             User user = userService.findUserByJwtToken(jwtToken);
             Order order = orderService.updateOrderStatus(orderId, status, user);
             logger.info("Updated order status: {} to {}", orderId, status);
             return new ResponseEntity<>(order, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to update order status: {}", orderId, e);
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import java.util.Collection;
@@ -16,6 +18,8 @@ import java.util.HashSet;
 
 @Service
 public class JwtProvider {
+    private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    
     @Value("${app.jwt.secret}")
     private String jwtSecret;
 
@@ -29,6 +33,8 @@ public class JwtProvider {
     public String generateToken(Authentication auth) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
+        
+        logger.info("Generating token for user: {} with roles: {}", auth.getName(), roles);
 
         String jwt = Jwts.builder().setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpiration))
@@ -41,34 +47,39 @@ public class JwtProvider {
     }
 
     public String getEmailFromToken(String jwt) {
-        // Check if the token has "Bearer " prefix and remove it if present
-        if (jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7);
-        }
-        
-        Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
-
-        String email = String.valueOf(claims.get("email"));
-        return email;
-    }
-
-    public boolean validateToken(String token) {
         try {
-            // Check if the token has "Bearer " prefix and remove it if present
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
+            // Check if the token still has the "Bearer " prefix and remove it
+            if (jwt.startsWith("Bearer ")) {
+                jwt = jwt.substring(7);
             }
             
-            // Parse and validate the token
-            Jwts.parserBuilder()
-                .setSigningKey(getKey())
-                .build()
-                .parseClaimsJws(token);
-                
-            return true;
+            Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
+            
+            String email = String.valueOf(claims.get("email"));
+            String authorities = String.valueOf(claims.get("authorities"));
+            
+            logger.debug("Extracted email: {} and authorities: {} from token", email, authorities);
+            
+            return email;
         } catch (Exception e) {
-            // If any exception occurs during parsing, the token is invalid
-            return false;
+            logger.error("Error parsing JWT token: {}", e.getMessage());
+            throw e;
+        }
+    }
+    
+    public Claims getAllClaimsFromToken(String jwt) {
+        try {
+            // Check if the token still has the "Bearer " prefix and remove it
+            if (jwt.startsWith("Bearer ")) {
+                jwt = jwt.substring(7);
+            }
+            
+            Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
+            logger.debug("Successfully parsed JWT token with claims: {}", claims);
+            return claims;
+        } catch (Exception e) {
+            logger.error("Error parsing JWT token: {}", e.getMessage());
+            throw e;
         }
     }
 

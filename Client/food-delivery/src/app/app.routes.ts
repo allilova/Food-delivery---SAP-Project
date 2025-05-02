@@ -78,7 +78,7 @@ export const routes: Routes = [
     },
     {
         path: 'supplier', 
-        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])],
+        canActivate: [roleGuard([USER_ROLE.ROLE_DRIVER])],
         children: [
             {path: '', component: SupplierComponent},
             {path: 'orders', component: OrdersComponent},

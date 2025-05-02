@@ -49,6 +49,7 @@ com\example\food_delivery_app\controller\CartController.class
 com\example\food_delivery_app\service\RestaurantService.class
 com\example\food_delivery_app\repository\CartRepository.class
 com\example\food_delivery_app\dto\RestaurantDto.class
+com\example\food_delivery_app\service\OrderServiceImpl$1.class
 com\example\food_delivery_app\service\UserServiceImp.class
 com\example\food_delivery_app\model\Cart.class
 com\example\food_delivery_app\service\PaymentService.class

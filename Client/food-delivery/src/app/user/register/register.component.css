@@ -125,3 +125,60 @@ margin-bottom: 5px;
 .is-invalid {
     border-color: #cc0000 !important;
 }
+
+/* Password Strength Styles */
+.password-strength {
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.strength-meter {
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.strength-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.strength-text {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+}
+
+.password-criteria {
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.criterion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2px;
+    color: #6c757d;
+}
+
+.criterion i {
+    margin-right: 6px;
+    font-size: 14px;
+}
+
+.criterion i.fa-times {
+    color: #dc3545;
+}
+
+.criterion i.fa-check {
+    color: #28a745;
+}
+
+.criterion.met {
+    color: #495057;
+    font-weight: 500;
+}

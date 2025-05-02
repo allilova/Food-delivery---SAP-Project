@@ -1,16 +1,17 @@
 // src/app/services/auth.service.ts
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment.development';
+import { catchError, tap, map, finalize } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { USER_ROLE } from '../types/user-role.enum';
+import { ErrorHandlerService } from './error-handler.service';
+import { NotificationService } from './notification.service';
 
 export interface AuthResponse {
   jwt: string;
-  refreshToken?: string;
   message: string;
   role: USER_ROLE;
 }
@@ -24,13 +25,8 @@ export interface RegisterUser {
   name: string;
   email: string;
   password: string;
-  phone_number: string;
-  address: string;
-  role: USER_ROLE;
-}
-
-export interface RefreshTokenRequest {
-  refreshToken: string;
+  phone: string;
+  role?: string;
 }
 
 export interface UserProfile {
@@ -50,12 +46,12 @@ export class AuthService {
   public currentUser: Observable<any>;
   private apiUrl = environment.apiUrl;
   private isBrowser: boolean;
-  private refreshTokenInProgress = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private http: HttpClient,
     private router: Router,
+    private errorHandler: ErrorHandlerService,
+    private notificationService: NotificationService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -92,14 +88,18 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
+    // Show loading notification
+    this.notificationService.info('Logging in...', true, 2000);
+    
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => {
           if (response.jwt) {
+            console.log('Login successful, token received:', response.jwt.substring(0, 10) + '...');
+            
             const userData = {
               email: credentials.email,
               token: response.jwt,
-              refreshToken: response.refreshToken || null,
               role: response.role
             };
             
@@ -107,27 +107,70 @@ export class AuthService {
             if (this.isBrowser) {
               localStorage.setItem('currentUser', JSON.stringify(userData));
               localStorage.setItem('jwt_token', response.jwt);
-              if (response.refreshToken) {
-                localStorage.setItem('refresh_token', response.refreshToken);
-              }
             }
             
             this.currentUserSubject.next(userData);
+            
+            // Show success notification
+            this.notificationService.success('Login successful! Welcome back.');
           }
         }),
-        catchError(error => {
-          console.error('Login error:', error);
-          return throwError(() => error);
+        catchError((error: HttpErrorResponse) => {
+          // Handle common login errors more elegantly
+          let errorMessage = 'Login failed. Please check your credentials and try again.';
+          
+          if (error.status === 401) {
+            errorMessage = 'Invalid email or password. Please try again.';
+          } else if (error.status === 403) {
+            errorMessage = 'Your account is suspended or inactive. Please contact support.';
+          } else if (error.status >= 500) {
+            errorMessage = 'Server error. Please try again later.';
+          }
+          
+          // Show error notification
+          this.notificationService.error(errorMessage);
+          
+          // Use our error handler service
+          return this.errorHandler.handleError(error, 'login');
         })
       );
   }
 
   register(user: RegisterUser): Observable<AuthResponse> {
+    console.log('Sending registration request with data:', user);
+    // Show loading notification
+    this.notificationService.info('Creating your account...', true, 2000);
+    
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
       .pipe(
-        catchError(error => {
-          console.error('Registration error:', error);
-          return throwError(() => error);
+        tap(response => {
+          if (response.jwt) {
+            // Show success notification
+            this.notificationService.success('Account created successfully! Welcome to Food Delivery.');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          let errorMessage = 'Registration failed. Please try again.';
+          
+          if (error.status === 400) {
+            // Look for common validation errors
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.error && error.error.errors) {
+              // Join all validation errors
+              errorMessage = Object.values(error.error.errors).join('. ');
+            }
+          } else if (error.status === 409) {
+            errorMessage = 'An account with this email already exists.';
+          } else if (error.status >= 500) {
+            errorMessage = 'Server error. Please try again later.';
+          }
+          
+          // Show error notification
+          this.notificationService.error(errorMessage);
+          
+          // Use our error handler service
+          return this.errorHandler.handleError(error, 'registration');
         })
       );
   }
@@ -137,7 +180,6 @@ export class AuthService {
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');
       localStorage.removeItem('jwt_token');
-      localStorage.removeItem('refresh_token');
     }
     
     this.currentUserSubject.next(null);
@@ -147,16 +189,15 @@ export class AuthService {
   // Get user profile
   getUserProfile(): Observable<any> {
     const token = this.getToken();
-    if (!token) {
-      return throwError(() => new Error('No authentication token available'));
-    }
-
-    return this.http.get<any>(`${this.apiUrl}/api/user/profile`, {
+    console.log('Getting user profile with token:', token ? token.substring(0, 10) + '...' : 'No token');
+    
+    return this.http.get<any>(`${this.apiUrl}/api/users/profile`, {
       headers: { 
         'Authorization': `Bearer ${token}`
       }
     }).pipe(
       map(response => {
+        console.log('Profile response:', response);
         // Transform the response if needed
         // Add a property for favorites if it doesn't exist
         if (response && !response.favorites && response.favourites) {
@@ -164,88 +205,144 @@ export class AuthService {
         }
         return response;
       }),
-      catchError(error => {
+      catchError((error: HttpErrorResponse) => {
         console.error('Error fetching user profile:', error);
+        
+        // If 401 Unauthorized, clear token and navigate to login
         if (error.status === 401) {
           console.log('Unauthorized error getting profile, clearing tokens');
-          this.logout(); // Clear tokens and redirect
+          if (this.isBrowser) {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('jwt_token');
+          }
+          this.currentUserSubject.next(null);
+          this.router.navigate(['/login']);
+          this.notificationService.error('Your session has expired. Please login again.');
+        } else if (error.status === 403) {
+          this.notificationService.error('You do not have permission to access your profile.');
+        } else if (error.status === 404) {
+          this.notificationService.error('Profile not found. Please complete your registration.');
+        } else {
+          this.notificationService.error('Could not load profile. Please try again later.');
         }
-        return throwError(() => error);
+        
+        return this.errorHandler.handleError(error, 'profile retrieval');
       })
     );
   }
 
   // Update user profile
   updateUserProfile(profileData: any): Observable<UserProfile> {
+    const token = this.getToken();
     return this.http.put<UserProfile>(`${this.apiUrl}/api/user/profile`, profileData, {
       headers: { 
-        'Authorization': `Bearer ${this.getToken()}`
+        'Authorization': `Bearer ${token}`
       }
-    }).pipe(
-      catchError(error => {
-        console.error('Error updating user profile:', error);
-        if (error.status === 401) {
-          this.logout();
-        }
-        return throwError(() => error);
-      })
-    );
-  }
-
-  // Refresh token
-  refreshToken(): Observable<AuthResponse> {
-    if (this.refreshTokenInProgress) {
-      return this.refreshTokenSubject.asObservable();
-    }
-
-    this.refreshTokenInProgress = true;
-    this.refreshTokenSubject.next(null);
-
-    const refreshToken = this.isBrowser ? localStorage.getItem('refresh_token') : null;
-    if (!refreshToken) {
-      this.refreshTokenInProgress = false;
-      return throwError(() => new Error('No refresh token available'));
-    }
-    
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, { refreshToken })
-      .pipe(
-        tap(response => {
-          this.refreshTokenInProgress = false;
-          
-          if (response.jwt) {
-            // Update stored tokens
-            if (this.isBrowser) {
-              localStorage.setItem('jwt_token', response.jwt);
-              
-              // Update current user data
-              const currentUser = this.currentUserValue;
-              if (currentUser) {
-                currentUser.token = response.jwt;
-                if (response.refreshToken) {
-                  currentUser.refreshToken = response.refreshToken;
-                  localStorage.setItem('refresh_token', response.refreshToken);
-                }
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-              }
-            }
-            
-            this.refreshTokenSubject.next(response);
-          }
-        }),
-        catchError(error => {
-          this.refreshTokenInProgress = false;
-          console.error('Error refreshing token:', error);
-          this.logout();
-          return throwError(() => error);
-        })
-      );
+    });
   }
 
   // Get the auth token
-  getToken(): string | null {
+  private getToken(): string | null {
     if (this.isBrowser) {
       return localStorage.getItem('jwt_token');
     }
     return null;
+  }
+  
+  // Debug auth token - useful for troubleshooting
+  debugAuthToken(): Observable<any> {
+    const token = this.getToken();
+    let headers = new HttpHeaders();
+    
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+      this.notificationService.info('Debugging authentication token...', true, 2000);
+    } else {
+      this.notificationService.info('No token available, checking auth system...', true, 2000);
+    }
+    
+    // First try the new debug endpoint that doesn't require auth
+    return this.http.get<any>(`${this.apiUrl}/api/auth/debug`, {
+      headers: headers
+    }).pipe(
+      tap(response => {
+        console.log('Auth debug response:', response);
+        
+        if (response.error) {
+          this.notificationService.warning('Authentication debug encountered an error: ' + response.error);
+        } else if (response.auth && response.auth.isAuthenticated) {
+          this.notificationService.success('Authentication is working properly');
+        } else {
+          this.notificationService.info('System is working but you are not authenticated');
+        }
+        
+        // Check token info
+        if (response.token && response.token.user) {
+          const user = response.token.user;
+          this.notificationService.success(`Found user: ${user.name} with role: ${user.role}`);
+          
+          if (user.hasRestaurant) {
+            this.notificationService.success(`User has a restaurant: ${user.restaurantName}`);
+          } else {
+            this.notificationService.warning('No restaurant found for this user');
+          }
+        } else if (response.token) {
+          this.notificationService.error('Token is invalid or user not found');
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error debugging auth token:', error);
+        
+        // Try a fallback approach with just basic info
+        this.notificationService.warning('Trying fallback approach...');
+        
+        return this.http.get<any>(`${this.apiUrl}/api/test`).pipe(
+          map(() => {
+            return { 
+              fallback: true, 
+              apiWorking: true,
+              token: token ? { present: true, value: token.substring(0, 10) + '...' } : { present: false },
+              tokenLength: token ? token.length : 0
+            };
+          }),
+          tap(response => {
+            this.notificationService.info('API is working but authentication debug failed');
+            console.log('Fallback debug info:', response);
+          }),
+          catchError(fallbackError => {
+            console.error('Even fallback failed:', fallbackError);
+            this.notificationService.error('Failed to debug auth token and API seems to be down');
+            return throwError(() => fallbackError);
+          })
+        );
+      })
+    );
+  }
+  
+  // Original debug method using the token-requiring endpoint
+  debugAuthTokenOriginal(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      this.notificationService.error('No authentication token found');
+      return throwError(() => new Error('No authentication token found'));
+    }
+    
+    this.notificationService.info('Debugging authentication token...', true, 2000);
+    
+    return this.http.get<any>(`${this.apiUrl}/api/auth/debug-token`, {
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
+      tap(response => {
+        console.log('Auth debug response:', response);
+        this.notificationService.success('Authentication token debug successful');
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error debugging auth token:', error);
+        this.notificationService.error('Failed to debug auth token: ' + (error.error?.message || error.message));
+        return throwError(() => error);
+      })
+    );
   }
 }

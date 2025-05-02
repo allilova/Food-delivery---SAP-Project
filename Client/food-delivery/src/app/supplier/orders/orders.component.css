@@ -1,40 +1,255 @@
-.order{
-    min-height: 27.5rem;
-    color: rgb(59, 4, 4);
+.order {
+  min-height: 27.5rem;
+  color: rgb(59, 4, 4);
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
+
 .container {
-    max-width: 600px;
-    margin: auto;
-    background:  #f8b6b6;;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  .info p {
-    margin: 8px 0;
-  }
-  .btn {
-    margin-top: 30px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .btn-start {
-    background-color:  rgb(59, 4, 4);
-    color: white;
-  }
-  .btn-complete {
-    background-color:  rgb(59, 4, 4);
-    color: white;
-  }
-  .btn-done {
-    background-color:  rgb(59, 4, 4);
-    color: white;
-    cursor: default;
-  }
+  max-width: 700px;
+  margin: auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.header h1 {
+  margin: 0;
+  color: rgb(59, 4, 4);
+  font-size: 24px;
+}
+
+.btn-back {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  color: rgb(59, 4, 4);
+}
+
+.btn-back:hover {
+  background-color: #e9ecef;
+}
+
+.info p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+.order-details {
+  margin-bottom: 25px;
+}
+
+.status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: lowercase;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmed {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-preparing {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-ready {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-out_for_delivery {
+  background-color: #ffd6a5;
+  color: #856404;
+}
+
+.status-delivered {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.items-container {
+  margin-bottom: 25px;
+}
+
+.items-container h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: rgb(59, 4, 4);
+}
+
+.items-list {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.item-quantity {
+  margin: 0 15px;
+  color: #666;
+}
+
+.item-price {
+  font-weight: 500;
+  color: #333;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.total-amount {
+  color: rgb(59, 4, 4);
+  font-weight: 600;
+}
+
+.driver-info {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.driver-info h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: rgb(59, 4, 4);
+}
+
+.driver-info p {
+  margin: 5px 0;
+}
+
+.order-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  justify-content: flex-end;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-start {
+  background-color: rgb(59, 4, 4);
+  color: white;
+}
+
+.btn-preparing {
+  background-color: rgb(59, 4, 4);
+  color: white;
+}
+
+.btn-ready {
+  background-color: rgb(59, 4, 4);
+  color: white;
+}
+
+.btn-out-delivery {
+  background-color: rgb(59, 4, 4);
+  color: white;
+}
+
+.btn-complete {
+  background-color: rgb(59, 4, 4);
+  color: white;
+}
+
+.btn-done {
+  background-color: #6c757d;
+  color: white;
+  cursor: not-allowed;
+}
+
+.btn-cancelled {
+  background-color: #dc3545;
+  color: white;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn:hover:not([disabled]) {
+  opacity: 0.9;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+}

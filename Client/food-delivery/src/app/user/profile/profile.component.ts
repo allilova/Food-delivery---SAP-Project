@@ -1,10 +1,11 @@
 // src/app/user/profile/profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RestaurantService } from '../../services/restaurant.service';
 import { OrderService } from '../../services/order.service';
+import { CartService } from '../../services/cart.service';
 import { User } from '../../types/user';
 import { Restaurant } from '../../types/restaurants';
 import { Order } from '../../types/order';
@@ -35,7 +36,9 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private restaurantService: RestaurantService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private cartService: CartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +102,21 @@ export class ProfileComponent implements OnInit {
 
   // This is used to navigate to editing the profile
   editProfile(): void {
-    // Implement navigation to edit profile page
-    // or show edit form in a modal, etc.
+    // For now, we'll just navigate to a hypothetical edit profile page
+    // We can implement this later
+    console.log('Edit profile requested');
+    // Uncomment when edit profile page is created
+    // this.router.navigate(['/user/edit-profile']);
+  }
+  
+  // Add an item from a previous order to cart
+  reorderItem(item: any): void {
+    if (item && item.food) {
+      // Call addToCart with food object and quantity
+      this.cartService.addToCart(item.food, 1);
+      console.log('Item added to cart');
+      // Optional: navigate to cart
+      // this.router.navigate(['/cart']);
+    }
   }
 }

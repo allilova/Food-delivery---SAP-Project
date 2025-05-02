@@ -1,113 +1,106 @@
 <div class="profile-page">
-    <div class="info-client">
+    <!-- Show loading spinner when loading profile data -->
+    <div *ngIf="loading.profile" class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+    
+    <!-- Show error message if profile loading fails -->
+    <div *ngIf="error.profile && !loading.profile" class="error-message">
+        {{ error.profile }}
+    </div>
+    
+    <!-- Show profile info when data is loaded -->
+    <div *ngIf="user && !loading.profile" class="info-client">
         <div class="img">
         <img src="profile.png">
         </div>
         <div class="text">
-        <h3>Aleksandra Lilova</h3>
-        <p><b>Gender:</b> Female</p>
-        <p><b>Email:</b> alilova&#64;tu-sofia.bg</p>
-        <p><b>Phone Number:</b> 0878675678</p>
-        <p><b>Address:</b> Studentski grad 14</p>
+        <h3>{{ user.name }}</h3>
+        <p><b>Email:</b> {{ user.email }}</p>
+        <p><b>Phone Number:</b> {{ user.phoneNumber }}</p>
+        <p><b>Address:</b> {{ user.address || 'Not provided' }}</p>
         </div>
-        <button type="submit">Edit</button>
+        <button type="submit" (click)="editProfile()">Edit</button>
     </div>
     <div class="favorites">
-        <h2>Favorite Resturants:</h2>
-        <div class="list-items">
-            <div class="cards">
-                <div class="card">
-                    <div class="img-card">
-                        <img src="Gourmet Restaurant.jpg">
-                    </div>
-                    <div class="text-card">
-                    <h4>name</h4>
-                    <p><i class="fa-solid fa-location-dot"></i>address</p>
-                    <p>foodType</p>
-                    <div class="ran-time">
-                    <p><i class="fa-solid fa-star"></i>rating</p>
-                    <p><time datetime="time"><i class="fa-solid fa-clock"></i> timeDelivery</time></p>
-                    </div>
-                    <button class="Order">View menu</button>
-                </div>
-                </div>
-                <div class="card">
-                    <div class="img-card">
-                        <img src="Gourmet Restaurant.jpg">
-                    </div>
-                    <div class="text-card">
-                    <h4>name</h4>
-                    <p><i class="fa-solid fa-location-dot"></i>address</p>
-                    <p>foodType</p>
-                    <div class="ran-time">
-                    <p><i class="fa-solid fa-star"></i>rating</p>
-                    <p><time datetime="time"><i class="fa-solid fa-clock"></i> timeDelivery</time></p>
-                    </div>
-                    <button class="Order">View menu</button>
-                </div>
-                </div>
-                <div class="card">
-                    <div class="img-card">
-                        <img src="Gourmet Restaurant.jpg">
-                    </div>
-                    <div class="text-card">
-                    <h4>name</h4>
-                    <p><i class="fa-solid fa-location-dot"></i>address</p>
-                    <p>foodType</p>
-                    <div class="ran-time">
-                    <p><i class="fa-solid fa-star"></i>rating</p>
-                    <p><time datetime="time"><i class="fa-solid fa-clock"></i> timeDelivery</time></p>
-                    </div>
-                    <button class="Order">View menu</button>
-                </div>
-                </div>
+        <h2>Favorite Restaurants:</h2>
+        
+        <!-- Show loading spinner when loading favorites -->
+        <div *ngIf="loading.favorites" class="loading-container">
+            <app-loading-spinner></app-loading-spinner>
         </div>
         
+        <!-- Show error message if favorites loading fails -->
+        <div *ngIf="error.favorites && !loading.favorites" class="error-message">
+            {{ error.favorites }}
+        </div>
+        
+        <!-- Show message when no favorites -->
+        <div *ngIf="!loading.favorites && favoriteRestaurants.length === 0" class="no-data-message">
+            You haven't added any restaurants to your favorites yet.
+        </div>
+        
+        <!-- Show favorites when data is loaded -->
+        <div *ngIf="!loading.favorites && favoriteRestaurants.length > 0" class="list-items">
+            <div class="cards">
+                <div *ngFor="let restaurant of favoriteRestaurants" class="card">
+                    <div class="img-card">
+                        <img [src]="restaurant.imgUrl || 'Gourmet Restaurant.jpg'" alt="{{ restaurant.name }}">
+                    </div>
+                    <div class="text-card">
+                        <h4>{{ restaurant.name }}</h4>
+                        <p><i class="fa-solid fa-location-dot"></i> {{ restaurant.address }}</p>
+                        <p>{{ restaurant.foodType }}</p>
+                        <div class="ran-time">
+                            <p><i class="fa-solid fa-star"></i> {{ restaurant.rating || 'N/A' }}</p>
+                            <p><time><i class="fa-solid fa-clock"></i> {{ restaurant.timeDelivery || '30-40 min' }}</time></p>
+                        </div>
+                        <button class="Order" [routerLink]="['/menu', restaurant.id]">View menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 <div class="last order">
     <h2>Previous orders:</h2>
-    <div class="list-items">
-        <div class="order">
-            <data>20.04.2025</data>
-            <div class="card">
-                <div class="img-card">
-                    <img src="Gourmet Restaurant.jpg">
-                </div>
-                <div class="text-card">
-                <h4>Food Name</h4>
-                <p>Description</p>
-                <p>Portion Size</p>
-                <p>Price</p>
-                <button class="Add">Add</button>
-            </div>
-            </div>
-            <div class="card">
-                <div class="img-card">
-                    <img src="Gourmet Restaurant.jpg">
-                </div>
-                <div class="text-card">
-                <h4>Food Name</h4>
-                <p>Description</p>
-                <p>Portion Size</p>
-                <p>Price</p>
-                <button class="Add">Add</button>
-            </div>
-            </div>
-            <div class="card">
-                <div class="img-card">
-                    <img src="Gourmet Restaurant.jpg">
-                </div>
-                <div class="text-card">
-                <h4>Food Name</h4>
-                <p>Description</p>
-                <p>Portion Size</p>
-                <p>Price</p>
-                <button class="Add">Add</button>
-            </div>
-            </div>
+    
+    <!-- Show loading spinner when loading orders -->
+    <div *ngIf="loading.orders" class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
     </div>
+    
+    <!-- Show error message if orders loading fails -->
+    <div *ngIf="error.orders && !loading.orders" class="error-message">
+        {{ error.orders }}
     </div>
-</div>
+    
+    <!-- Show message when no previous orders -->
+    <div *ngIf="!loading.orders && previousOrders.length === 0" class="no-data-message">
+        You haven't placed any orders yet.
+    </div>
+    
+    <!-- Show orders when data is loaded -->
+    <div *ngIf="!loading.orders && previousOrders.length > 0" class="list-items">
+        <div *ngFor="let order of previousOrders" class="order">
+            <data>{{ order.orderDate | date:'dd.MM.yyyy' }}</data>
+            <div *ngFor="let item of order.items" class="card">
+                <div class="img-card">
+                    <img [src]="item.food && item.food.imageUrl || 'Gourmet Restaurant.jpg'" alt="{{ item.food && item.food.name }}">
+                </div>
+                <div class="text-card">
+                    <h4>{{ item.food && item.food.name }}</h4>
+                    <p>{{ item.food && item.food.description }}</p>
+                    <p>Quantity: {{ item.quantity }}</p>
+                    <p>Price: {{ item.totalPrice | currency }}</p>
+                    <button class="Add" (click)="reorderItem(item)">Reorder</button>
+                </div>
+            </div>
+            <div class="order-status">
+                <p>Status: {{ order.status }}</p>
+                <p>Total: {{ order.totalAmount | currency }}</p>
+            </div>
+        </div>
+    </div>
 </div>

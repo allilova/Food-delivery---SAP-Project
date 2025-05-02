@@ -104,7 +104,40 @@
             <label for="password"><i class="fa-solid fa-lock"></i>Password</label>
             <input type="password" formControlName="password" id="password"
                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
-            <legend>Must be at least 8 characters</legend>
+                   
+            <div class="password-strength">
+                <div class="strength-meter">
+                    <div class="strength-bar" [style.width.%]="getPasswordStrengthScore() * 20" 
+                         [style.background-color]="getPasswordStrengthColor()"></div>
+                </div>
+                <div class="strength-text" [style.color]="getPasswordStrengthColor()">
+                    Password Strength: {{ getPasswordStrengthText() }}
+                </div>
+            </div>
+            
+            <div class="password-criteria">
+                <div class="criterion" [ngClass]="{'met': passwordStrength.hasMinLength}">
+                    <i class="fa" [ngClass]="passwordStrength.hasMinLength ? 'fa-check' : 'fa-times'"></i>
+                    At least 8 characters
+                </div>
+                <div class="criterion" [ngClass]="{'met': passwordStrength.hasUpperCase}">
+                    <i class="fa" [ngClass]="passwordStrength.hasUpperCase ? 'fa-check' : 'fa-times'"></i>
+                    Uppercase letter
+                </div>
+                <div class="criterion" [ngClass]="{'met': passwordStrength.hasLowerCase}">
+                    <i class="fa" [ngClass]="passwordStrength.hasLowerCase ? 'fa-check' : 'fa-times'"></i>
+                    Lowercase letter
+                </div>
+                <div class="criterion" [ngClass]="{'met': passwordStrength.hasNumber}">
+                    <i class="fa" [ngClass]="passwordStrength.hasNumber ? 'fa-check' : 'fa-times'"></i>
+                    Number
+                </div>
+                <div class="criterion" [ngClass]="{'met': passwordStrength.hasSpecialChar}">
+                    <i class="fa" [ngClass]="passwordStrength.hasSpecialChar ? 'fa-check' : 'fa-times'"></i>
+                    Special character
+                </div>
+            </div>
+            
             @if (submitted && f['password'].errors) {
                 <div class="text-danger">
                     @if (f['password'].errors['required']) {

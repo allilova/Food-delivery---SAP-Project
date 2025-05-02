@@ -30,7 +30,7 @@
             
             @if (isRestaurantOwner || isAdmin) {
                 <div class="adminAdd">
-                    <a [routerLink]="['/create-menu']" [queryParams]="{restaurantId: restaurantId}">
+                    <a [routerLink]="['/admin/create-menu-item', restaurantId]">
                         <i class="fa-solid fa-plus"></i> Add new menu item
                     </a>
                 </div>
@@ -56,7 +56,7 @@
                                 <div class="text-card">
                                     <h4>{{ food.name }}</h4>
                                     <p>{{ food.description }}</p>
-                                    <p>{{ food.ingredients?.join(', ') }}</p>
+                                    <p>{{ food.ingredients && food.ingredients.join(', ') }}</p>
                                     <p><b>{{ food.price.toFixed(2) }} BGN</b></p>
                                     
                                     <!-- Different buttons based on user role -->
@@ -65,8 +65,9 @@
                                             <a [routerLink]="['/edit-menu', food.id]">
                                                 <button class="Edit">Edit</button>
                                             </a>
-                                            <button class="Delete">Delete</button>
-                                            <button [class]="food.isAvailable ? 'Available' : 'Unavailable'">
+                                            <button class="Delete" (click)="deleteMenuItem(food.id)">Delete</button>
+                                            <button [class]="food.isAvailable ? 'Available' : 'Unavailable'" 
+                                                    (click)="toggleAvailability(food)">
                                                 {{ food.isAvailable ? 'Available' : 'Unavailable' }}
                                             </button>
                                         </div>

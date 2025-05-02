@@ -115,7 +115,58 @@ export class MenuComponent implements OnInit {
       return;
     }
     
-    this.cartService.addToCart(food);
-    // Could show a success notification here
+    console.log('Adding to cart:', food);
+    
+    try {
+      this.cartService.addToCart(food);
+      // Show success notification
+      alert(`Added ${food.name} to cart!`);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Unable to add item to cart. Please try again.');
+    }
+  }
+  
+  // Delete menu item (for admin or restaurant owner)
+  deleteMenuItem(foodId: number): void {
+    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner)) {
+      return;
+    }
+    
+    if (confirm('Are you sure you want to delete this menu item?')) {
+      this.restaurantService.deleteMenuItem(foodId.toString()).subscribe({
+        next: () => {
+          // Remove item from local array to update UI immediately
+          this.menuItems = this.menuItems.filter(item => item.id !== foodId);
+          console.log('Menu item deleted successfully');
+        },
+        error: (err) => {
+          console.error('Error deleting menu item:', err);
+          // Could show an error notification here
+        }
+      });
+    }
+  }
+  
+  // Toggle food item availability
+  toggleAvailability(food: Food): void {
+    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner)) {
+      return;
+    }
+    
+    this.restaurantService.toggleFoodAvailability(food.id.toString()).subscribe({
+      next: (updatedFood) => {
+        // Update the item in the local array
+        const index = this.menuItems.findIndex(item => item.id === food.id);
+        if (index !== -1) {
+          this.menuItems[index].isAvailable = updatedFood.isAvailable;
+        }
+        console.log('Food availability toggled successfully');
+      },
+      error: (err) => {
+        console.error('Error toggling food availability:', err);
+        // Could show an error notification here
+      }
+    });
   }
 }

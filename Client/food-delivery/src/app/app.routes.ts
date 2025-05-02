@@ -10,12 +10,14 @@ import { SearchComponent } from './search/search.component';
 import { MenuComponent } from './menu/menu.component';
 import { EditMenuComponent } from './edit/edit-menu/edit-menu.component';
 import { EditRestaurantComponent } from './edit/edit-restaurant/edit-resturant.component';
-import { CreateMenuComponent } from './admin/create-menu/create-menu-item.component';
 import { ShopCartComponent } from './shop-cart/shop-cart.component';
 import { PaymentComponent } from './payment/payment.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { OrdersComponent } from './supplier/orders/orders.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
+import { OrderTrackingPageComponent } from './order-tracking/order-tracking-page.component';
+import { CreateRestaurantComponent } from './admin/create-restaurant/create-restaurant.component';
+import { CreateMenuItemComponent } from './admin/create-menu-item.component/create-menu-item.component';
 import { authGuard, roleGuard, customerOnlyGuard } from './guards/auth.guard';
 import { USER_ROLE } from './types/user-role.enum';
 
@@ -26,7 +28,6 @@ export const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {
         path: 'catalog', 
-        canActivate: [customerOnlyGuard], // Prevent restaurant owners from accessing
         children: [
             {path: '', component: CatalogComponent},
             {path: ':restaurantId', component: MenuComponent}
@@ -44,7 +45,7 @@ export const routes: Routes = [
     },
     {
         path: 'create-menu', 
-        component: CreateMenuComponent, 
+        component: CreateMenuItemComponent, 
         canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT, USER_ROLE.ROLE_ADMIN])]
     },
     {
@@ -63,6 +64,14 @@ export const routes: Routes = [
         canActivate: [customerOnlyGuard] // Only customers can access payment
     },
     {
+        path: 'track-order', 
+        component: OrderTrackingPageComponent
+    },
+    {
+        path: 'track-order/:id', 
+        component: OrderTrackingPageComponent
+    },
+    {
         path: 'search', 
         component: SearchComponent, 
         canActivate: [customerOnlyGuard] // Only customers can access search
@@ -72,14 +81,24 @@ export const routes: Routes = [
         canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])],
         children: [
             {path: '', component: SupplierComponent},
-            {path: 'order', component: OrdersComponent},
-            {path: 'order/:id', component: OrdersComponent}
+            {path: 'orders', component: OrdersComponent},
+            {path: 'orders/:id', component: OrdersComponent}
         ]
     },
     {
         path: 'restaurants', 
         component: RestaurantsComponent, 
         canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])] // Only admin can access all restaurants
+    },
+    {
+        path: 'admin/create-restaurant',
+        component: CreateRestaurantComponent,
+        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])] // Only admin can create restaurants
+    },
+    {
+        path: 'admin/create-menu-item/:restaurantId',
+        component: CreateMenuItemComponent,
+        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN, USER_ROLE.ROLE_RESTAURANT])] // Admin or restaurant owner can create menu items
     },
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}

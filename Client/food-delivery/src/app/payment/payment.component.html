@@ -1,169 +1,169 @@
 <div class="container">
-  <h2>Checkout</h2>
-
-  @if (error) {
-      <div class="error-message">{{ error }}</div>
-  }
-
-  @if (successMessage) {
-      <div class="success-message">{{ successMessage }}</div>
-  }
-
-  <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-          <label>Select Payment Method</label>
-          <div class="radio-options">
-              <label>
-                  <input 
-                      type="radio" 
-                      formControlName="paymentMethod" 
-                      value="CARD" 
-                      id="card"
-                  >
-                  <span class="option">Credit/Debit Card</span>
-              </label>
-              <label>
-                  <input 
-                      type="radio" 
-                      formControlName="paymentMethod" 
-                      value="CASH" 
-                      id="cash"
-                  >
-                  <span class="option">Cash on Delivery</span>
-              </label>
-          </div>
-      </div>
-
-      <div class="form-group">
-          <label for="deliveryAddress">Delivery Address</label>
-          <input 
-              type="text" 
-              id="deliveryAddress" 
-              formControlName="deliveryAddress" 
-              placeholder="Enter your full delivery address"
-              [ngClass]="{'is-invalid': f['deliveryAddress']?.invalid && f['deliveryAddress']?.touched}"
-          >
-          @if (f['deliveryAddress']?.invalid && f['deliveryAddress']?.touched) {
-              <div class="error-feedback">Delivery address is required</div>
-          }
-      </div>
-
-      <!-- Card payment fields - shown only when card payment is selected -->
-      @if (paymentMethod === 'CARD') {
-          <div class="card-details">
-              <div class="form-group">
-                  <label for="cardName">Name on Card</label>
-                  <input 
-                      type="text" 
-                      id="cardName" 
-                      formControlName="cardName" 
-                      placeholder="e.g. John Doe"
-                      [ngClass]="{'is-invalid': f['cardName']?.invalid && f['cardName']?.touched}"
-                  >
-                  @if (f['cardName']?.invalid && f['cardName']?.touched) {
-                      <div class="error-feedback">Name on card is required</div>
-                  }
-              </div>
-
-              <div class="form-group">
-                  <label for="cardNumber">Card Number</label>
-                  <input 
-                      type="text" 
-                      id="cardNumber" 
-                      formControlName="cardNumber" 
-                      placeholder="1234 5678 9012 3456"
-                      [ngClass]="{'is-invalid': f['cardNumber']?.invalid && f['cardNumber']?.touched}"
-                  >
-                  @if (f['cardNumber']?.invalid && f['cardNumber']?.touched) {
-                      <div class="error-feedback">
-                          @if (f['cardNumber']?.errors?.['required']) {
-                              Card number is required
-                          } @else if (f['cardNumber']?.errors?.['pattern']) {
-                              Please enter a valid 16-digit card number
-                          }
-                      </div>
-                  }
-              </div>
-
-              <div class="form-row">
-                  <div class="form-group">
-                      <label for="expiryDate">Expiry Date</label>
-                      <input 
-                          type="text" 
-                          id="expiryDate" 
-                          formControlName="expiryDate" 
-                          placeholder="MM/YY"
-                          [ngClass]="{'is-invalid': f['expiryDate']?.invalid && f['expiryDate']?.touched}"
-                      >
-                      @if (f['expiryDate']?.invalid && f['expiryDate']?.touched) {
-                          <div class="error-feedback">
-                              @if (f['expiryDate']?.errors?.['required']) {
-                                  Expiry date is required
-                              } @else if (f['expiryDate']?.errors?.['pattern']) {
-                                  Format: MM/YY
-                              }
-                          </div>
-                      }
-                  </div>
-
-                  <div class="form-group">
-                      <label for="cvv">CVV</label>
-                      <input 
-                          type="text" 
-                          id="cvv" 
-                          formControlName="cvv" 
-                          placeholder="123"
-                          [ngClass]="{'is-invalid': f['cvv']?.invalid && f['cvv']?.touched}"
-                      >
-                      @if (f['cvv']?.invalid && f['cvv']?.touched) {
-                          <div class="error-feedback">
-                              @if (f['cvv']?.errors?.['required']) {
-                                  CVV is required
-                              } @else if (f['cvv']?.errors?.['pattern']) {
-                                  Invalid CVV format
-                              }
-                          </div>
-                      }
-                  </div>
-              </div>
-          </div>
-      }
-
-      <!-- Order summary -->
-      <div class="order-summary">
-          <h3>Order Summary</h3>
-          <div class="summary-row">
-              <span>Subtotal:</span>
-              <span>{{ subtotal.toFixed(2) }} BGN</span>
-          </div>
-          <div class="summary-row">
-              <span>Service Fee:</span>
-              <span>{{ serviceFee.toFixed(2) }} BGN</span>
-          </div>
-          <div class="summary-row">
-              <span>Delivery Fee:</span>
-              <span>{{ deliveryFee.toFixed(2) }} BGN</span>
-          </div>
-          <div class="summary-row total">
-              <span>Total:</span>
-              <span>{{ totalPrice.toFixed(2) }} BGN</span>
-          </div>
-      </div>
-
-      <button 
-          type="submit" 
-          class="button" 
-          [disabled]="loading || paymentForm.invalid"
-      >
-          @if (loading) {
-              <app-loading-spinner></app-loading-spinner>
-          } @else {
-              <b>Confirm and Pay</b>
-          }
-      </button>
-
-      <div class="note">
-          Thank you for your order! 🧡
-      </div>
-  </form>
-</div>
+    <h2>Checkout</h2>
+  
+    @if (error) {
+        <div class="error-message">{{ error }}</div>
+    }
+  
+    @if (successMessage) {
+        <div class="success-message">{{ successMessage }}</div>
+    }
+  
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label>Select Payment Method</label>
+            <div class="radio-options">
+                <label>
+                    <input 
+                        type="radio" 
+                        formControlName="paymentMethod" 
+                        value="CARD" 
+                        id="card"
+                    >
+                    <span class="option">Credit/Debit Card</span>
+                </label>
+                <label>
+                    <input 
+                        type="radio" 
+                        formControlName="paymentMethod" 
+                        value="CASH" 
+                        id="cash"
+                    >
+                    <span class="option">Cash on Delivery</span>
+                </label>
+            </div>
+        </div>
+  
+        <div class="form-group">
+            <label for="deliveryAddress">Delivery Address</label>
+            <input 
+                type="text" 
+                id="deliveryAddress" 
+                formControlName="deliveryAddress" 
+                placeholder="Enter your full delivery address"
+                [ngClass]="{'is-invalid': f['deliveryAddress'].invalid && f['deliveryAddress'].touched}"
+            >
+            @if (f['deliveryAddress'].invalid && f['deliveryAddress'].touched) {
+                <div class="error-feedback">Delivery address is required</div>
+            }
+        </div>
+  
+        <!-- Card payment fields - shown only when card payment is selected -->
+        @if (paymentMethod === 'CARD') {
+            <div class="card-details">
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input 
+                        type="text" 
+                        id="cardName" 
+                        formControlName="cardName" 
+                        placeholder="e.g. John Doe"
+                        [ngClass]="{'is-invalid': f['cardName'].invalid && f['cardName'].touched}"
+                    >
+                    @if (f['cardName'].invalid && f['cardName'].touched) {
+                        <div class="error-feedback">Name on card is required</div>
+                    }
+                </div>
+  
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input 
+                        type="text" 
+                        id="cardNumber" 
+                        formControlName="cardNumber" 
+                        placeholder="1234 5678 9012 3456"
+                        [ngClass]="{'is-invalid': f['cardNumber'].invalid && f['cardNumber'].touched}"
+                    >
+                    @if (f['cardNumber'].invalid && f['cardNumber'].touched) {
+                        <div class="error-feedback">
+                            @if (f['cardNumber'].errors && f['cardNumber'].errors['required']) {
+                                Card number is required
+                            } @else if (f['cardNumber'].errors && f['cardNumber'].errors['pattern']) {
+                                Please enter a valid 16-digit card number
+                            }
+                        </div>
+                    }
+                </div>
+  
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date</label>
+                        <input 
+                            type="text" 
+                            id="expiryDate" 
+                            formControlName="expiryDate" 
+                            placeholder="MM/YY"
+                            [ngClass]="{'is-invalid': f['expiryDate'].invalid && f['expiryDate'].touched}"
+                        >
+                        @if (f['expiryDate'].invalid && f['expiryDate'].touched) {
+                            <div class="error-feedback">
+                                @if (f['expiryDate'].errors && f['expiryDate'].errors['required']) {
+                                    Expiry date is required
+                                } @else if (f['expiryDate'].errors && f['expiryDate'].errors['pattern']) {
+                                    Format: MM/YY
+                                }
+                            </div>
+                        }
+                    </div>
+  
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input 
+                            type="text" 
+                            id="cvv" 
+                            formControlName="cvv" 
+                            placeholder="123"
+                            [ngClass]="{'is-invalid': f['cvv'].invalid && f['cvv'].touched}"
+                        >
+                        @if (f['cvv'].invalid && f['cvv'].touched) {
+                            <div class="error-feedback">
+                                @if (f['cvv'].errors && f['cvv'].errors['required']) {
+                                    CVV is required
+                                } @else if (f['cvv'].errors && f['cvv'].errors['pattern']) {
+                                    Invalid CVV format
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+  
+        <!-- Order summary -->
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span>{{ subtotal.toFixed(2) }} BGN</span>
+            </div>
+            <div class="summary-row">
+                <span>Service Fee:</span>
+                <span>{{ serviceFee.toFixed(2) }} BGN</span>
+            </div>
+            <div class="summary-row">
+                <span>Delivery Fee:</span>
+                <span>{{ deliveryFee.toFixed(2) }} BGN</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span>{{ totalPrice.toFixed(2) }} BGN</span>
+            </div>
+        </div>
+  
+        <button 
+            type="submit" 
+            class="button" 
+            [disabled]="loading || paymentForm.invalid"
+        >
+            @if (loading) {
+                <app-loading-spinner></app-loading-spinner>
+            } @else {
+                <b>Confirm and Pay</b>
+            }
+        </button>
+  
+        <div class="note">
+            Thank you for your order! 🧡
+        </div>
+    </form>
+  </div>

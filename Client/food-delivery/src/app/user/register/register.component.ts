@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { USER_ROLE } from '../../types/user-role.enum';
 import { LoadingSpinnerComponent } from '../../components/loading-spinner.component';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -20,11 +21,21 @@ export class RegisterComponent implements OnInit {
   loading = false;
   error = '';
   successMessage = '';
+  
+  // Password strength indicators
+  passwordStrength = {
+    hasMinLength: false,
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialChar: false
+  };
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {
     // Redirect to home if already logged in
     if (this.authService.isLoggedIn) {
@@ -34,21 +45,74 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       gender: ['', Validators.required],
-      address: ['', Validators.required],
-      phone_number: ['', [Validators.required, Validators.pattern('^[0-9]{10,}$')]],
-      email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
+      phone: ['', [
+        Validators.required, 
+        Validators.pattern('^[0-9]{10,}$'),
+        Validators.maxLength(15)
+      ]],
+      email: ['', [
+        Validators.required, 
+        Validators.email,
+        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
+      ]],
       password: ['', [
         Validators.required, 
         Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/)
+        Validators.maxLength(128)
       ]],
       confirmPassword: ['', Validators.required]
     }, {
       validators: this.passwordMatchValidator
     });
+    
+    // Subscribe to password changes to validate in real-time
+    this.registerForm.get('password')?.valueChanges.subscribe(password => {
+      if (password) {
+        this.checkPasswordStrength(password);
+      }
+      this.registerForm.get('confirmPassword')?.updateValueAndValidity();
+    });
+  }
+  
+  // Check password strength
+  checkPasswordStrength(password: string): void {
+    this.passwordStrength = {
+      hasMinLength: password.length >= 8,
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    };
+  }
+  
+  // Get password strength score (0-5)
+  getPasswordStrengthScore(): number {
+    return Object.values(this.passwordStrength).filter(Boolean).length;
+  }
+  
+  // Get password strength description
+  getPasswordStrengthText(): string {
+    const score = this.getPasswordStrengthScore();
+    if (score === 0) return 'Very Weak';
+    if (score === 1) return 'Weak';
+    if (score === 2) return 'Fair';
+    if (score === 3) return 'Good';
+    if (score === 4) return 'Strong';
+    return 'Very Strong';
+  }
+  
+  // Get password strength color
+  getPasswordStrengthColor(): string {
+    const score = this.getPasswordStrengthScore();
+    if (score <= 1) return '#dc3545'; // red
+    if (score === 2) return '#fd7e14'; // orange
+    if (score === 3) return '#ffc107'; // yellow
+    if (score === 4) return '#28a745'; // green
+    return '#20c997'; // teal
   }
 
   // Custom validator for password match
@@ -82,6 +146,11 @@ export class RegisterComponent implements OnInit {
     this.error = '';
     this.successMessage = '';
 
+    // If password strength isn't at least "Good" (3), show warning
+    if (this.getPasswordStrengthScore() < 3) {
+      this.notificationService.warning('Your password is weak. Consider using a stronger password for better security.');
+    }
+
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
@@ -89,15 +158,18 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     
-    // Prepare the data to match the backend expectations and RegisterUser interface
+    // Prepare the data to match the backend expectations
     const userData = {
       name: `${this.registerForm.value.firstName} ${this.registerForm.value.lastName}`,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
-      phone_number: this.registerForm.value.phone_number, // Match the interface property name
-      address: this.registerForm.value.address,
-      role: USER_ROLE.ROLE_CUSTOMER
+      phone: this.registerForm.value.phone,
+      role: 'ROLE_CUSTOMER'
     };
+
+    // For debug - log the form values
+    console.log('Form Values:', this.registerForm.value);
+    console.log('Prepared User Data:', userData);
 
     // Register the user
     this.authService.register(userData)
@@ -112,7 +184,7 @@ export class RegisterComponent implements OnInit {
           }, 2000);
         },
         error: error => {
-          this.error = error?.error?.message || 'Registration failed. Please try again.';
+          this.error = error?.message || 'Registration failed. Please try again.';
           this.loading = false;
         }
       });

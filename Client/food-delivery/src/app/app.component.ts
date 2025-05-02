@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { NavigationBarComponent } from './core/nav-bar/nav-bar.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NotificationComponent } from './components/notifications/notification.component';
+import { DialogHostComponent } from './components/dialog-host/dialog-host.component';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
     RouterOutlet, 
     NavigationBarComponent, 
     FooterComponent,
-    HttpClientModule
+    HttpClientModule,
+    NotificationComponent,
+    DialogHostComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

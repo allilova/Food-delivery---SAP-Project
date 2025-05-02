@@ -1,3 +1,4 @@
+import { Address } from './address';
 export interface Restaurant {
     id: string;
     name: string;

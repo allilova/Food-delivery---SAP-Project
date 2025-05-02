@@ -6,8 +6,8 @@ img {
 }
 
 .card {
-    width: 300px;
-    height: auto;
+    width: 8cm;
+    min-height: 9.6cm;;
     margin: auto;
     margin-top: 1cm;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

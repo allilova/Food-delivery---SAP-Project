@@ -13,13 +13,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:mysql://localhost:3306/food_delivery_test?createDatabaseIfNotExist=true",
-    "spring.datasource.username=root",
-    "spring.datasource.password=root",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
 public class RestaurantRepositoryTest {
     @Autowired
     private RestaurantRepository restaurantRepository;

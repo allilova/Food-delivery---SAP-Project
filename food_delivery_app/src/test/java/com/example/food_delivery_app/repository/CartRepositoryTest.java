@@ -4,23 +4,12 @@ import com.example.food_delivery_app.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Optional;
 
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:mysql://localhost:3306/food_delivery_test?createDatabaseIfNotExist=true",
-    "spring.datasource.username=root",
-    "spring.datasource.password=root",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
+
 class CartRepositoryTest {
 
     @Autowired
@@ -32,18 +21,11 @@ class CartRepositoryTest {
 
     @Test
     void ItShouldFindCartByUserId() {
-        // Create address
-        Address address = new Address();
-        address.setStreet("123 Test St");
-        address.setCity("Test City");
 
-        // Create user
         User user = new User();
-        user.setEmail("test@example.com");
+        user.setEmail("Sezer@gmail.com");
         user.setPassword("password");
-        user.setRole(USER_ROLE.ROLE_CUSTOMER);
-        user.setName("Test User");
-        user.setAddress(address);
+        user.setName("Sezer");
         user.setPhoneNumber("1234567890");
         user = userRepository.save(user);
 
@@ -59,18 +41,11 @@ class CartRepositoryTest {
 
     @Test
     void ItShouldFindCartByUserEmail() {
-        // Create address
-        Address address = new Address();
-        address.setStreet("123 Test St");
-        address.setCity("Test City");
 
-        // Create user
         User user = new User();
         user.setEmail("Sezer@gmail.com");
         user.setPassword("password");
-        user.setRole(USER_ROLE.ROLE_CUSTOMER);
         user.setName("Sezer");
-        user.setAddress(address);
         user.setPhoneNumber("1234567890");
         user = userRepository.save(user);
 
@@ -82,5 +57,26 @@ class CartRepositoryTest {
 
         assertThat(foundCart).isPresent();
         assertThat(foundCart.get().getUser().getEmail()).isEqualTo("Sezer@gmail.com");
+    }
+
+    @Test
+    void ItShouldFindCartByUser() {
+
+        User user = new User();
+        user.setEmail("Sezer@gmail.com");
+        user.setPassword("password");
+        user.setName("Sezer");
+        user.setPhoneNumber("1234567890");
+        user = userRepository.save(user);
+
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cartRepository.save(cart);
+
+        Optional<Cart> foundCart = cartRepository.findByUser(user);
+
+        assertThat(foundCart).isPresent();
+        assertThat(foundCart.get().getUser()).isEqualTo(user);
+
     }
 }

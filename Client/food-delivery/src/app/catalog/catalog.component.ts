@@ -101,21 +101,4 @@ export class CatalogComponent implements OnInit {
     }
   }
 
-  // Add restaurant to favorites
-  addToFavorites(restaurantId: string): void {
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    
-    this.restaurantService.toggleFavorite(restaurantId).subscribe({
-      next: () => {
-        // Show success message or update UI
-        console.log('Restaurant added to favorites');
-      },
-      error: (err) => {
-        console.error('Error adding to favorites:', err);
-      }
-    });
-  }
 }

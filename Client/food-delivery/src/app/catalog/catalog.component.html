@@ -2,7 +2,7 @@
     <h2>Filters:</h2>
     <ul>
         @for (category of categories; track category.name) {
-            <li>
+            <li class="category-item">
                 <div class="category-card" [class.active]="selectedCategory === category.name">
                     <a href="javascript:void(0)" (click)="filterByCategory(category.name)">
                         <img [src]="category.img" [alt]="category.name">

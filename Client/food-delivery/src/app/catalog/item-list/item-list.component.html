@@ -1,65 +1,47 @@
 <div class="cards">
     @if (loading) {
-        <div class="loading-container">
-            <app-loading-spinner></app-loading-spinner>
-            <p>Loading restaurants...</p>
-        </div>
-    } @else if (error) {
-        <div class="error-message">{{ error }}</div>
-    } @else if (restaurants.length === 0) {
-        <div class="no-restaurants">
-            <p>No restaurants found. Try a different category or check back later!</p>
-        </div>
-    } @else {
-        @for (restaurant of restaurants; track restaurant.id) {
-            <div class="card">
-                <div class="img-card">
-                    <img [src]="restaurant.imgUrl || 'Gourmet Restaurant.jpg'" [alt]="restaurant.name">
-                </div>
-                <div class="text-card">
-                    <h4>{{restaurant.name}}</h4>
-                    <p><i class="fa-solid fa-location-dot"></i> {{restaurant.address}}</p>
-                    <p>{{restaurant.foodType}}</p>
-                    <div class="ran-time">
-                        <p><i class="fa-solid fa-star"></i> {{restaurant.rating}}</p>
-                        <p><time datetime="time"><i class="fa-solid fa-clock"></i> {{restaurant.timeDelivery}}</time></p>
+    <div class="loading-container">
+        <app-loading-spinner></app-loading-spinner>
+        <p>Loading restaurants...</p>
+    </div>
+} @else if (error) {
+    <div class="error-message">
+        <p>{{ error }}</p>
+    </div>
+} @else if (restaurants.length === 0) {
+    <div class="no-results">
+        <p>No restaurants found. Try a different category or check back later!</p>
+    </div>
+} @else {
+    <div class="restaurant-list">
+        <div class="cards">
+            @for (restaurant of restaurants; track restaurant.id) {
+                <div class="card">
+                    <div class="img-card">
+                        <img [src]="restaurant.imgUrl || '/public/logo2.png'" alt="{{ restaurant.name }}">
                     </div>
-                    <div class="button-container">
-                        <!-- View menu button for all users -->
-                        <a class="button" [routerLink]="['/catalog', restaurant.id]">
-                            <button class="view-btn">View menu</button>
-                        </a>
-                        
-                        <!-- Favorite button for regular users (if not already in favorites) -->
-                        @if (!isAdmin && !isFavorite(restaurant.id)) {
-                            <button class="favorite-btn" (click)="toggleFavorite($event, restaurant.id)">
-                                <i class="fa-solid fa-heart"></i> Add to Favorites
-                            </button>
-                        }
-                        
-                        <!-- Remove from favorites button if already in favorites -->
-                        @if (!isAdmin && isFavorite(restaurant.id)) {
-                            <button class="unfavorite-btn" (click)="toggleFavorite($event, restaurant.id)">
-                                <i class="fa-solid fa-heart-broken"></i> Remove Favorite
-                            </button>
-                        }
-                        
-                        <!-- Admin controls -->
-                        @if (isAdmin) {
-                            <div class="admin-controls">
-                                <a [routerLink]="['/edit-restaurant', restaurant.id]">
-                                    <button class="edit-btn">
-                                        <i class="fa-solid fa-edit"></i> Edit
-                                    </button>
-                                </a>
-                                <button class="delete-btn" (click)="deleteRestaurant($event, restaurant.id)">
-                                    <i class="fa-solid fa-trash"></i> Delete
+                    <div class="text-card">
+                        <h4>{{ restaurant.name }}</h4>
+                        <p><i class="fa-solid fa-location-dot"></i> {{ restaurant.address }}</p>
+                        <p>{{ restaurant.foodType }}</p>
+                        <div class="ran-time">
+                            <p><i class="fa-solid fa-star"></i> {{ restaurant.rating }}</p>
+                            <p><time><i class="fa-solid fa-clock"></i> {{ restaurant.timeDelivery }}</time></p>
+                        </div>
+                        <div class="button-group">
+                            <a [routerLink]="['/catalog', restaurant.id]">
+                                <button class="view-menu">View menu</button>
+                            </a>
+                            @if (isLoggedIn) {
+                                <button class="add-favorite" (click)="addToFavorites(restaurant.id)">
+                                    <i class="fa-solid fa-heart"></i> Favorite
                                 </button>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    }
+            }
+        </div>
+    </div>
+}
 </div>

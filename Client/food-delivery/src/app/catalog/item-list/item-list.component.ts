@@ -1,7 +1,7 @@
 // src/app/catalog/item-list/item-list.component.ts
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { RestaurantService } from '../../services/restaurant.service';
 import { AuthService } from '../../services/auth.service';
 import { Restaurant } from '../../types/restaurants';
@@ -27,7 +27,8 @@ export class ItemListComponent implements OnInit, OnChanges {
 
   constructor(
     private restaurantService: RestaurantService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -144,5 +145,23 @@ export class ItemListComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  // Add restaurant to favorites
+  addToFavorites(restaurantId: string): void {
+    if (!this.isLoggedIn) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
+    this.restaurantService.toggleFavorite(restaurantId).subscribe({
+      next: () => {
+        // Show success message or update UI
+        console.log('Restaurant added to favorites');
+      },
+      error: (err) => {
+        console.error('Error adding to favorites:', err);
+      }
+    });
   }
 }

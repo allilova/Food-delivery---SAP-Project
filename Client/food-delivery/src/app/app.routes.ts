@@ -88,7 +88,7 @@ export const routes: Routes = [
     {
         path: 'restaurants', 
         component: RestaurantsComponent, 
-        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])] // Only admin can access all restaurants
+        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])] // Only restaurant owners can access this route
     },
     {
         path: 'admin/create-restaurant',

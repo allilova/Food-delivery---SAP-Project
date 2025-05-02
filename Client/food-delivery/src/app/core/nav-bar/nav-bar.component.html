@@ -8,10 +8,15 @@
         <!-- Only visible when logged in as an admin -->
         @if (isLoggedIn && isAdmin()) {
             <li><a routerLink="/admin/create-restaurant">Create Restaurant</a></li>
+            <li><a routerLink="/catalog">Catalog</a></li>
         }
 
         @if (isLoggedIn && isRestaurant()) {
             <li><a routerLink="/restaurants">Dashboard</a></li>
+        }
+
+        @if (isLoggedIn && isCustomer()) {
+            <li><a routerLink="/catalog">Catalog</a></li>
         }
         
         <!-- Authentication links -->
@@ -23,7 +28,6 @@
         
         <!-- Only visible when logged in (any role) -->
         @if (isLoggedIn) {
-            <li><a routerLink="/catalog">Catalog</a></li>
             <li><a routerLink="/profile">Profile</a></li>
             <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
         }

@@ -1,29 +1,30 @@
 <nav>
     <ul>
-        <li><a routerLink="/home">Home</a></li>
-        
-        <!-- Always visible for all users -->
-        <li><a routerLink="/catalog">Catalog</a></li>
-        
         <!-- Only visible when logged in as a restaurant owner -->
-        @if (isLoggedIn && isRestaurant()) {
+        @if (isLoggedIn && isDriver()) {
             <li><a routerLink="/supplier">Dashboard</a></li>
-            <li><a routerLink="/supplier/order">Orders</a></li>
         }
         
         <!-- Only visible when logged in as an admin -->
         @if (isLoggedIn && isAdmin()) {
             <li><a routerLink="/restaurants">Admin Panel</a></li>
+            <li><a routerLink="/admin/create-restaurant">Create Restaurant</a></li>
+        }
+
+        @if (isLoggedIn && isRestaurant()) {
+            <li><a routerLink="/restaurants">Dashboard</a></li>
         }
         
         <!-- Authentication links -->
         @if (!isLoggedIn) {
+            <li><a routerLink="/home">Home</a></li>
             <li><a routerLink="/login">Login</a></li>
             <li><a routerLink="/register">Register</a></li>
         }
         
         <!-- Only visible when logged in (any role) -->
         @if (isLoggedIn) {
+            <li><a routerLink="/catalog">Catalog</a></li>
             <li><a routerLink="/profile">Profile</a></li>
             <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
         }

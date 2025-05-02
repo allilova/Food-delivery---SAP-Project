@@ -36,7 +36,16 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.currentUser.subscribe(user => {
       console.log('Auth state changed:', user);
       this.isLoggedIn = !!user;
+      const previousRole = this.userRole;
       this.userRole = user ? user.role as USER_ROLE : null;
+      
+      // If user logged in as customer, load cart
+      if (this.isLoggedIn && this.userRole === USER_ROLE.ROLE_CUSTOMER) {
+        // Only fetch cart if user is newly logged in or just changed to customer role
+        if (!previousRole || previousRole !== USER_ROLE.ROLE_CUSTOMER) {
+          this.cartService.loadCartFromBackend();
+        }
+      }
     });
 
     // Subscribe to cart updates for badge count
@@ -44,8 +53,8 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
       this.cartItemsCount = items.reduce((count, item) => count + item.quantity, 0);
     });
 
-    // Load cart from backend if logged in
-    if (this.isLoggedIn) {
+    // Load cart from backend ONLY if logged in as CUSTOMER
+    if (this.isLoggedIn && this.userRole === USER_ROLE.ROLE_CUSTOMER) {
       this.cartService.loadCartFromBackend();
     }
     

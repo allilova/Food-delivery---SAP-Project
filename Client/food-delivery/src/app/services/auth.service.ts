@@ -3,13 +3,14 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.development';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { USER_ROLE } from '../types/user-role.enum';
 
 export interface AuthResponse {
   jwt: string;
+  refreshToken?: string;
   message: string;
   role: USER_ROLE;
 }
@@ -23,8 +24,13 @@ export interface RegisterUser {
   name: string;
   email: string;
   password: string;
-  phone: string;
-  role?: string;
+  phone_number: string;
+  address: string;
+  role: USER_ROLE;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
 }
 
 export interface UserProfile {
@@ -44,6 +50,8 @@ export class AuthService {
   public currentUser: Observable<any>;
   private apiUrl = environment.apiUrl;
   private isBrowser: boolean;
+  private refreshTokenInProgress = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private http: HttpClient,
@@ -88,11 +96,10 @@ export class AuthService {
       .pipe(
         tap(response => {
           if (response.jwt) {
-            console.log('Login successful, token received:', response.jwt.substring(0, 10) + '...');
-            
             const userData = {
               email: credentials.email,
               token: response.jwt,
+              refreshToken: response.refreshToken || null,
               role: response.role
             };
             
@@ -100,6 +107,9 @@ export class AuthService {
             if (this.isBrowser) {
               localStorage.setItem('currentUser', JSON.stringify(userData));
               localStorage.setItem('jwt_token', response.jwt);
+              if (response.refreshToken) {
+                localStorage.setItem('refresh_token', response.refreshToken);
+              }
             }
             
             this.currentUserSubject.next(userData);
@@ -113,7 +123,6 @@ export class AuthService {
   }
 
   register(user: RegisterUser): Observable<AuthResponse> {
-    console.log('Sending registration request with data:', user);
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
       .pipe(
         catchError(error => {
@@ -128,6 +137,7 @@ export class AuthService {
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');
       localStorage.removeItem('jwt_token');
+      localStorage.removeItem('refresh_token');
     }
     
     this.currentUserSubject.next(null);
@@ -137,15 +147,16 @@ export class AuthService {
   // Get user profile
   getUserProfile(): Observable<any> {
     const token = this.getToken();
-    console.log('Getting user profile with token:', token ? token.substring(0, 10) + '...' : 'No token');
-    
-    return this.http.get<any>(`${this.apiUrl}/api/users/profile`, {
+    if (!token) {
+      return throwError(() => new Error('No authentication token available'));
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/api/user/profile`, {
       headers: { 
         'Authorization': `Bearer ${token}`
       }
     }).pipe(
       map(response => {
-        console.log('Profile response:', response);
         // Transform the response if needed
         // Add a property for favorites if it doesn't exist
         if (response && !response.favorites && response.favourites) {
@@ -155,18 +166,10 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('Error fetching user profile:', error);
-        
-        // If 401 Unauthorized, clear token and navigate to login
         if (error.status === 401) {
           console.log('Unauthorized error getting profile, clearing tokens');
-          if (this.isBrowser) {
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('jwt_token');
-          }
-          this.currentUserSubject.next(null);
-          this.router.navigate(['/login']);
+          this.logout(); // Clear tokens and redirect
         }
-        
         return throwError(() => error);
       })
     );
@@ -178,11 +181,68 @@ export class AuthService {
       headers: { 
         'Authorization': `Bearer ${this.getToken()}`
       }
-    });
+    }).pipe(
+      catchError(error => {
+        console.error('Error updating user profile:', error);
+        if (error.status === 401) {
+          this.logout();
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Refresh token
+  refreshToken(): Observable<AuthResponse> {
+    if (this.refreshTokenInProgress) {
+      return this.refreshTokenSubject.asObservable();
+    }
+
+    this.refreshTokenInProgress = true;
+    this.refreshTokenSubject.next(null);
+
+    const refreshToken = this.isBrowser ? localStorage.getItem('refresh_token') : null;
+    if (!refreshToken) {
+      this.refreshTokenInProgress = false;
+      return throwError(() => new Error('No refresh token available'));
+    }
+    
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, { refreshToken })
+      .pipe(
+        tap(response => {
+          this.refreshTokenInProgress = false;
+          
+          if (response.jwt) {
+            // Update stored tokens
+            if (this.isBrowser) {
+              localStorage.setItem('jwt_token', response.jwt);
+              
+              // Update current user data
+              const currentUser = this.currentUserValue;
+              if (currentUser) {
+                currentUser.token = response.jwt;
+                if (response.refreshToken) {
+                  currentUser.refreshToken = response.refreshToken;
+                  localStorage.setItem('refresh_token', response.refreshToken);
+                }
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+              }
+            }
+            
+            this.refreshTokenSubject.next(response);
+          }
+        }),
+        catchError(error => {
+          this.refreshTokenInProgress = false;
+          console.error('Error refreshing token:', error);
+          this.logout();
+          return throwError(() => error);
+        })
+      );
   }
 
   // Get the auth token
-  private getToken(): string | null {
+  getToken(): string | null {
     if (this.isBrowser) {
       return localStorage.getItem('jwt_token');
     }

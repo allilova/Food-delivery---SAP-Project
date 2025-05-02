@@ -41,11 +41,35 @@ public class JwtProvider {
     }
 
     public String getEmailFromToken(String jwt) {
-        jwt = jwt.substring(7);
+        // Check if the token has "Bearer " prefix and remove it if present
+        if (jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
+        }
+        
         Claims claims = Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(jwt).getBody();
 
         String email = String.valueOf(claims.get("email"));
         return email;
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            // Check if the token has "Bearer " prefix and remove it if present
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            
+            // Parse and validate the token
+            Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token);
+                
+            return true;
+        } catch (Exception e) {
+            // If any exception occurs during parsing, the token is invalid
+            return false;
+        }
     }
 
     private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {

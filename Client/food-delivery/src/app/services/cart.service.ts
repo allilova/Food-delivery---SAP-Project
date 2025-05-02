@@ -1,11 +1,12 @@
 // src/app/services/cart.service.ts
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { BehaviorSubject, Observable, of } from 'rxjs'; // Added 'of'
+import { environment } from '../../environments/environment.development';
 import { Cart, CartItem } from '../types/cart';
 import { Food } from '../types/food';
 import { isPlatformBrowser } from '@angular/common';
+import { catchError } from 'rxjs/operators'; // Added catchError
 
 @Injectable({
   providedIn: 'root'
@@ -171,7 +172,7 @@ export class CartService {
         }))
       };
       
-      this.http.post(`${this.apiUrl}/api/cart/items`, cartData, {
+      this.http.post(`${this.apiUrl}/api/cart`, cartData, {
         headers: this.getHeaders()
       }).subscribe({
         error: err => console.error('Error syncing cart with backend:', err)
@@ -191,14 +192,20 @@ export class CartService {
     if (!this.isBrowser) return;
     
     if (this.getAuthToken()) {
-      this.fetchCartFromBackend().subscribe({
+      // HERE IS THE FIX - We add error handling with catchError
+      this.fetchCartFromBackend().pipe(
+        catchError(error => {
+          // If 404 error, fall back to local cart and don't show error
+          console.log('Cart not found or not created yet, using local cart');
+          return of({ id: 0, items: [], totalAmount: 0 });
+        })
+      ).subscribe({
         next: (cart) => {
           if (cart && cart.items) {
             this.cartItemsSubject.next(cart.items);
             this.saveCartToLocalStorage();
           }
-        },
-        error: err => console.error('Error loading cart from backend:', err)
+        }
       });
     }
   }

@@ -33,21 +33,21 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public User findUserByJwtToken(String jwt) throws Exception {
-        if (jwt.startsWith("Bearer ")) {
-            jwt = jwt.substring(7); // Премахва "Bearer "
-        }
-        // Extract email from token
-        String email = jwtProvider.getEmailFromToken(jwt);
-        
-        // Find and return the user
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new Exception("User not found with email: " + email);
-        }
-        
-        return user;
+public User findUserByJwtToken(String jwt) throws Exception {
+    if (jwt.startsWith("Bearer ")) {
+        jwt = jwt.substring(7); // Premахва "Bearer "
     }
+    // Extract email from token
+    String email = jwtProvider.getEmailFromToken(jwt);
+    
+    // Find and return the user
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+        throw new Exception("User not found with email: " + email);
+    }
+    
+    return user;
+}
 
     @Override
     public User findByEmail(String email) throws Exception {

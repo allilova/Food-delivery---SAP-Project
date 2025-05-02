@@ -55,31 +55,33 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String authHeader) {
-        try {
-            String jwt = extractJwt(authHeader);
-            User user = userService.findUserByJwtToken(jwt);
-
-            UserProfileDto dto = new UserProfileDto();
-            dto.setId(user.getId());
-            dto.setName(user.getName());
-            dto.setEmail(user.getEmail());
-            dto.setPhoneNumber(user.getPhoneNumber());
-            dto.setRole(user.getRole());
-
-            if (user.getAddress() != null) {
-                dto.setAddress(user.getAddress().getStreet() + ", " + user.getAddress().getCity());
-            } else {
-                dto.setAddress("No address provided");
-            }
-
-            return ResponseEntity.ok(dto);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing or invalid Authorization header");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+public ResponseEntity<?> getUserProfile(@RequestHeader("Authorization") String authHeader) {
+    try {
+        // Ensure consistent handling of the Bearer token
+        String jwt = authHeader;
+        if (jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7);
         }
+        User user = userService.findUserByJwtToken(jwt);
+
+        UserProfileDto dto = new UserProfileDto();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setRole(user.getRole());
+
+        if (user.getAddress() != null) {
+            dto.setAddress(user.getAddress().getStreet() + ", " + user.getAddress().getCity());
+        } else {
+            dto.setAddress("No address provided");
+        }
+
+        return ResponseEntity.ok(dto);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
     }
+}
 
     private String extractJwt(String header) {
         if (header == null || !header.startsWith("Bearer ")) {

@@ -52,30 +52,31 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     }
     
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+protected void doFilterInternal(HttpServletRequest request,
+                              HttpServletResponse response,
+                              FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader(JwtConstant.JWT_HEADER);
+    String authHeader = request.getHeader(JwtConstant.JWT_HEADER);
 
-        if(authHeader != null && authHeader.startsWith("Bearer ")) {
-            try {
-                String jwt = authHeader.substring(7);
-                SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-                Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+    if(authHeader != null && authHeader.startsWith("Bearer ")) {
+        try {
+            String jwt = authHeader.substring(7);
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
-                String username = String.valueOf(claims.get("email"));
-                String authorities = String.valueOf(claims.get("authorities"));
-                
-                List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+            String username = String.valueOf(claims.get("email"));
+            String authorities = String.valueOf(claims.get("authorities"));
+            
+            List<GrantedAuthority> auth = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, auth);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            catch(Exception e) {
-                throw new BadCredentialsException("Invalid token...");
-            }
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, auth);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request, response);
+        catch(Exception e) {
+            throw new BadCredentialsException("Invalid token...");
+        }
     }
+    filterChain.doFilter(request, response);
 }
+    
+    }

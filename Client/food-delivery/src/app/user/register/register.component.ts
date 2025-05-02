@@ -38,11 +38,12 @@ export class RegisterComponent implements OnInit {
       lastName: ['', Validators.required],
       gender: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,}$')]],
+      phone_number: ['', [Validators.required, Validators.pattern('^[0-9]{10,}$')]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [
         Validators.required, 
-        Validators.minLength(8)
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d@$!%*?&#^()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/)
       ]],
       confirmPassword: ['', Validators.required]
     }, {
@@ -88,18 +89,15 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
     
-    // Prepare the data to match the backend expectations
+    // Prepare the data to match the backend expectations and RegisterUser interface
     const userData = {
       name: `${this.registerForm.value.firstName} ${this.registerForm.value.lastName}`,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password,
-      phone: this.registerForm.value.phone,
-      role: 'ROLE_CUSTOMER'
+      phone_number: this.registerForm.value.phone_number, // Match the interface property name
+      address: this.registerForm.value.address,
+      role: USER_ROLE.ROLE_CUSTOMER
     };
-
-    // For debug - log the form values
-    console.log('Form Values:', this.registerForm.value);
-    console.log('Prepared User Data:', userData);
 
     // Register the user
     this.authService.register(userData)

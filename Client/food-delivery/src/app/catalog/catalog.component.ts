@@ -43,23 +43,19 @@ export class CatalogComponent implements OnInit {
     // Check if user is logged in
     this.isLoggedIn = this.authService.isLoggedIn;
     
-    // If not logged in, redirect to login page
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/login'], { queryParams: { returnUrl: '/catalog' } });
-      return;
-    }
-    
     // Check if user is a restaurant owner
-    const userRole = this.authService.userRole;
-    this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
-    
-    // If user is a restaurant owner, redirect to their dashboard
-    if (this.isRestaurantOwner) {
-      this.router.navigate(['/supplier']);
-      return;
+    if (this.isLoggedIn) {
+      const userRole = this.authService.userRole;
+      this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
+      
+      // If user is a restaurant owner, redirect to their dashboard
+      if (this.isRestaurantOwner) {
+        this.router.navigate(['/supplier']);
+        return;
+      }
     }
 
-    // Load all restaurants
+    // Load all restaurants (for both logged in and non-logged in users)
     this.loadRestaurants();
   }
 

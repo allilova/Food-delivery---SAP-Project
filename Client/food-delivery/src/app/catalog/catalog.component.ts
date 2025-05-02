@@ -7,11 +7,12 @@ import { AuthService } from '../services/auth.service';
 import { Restaurant } from '../types/restaurants';
 import { USER_ROLE } from '../types/user-role.enum';
 import { LoadingSpinnerComponent } from '../components/loading-spinner.component';
+import { ItemListComponent } from './item-list/item-list.component';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [RouterLink, CommonModule, LoadingSpinnerComponent],
+  imports: [RouterLink, CommonModule, LoadingSpinnerComponent, ItemListComponent],
   templateUrl: './catalog.component.html',
   styleUrl: './catalog.component.css'
 })

@@ -33,32 +33,7 @@
         <p>No restaurants found. Try a different category or check back later!</p>
     </div>
 } @else {
-    <div class="restaurant-list">
-        <div class="cards">
-            @for (restaurant of restaurants; track restaurant.id) {
-                <div class="card">
-                    <div class="img-card">
-                        <img [src]="restaurant.imgUrl || 'assets/images/default-restaurant.jpg'" alt="{{ restaurant.name }}">
-                    </div>
-                    <div class="text-card">
-                        <h4>{{ restaurant.name }}</h4>
-                        <p><i class="fa-solid fa-location-dot"></i> {{ restaurant.address }}</p>
-                        <p>{{ restaurant.foodType }}</p>
-                        <div class="ran-time">
-                            <p><i class="fa-solid fa-star"></i> {{ restaurant.rating }}</p>
-                            <p><time><i class="fa-solid fa-clock"></i> {{ restaurant.timeDelivery }}</time></p>
-                        </div>
-                        <div class="button-group">
-                            <a [routerLink]="['/catalog', restaurant.id]">
-                                <button class="view-menu">View menu</button>
-                            </a>
-                            <button class="add-favorite" (click)="addToFavorites(restaurant.id)">
-                                <i class="fa-solid fa-heart"></i> Favorite
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+    <div class="item-list">
+        <app-item-list/>
     </div>
 }

@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RestaurantService } from '../services/restaurant.service';
-import { AuthService } from '../services/auth.service';
-import { USER_ROLE } from '../types/user-role.enum';
-import { LoadingSpinnerComponent } from '../components/loading-spinner.component';
+import { RestaurantService } from '../../services/restaurant.service';
+import { AuthService } from '../../services/auth.service';
+import { USER_ROLE } from '../../types/user-role.enum';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner.component';
 
 @Component({
   selector: 'app-create-menu',

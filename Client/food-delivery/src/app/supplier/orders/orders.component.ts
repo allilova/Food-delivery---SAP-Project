@@ -32,9 +32,19 @@ export class OrdersComponent implements OnInit {
     private notificationService: NotificationService
   ) {}
 
+  // Helper method to check if user is a restaurant owner
+  isRestaurant(): boolean {
+    return this.authService.userRole === 'ROLE_RESTAURANT';
+  }
+  
+  // Helper method to check if user is a driver
+  isDriver(): boolean {
+    return this.authService.userRole === 'ROLE_DRIVER';
+  }
+
   ngOnInit(): void {
-    // Check if user is logged in and is a restaurant owner
-    if (!this.authService.isLoggedIn || this.authService.userRole !== 'ROLE_RESTAURANT') {
+    // Check if user is logged in and is a restaurant owner or driver
+    if (!this.authService.isLoggedIn || (this.authService.userRole !== 'ROLE_RESTAURANT' && this.authService.userRole !== 'ROLE_DRIVER')) {
       this.router.navigate(['/login']);
       return;
     }

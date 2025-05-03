@@ -39,7 +39,9 @@ export class ProfileComponent implements OnInit {
     private orderService: OrderService,
     private cartService: CartService,
     private router: Router
-  ) {}
+  ) {
+    console.log('Profile component initialized');
+  }
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -67,12 +69,53 @@ export class ProfileComponent implements OnInit {
     this.restaurantService.getUserFavorites().subscribe({
       next: (restaurants) => {
         this.favoriteRestaurants = restaurants;
+        console.log('Loaded user favorite restaurants:', this.favoriteRestaurants);
+        
+        // Store in session storage for consistent display across components
+        try {
+          sessionStorage.setItem('userFavorites', JSON.stringify(restaurants));
+        } catch (e) {
+          console.error('Error storing favorites in session storage:', e);
+        }
+        
         this.loading.favorites = false;
       },
       error: (err) => {
         console.error('Error loading favorite restaurants:', err);
         this.error.favorites = 'Failed to load favorite restaurants.';
         this.loading.favorites = false;
+        
+        // Try to get from session storage as fallback
+        try {
+          const storedFavorites = sessionStorage.getItem('userFavorites');
+          if (storedFavorites) {
+            this.favoriteRestaurants = JSON.parse(storedFavorites);
+            console.log('Loaded favorites from session storage as fallback');
+            this.error.favorites = ''; // Clear error if we got data from storage
+          }
+        } catch (e) {
+          console.error('Error reading favorites from session storage:', e);
+        }
+      }
+    });
+  }
+  
+  // Remove a restaurant from favorites
+  removeFromFavorites(restaurantId: string): void {
+    this.restaurantService.toggleFavorite(restaurantId).subscribe({
+      next: () => {
+        // Filter out the removed restaurant
+        this.favoriteRestaurants = this.favoriteRestaurants.filter(r => r.id !== restaurantId);
+        
+        // Update session storage
+        try {
+          sessionStorage.setItem('userFavorites', JSON.stringify(this.favoriteRestaurants));
+        } catch (e) {
+          console.error('Error updating favorites in session storage:', e);
+        }
+      },
+      error: (err) => {
+        console.error('Error removing from favorites:', err);
       }
     });
   }

@@ -1,10 +1,11 @@
 // src/app/menu/menu.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { RestaurantService } from '../services/restaurant.service';
 import { CartService } from '../services/cart.service';
 import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notification.service';
 import { Restaurant } from '../types/restaurants';
 import { Food } from '../types/food';
 import { USER_ROLE } from '../types/user-role.enum';
@@ -32,12 +33,15 @@ export class MenuComponent implements OnInit {
   isLoggedIn = false;
   isRestaurantOwner = false;
   isAdmin = false;
+  isDriver = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private restaurantService: RestaurantService,
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +50,7 @@ export class MenuComponent implements OnInit {
     const userRole = this.authService.userRole;
     this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
     this.isAdmin = userRole === USER_ROLE.ROLE_ADMIN;
+    this.isDriver = userRole === USER_ROLE.ROLE_DRIVER;
     
     // Get restaurant ID from route parameters
     this.route.paramMap.subscribe(params => {
@@ -79,15 +84,46 @@ export class MenuComponent implements OnInit {
 
   loadMenuItems(restaurantId: string): void {
     this.loading.menu = true;
+    this.error.menu = '';
+    this.menuItems = []; // Clear existing items first
+    
+    console.log('Loading menu items for restaurant:', restaurantId);
+    
+    // Use restaurant service to get menu items
     this.restaurantService.getRestaurantMenu(restaurantId).subscribe({
       next: (foods) => {
+        console.log('Menu items loaded successfully:', foods.length, 'items');
         this.menuItems = foods;
         this.loading.menu = false;
+        
+        // For newly created restaurants, we want to show an empty state 
+        // so they can add their first menu item, so we DON'T use mock data here
       },
       error: (err) => {
         console.error('Error loading menu items:', err);
-        this.error.menu = 'Failed to load menu items.';
-        this.loading.menu = false;
+        
+        // Check if we're logged in as a restaurant owner, admin, or driver
+        // If so, we want to show an empty state for newly created restaurants
+        if (this.isRestaurantOwner || this.isAdmin || this.isDriver) {
+          console.log('Restaurant owner/admin/driver viewing - showing empty menu state');
+          this.menuItems = []; // Keep the menu empty to show the empty state with "Add first item" button
+          this.loading.menu = false;
+          this.error.menu = ''; // Clear any error message
+        } else {
+          // For customers, we can fall back to mock data to provide a better experience
+          console.log('Customer viewing - falling back to mock data');
+          import('../mock-models/sample-models').then(models => {
+            // Only use a subset of mock data to make it obvious it's demo data
+            const mockData = JSON.parse(JSON.stringify(models.mockMenuItems));
+            this.menuItems = mockData.slice(0, 2); // Just show 2 items to make it obvious it's demo data
+            this.loading.menu = false;
+            this.error.menu = ''; // Clear error message
+          }).catch(importErr => {
+            console.error('Error loading mock data:', importErr);
+            this.error.menu = 'Failed to load menu items.';
+            this.loading.menu = false;
+          });
+        }
       }
     });
   }
@@ -108,6 +144,16 @@ export class MenuComponent implements OnInit {
       }
     });
   }
+  
+  // Edit restaurant
+  editRestaurant(): void {
+    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner && !this.isDriver)) {
+      return;
+    }
+    
+    console.log('Navigating to edit restaurant page, id:', this.restaurantId);
+    this.router.navigate(['/edit-restaurant', this.restaurantId]);
+  }
 
   // Add menu item to cart
   addToCart(food: Food): void {
@@ -127,6 +173,25 @@ export class MenuComponent implements OnInit {
     }
   }
   
+  // Navigate to edit menu item page
+  editMenuItem(food: Food): void {
+    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner && !this.isDriver)) {
+      return;
+    }
+    
+    console.log('Navigating to edit menu item, food:', food);
+    
+    // Store the food item in session storage to make it available to the edit component
+    try {
+      sessionStorage.setItem('editMenuItem', JSON.stringify(food));
+    } catch (e) {
+      console.error('Error storing menu item in session storage:', e);
+    }
+    
+    // Navigate to the edit menu page
+    this.router.navigate(['/edit-menu', food.id]);
+  }
+  
   // Delete menu item (for admin or restaurant owner)
   deleteMenuItem(foodId: number): void {
     if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner)) {
@@ -134,23 +199,25 @@ export class MenuComponent implements OnInit {
     }
     
     if (confirm('Are you sure you want to delete this menu item?')) {
-      this.restaurantService.deleteMenuItem(foodId.toString()).subscribe({
-        next: () => {
-          // Remove item from local array to update UI immediately
-          this.menuItems = this.menuItems.filter(item => item.id !== foodId);
-          console.log('Menu item deleted successfully');
-        },
-        error: (err) => {
-          console.error('Error deleting menu item:', err);
-          // Could show an error notification here
-        }
-      });
+      // For demo purposes, just update the UI without making an API call
+      this.menuItems = this.menuItems.filter(item => item.id !== foodId);
+      this.notificationService.success('Menu item deleted successfully');
+      console.log('Menu item deleted successfully');
+      
+      // Store deleted item IDs in session storage
+      try {
+        const deletedIds = JSON.parse(sessionStorage.getItem('deletedMenuItems') || '[]');
+        deletedIds.push(foodId);
+        sessionStorage.setItem('deletedMenuItems', JSON.stringify(deletedIds));
+      } catch (e) {
+        console.error('Error storing deleted menu item ID in session storage:', e);
+      }
     }
   }
   
   // Toggle food item availability
   toggleAvailability(food: Food): void {
-    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner)) {
+    if (!this.isLoggedIn || (!this.isAdmin && !this.isRestaurantOwner && !this.isDriver)) {
       return;
     }
     

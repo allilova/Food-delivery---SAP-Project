@@ -87,12 +87,12 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
     
     h1 {
       margin-bottom: 30px;
-      color: #333;
+      color: rgb(59, 4, 4);
       text-align: center;
     }
     
     .tracking-form-container {
-      background: white;
+      background: #FFDBDB;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       padding: 30px;
@@ -101,7 +101,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
     
     .tracking-form-container p {
       margin-bottom: 20px;
-      color: #666;
+      color: rgb(59, 4, 4);
     }
     
     .form-group {
@@ -112,7 +112,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      color: #333;
+      color:rgb(59, 4, 4);
     }
     
     input {
@@ -140,7 +140,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
     }
     
     .track-button {
-      background-color: #ff6b00;
+      background-color:rgb(59, 4, 4);
       color: white;
       border: none;
       padding: 12px 25px;
@@ -180,7 +180,7 @@ import { LoadingSpinnerComponent } from '../components/loading-spinner.component
     .secondary-button {
       display: inline-block;
       background-color: #f5f5f5;
-      color: #333;
+      color: rgb(59, 4, 4);
       border: 1px solid #ddd;
       padding: 10px 20px;
       border-radius: 4px;

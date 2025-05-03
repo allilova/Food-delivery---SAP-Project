@@ -16,7 +16,6 @@ import { SupplierComponent } from './supplier/supplier.component';
 import { OrdersComponent } from './supplier/orders/orders.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
 import { OrderTrackingPageComponent } from './order-tracking/order-tracking-page.component';
-import{OrderTrackingComponent} from './components/order-tracking/order-tracking.component';
 import { CreateRestaurantComponent } from './admin/create-restaurant/create-restaurant.component';
 import { CreateMenuItemComponent } from './admin/create-menu-item.component/create-menu-item.component';
 import { authGuard, roleGuard, customerOnlyGuard } from './guards/auth.guard';
@@ -42,12 +41,12 @@ export const routes: Routes = [
     {
         path: 'edit-menu/:id', 
         component: EditMenuComponent, 
-        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT, USER_ROLE.ROLE_ADMIN])]
+        canActivate: [roleGuard([ USER_ROLE.ROLE_ADMIN])]
     },
     {
         path: 'create-menu', 
         component: CreateMenuItemComponent, 
-        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT, USER_ROLE.ROLE_ADMIN])]
+        canActivate: [roleGuard([ USER_ROLE.ROLE_ADMIN])]
     },
     {
         path: 'profile', 
@@ -79,7 +78,7 @@ export const routes: Routes = [
     },
     {
         path: 'supplier', 
-        canActivate: [roleGuard([USER_ROLE.ROLE_DRIVER])],
+        canActivate: [roleGuard([ USER_ROLE.ROLE_DRIVER])],
         children: [
             {path: '', component: SupplierComponent},
             {path: 'orders', component: OrdersComponent},
@@ -89,7 +88,7 @@ export const routes: Routes = [
     {
         path: 'restaurants', 
         component: RestaurantsComponent, 
-        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])] // Only restaurant owners can access this route
+        canActivate: [roleGuard([USER_ROLE.ROLE_RESTAURANT])] // Only restaurant owners can access restaurant dashboard
     },
     {
         path: 'admin/create-restaurant',
@@ -99,9 +98,9 @@ export const routes: Routes = [
     {
         path: 'admin/create-menu-item/:restaurantId',
         component: CreateMenuItemComponent,
-        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN, USER_ROLE.ROLE_RESTAURANT])] // Admin or restaurant owner can create menu items
+        canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN])] 
     },
-    {path: 'tracking', component: OrderTrackingComponent},
+    {path: 'tracking', component: OrderTrackingPageComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}
 ];

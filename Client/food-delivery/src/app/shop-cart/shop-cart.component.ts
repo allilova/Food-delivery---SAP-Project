@@ -111,40 +111,41 @@ export class ShopCartComponent implements OnInit {
 
   // Remove item from cart
   removeItem(foodId: number, itemName: string = 'this item'): void {
-    const dialogRef = this.dialogService.confirm({
-      title: 'Remove Item',
-      message: `Are you sure you want to remove ${itemName} from your cart?`,
-      confirmText: 'Remove',
-      cancelText: 'Keep',
-      type: 'warning'
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.cartService.removeFromCart(foodId);
-        this.calculateTotals();
-        this.notificationService.info(`${itemName} has been removed from your cart.`);
+    // Create a simple confirmation dialog
+    if (confirm(`Are you sure you want to remove ${itemName} from your cart?`)) {
+      // Directly remove the item without using the problematic dialog service
+      this.cartService.removeFromCart(foodId);
+      this.calculateTotals();
+      this.notificationService.info(`${itemName} has been removed from your cart.`);
+      
+      // Force update of the cart UI
+      this.cartItems = this.cartItems.filter(item => item.food.id !== foodId);
+      
+      // If cart is now empty after removal, show empty cart message
+      if (this.cartItems.length === 0) {
+        this.error = '';
       }
-    });
+    }
   }
 
   // Clear cart
   clearCart(): void {
-    const dialogRef = this.dialogService.confirm({
-      title: 'Clear Cart',
-      message: 'Are you sure you want to remove all items from your cart?',
-      confirmText: 'Clear Cart',
-      cancelText: 'Cancel',
-      type: 'danger'
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.cartService.clearCart();
-        this.calculateTotals();
-        this.notificationService.success('Your cart has been cleared.');
+    // Create a simple confirmation dialog without relying on the dialog service
+    if (confirm('Are you sure you want to remove all items from your cart?')) {
+      // Clear the cart
+      this.cartService.clearCart();
+      // Update totals
+      this.calculateTotals();
+      // Clear cart items from UI immediately
+      this.cartItems = [];
+      // Show success notification
+      this.notificationService.success('Your cart has been cleared.');
+      
+      // Update localStorage manually in case the service doesn't do it properly
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('cart');
       }
-    });
+    }
   }
 
   // Proceed to checkout/payment

@@ -4,64 +4,101 @@
     </div>
     <div class="search-container">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Hop in! Find your next bite..." class="search-input" />
+        <input 
+            type="text" 
+            placeholder="Hop in! Find your next bite..." 
+            class="search-input" 
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="searchRestaurants()"
+        />
         <i class="fa-solid fa-location-dot"></i>
-        <input list="address-choice" id="address" name="address" class="address-input" />
+        <input 
+            list="address-choice" 
+            id="address" 
+            name="address" 
+            class="address-input" 
+            [(ngModel)]="addressFilter"
+            (change)="searchRestaurants()"
+        />
         <datalist id="address-choice">
          <option value="Block 3, Sofia"></option>
          <option value="Center, Sofia"></option>
         </datalist>
+        <button class="search-button" (click)="searchRestaurants()">
+            <i class="fa-solid fa-search"></i> Search
+        </button>
+    </div>
+    
+    <!-- Debug info - will help troubleshoot -->
+    <div class="debug-info" *ngIf="searchTerm || selectedCategory || addressFilter">
+        <p><small>
+            Searching for: 
+            <span *ngIf="searchTerm">Keyword: "{{ searchTerm }}"</span>
+            <span *ngIf="selectedCategory">, Category: "{{ selectedCategory }}"</span>
+            <span *ngIf="addressFilter">, Address: "{{ addressFilter }}"</span>
+        </small></p>
     </div>     
-    <ul>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="burgers.png" alt="">burgers</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="pizza.png" alt="">pizza</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="passta.png" alt="">pasta</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="healty.png" alt="">healthy</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="assian.png" alt="">asian</a>
-        </div>
-        </li>
-        <li>
-            <div class="category-card">
-            <a href=""><img src="desserts.png" alt="">desserts</a>
-        </div>
-        </li>
+    <ul class="categories-list">
+        @for (category of categories; track category.name) {
+            <li>
+                <div 
+                    class="category-card" 
+                    [class.selected]="selectedCategory === category.name"
+                    (click)="selectCategory(category.name)"
+                >
+                    <img [src]="category.img" [alt]="category.name">
+                    <span>{{category.name}}</span>
+                </div>
+            </li>
+        }
     </ul>
 </div>
-<div class="item-list">
+
+<!-- Loading spinner -->
+<div *ngIf="loading" class="loading-container">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+
+<!-- Error message -->
+<div *ngIf="error && !loading" class="error-message">
+    {{ error }}
+</div>
+
+<!-- No results message -->
+<div *ngIf="!loading && !error && filteredRestaurants.length === 0" class="no-results">
+    <p>No restaurants found matching your search criteria.</p>
+    <button (click)="loadAllRestaurants()" class="reset-button">Reset Search</button>
+</div>
+
+<!-- Restaurant list -->
+<div *ngIf="!loading && filteredRestaurants.length > 0" class="item-list">
     <div class="cards">
-    <div class="card">
-        <div class="img-card">
-            <img src="Gourmet Restaurant.jpg">
-        </div>
-        <div class="text-card">
-        <h4>name</h4>
-        <p><i class="fa-solid fa-location-dot"></i>address</p>
-        <p>foodType</p>
-        <div class="ran-time">
-        <p><i class="fa-solid fa-star"></i>rating</p>
-        <p><time datetime="time"><i class="fa-solid fa-clock"></i> timeDelivery</time></p>
-        </div>
-       <!-- <a class="button" [routerLink]="restaurant.restaurantId"><button>View menu</button></a>-->
-        <button class="Order"><i class="fa-solid fa-heart"></i>Favorite</button>
-    </div>
-    </div>
+        @for (restaurant of filteredRestaurants; track restaurant.id) {
+            <div class="card">
+                <div class="img-card">
+                    <img [src]="restaurant.imgUrl || 'Gourmet Restaurant.jpg'" [alt]="restaurant.name">
+                </div>
+                <div class="text-card">
+                    <h4>{{ restaurant.name }}</h4>
+                    <p><i class="fa-solid fa-location-dot"></i> {{ restaurant.address }}</p>
+                    <p>{{ restaurant.foodType }}</p>
+                    <div class="ran-time">
+                        <p><i class="fa-solid fa-star"></i> {{ restaurant.rating || 'N/A' }}</p>
+                        <p><time><i class="fa-solid fa-clock"></i> {{ restaurant.timeDelivery || '30-40 min' }}</time></p>
+                    </div>
+                    <div class="button-group">
+                        <button class="view-menu" [routerLink]="['/menu', restaurant.id]">View menu</button>
+                        <button 
+                            class="favorite-btn" 
+                            [class.favorited]="isFavorite(restaurant.id)"
+                            (click)="addToFavorites($event, restaurant.id)"
+                        >
+                            <i class="fa-solid" [class.fa-heart-broken]="isFavorite(restaurant.id)" [class.fa-heart]="!isFavorite(restaurant.id)"></i>
+                            {{ isFavorite(restaurant.id) ? 'Unfavorite' : 'Favorite' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

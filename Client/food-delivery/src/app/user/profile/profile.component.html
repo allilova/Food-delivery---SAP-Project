@@ -37,7 +37,8 @@
         
         <!-- Show message when no favorites -->
         <div *ngIf="!loading.favorites && favoriteRestaurants.length === 0" class="no-data-message">
-            You haven't added any restaurants to your favorites yet.
+            <p>You haven't added any restaurants to your favorites yet.</p>
+            <p><small>Try adding some restaurants to your favorites from the catalog or search pages!</small></p>
         </div>
         
         <!-- Show favorites when data is loaded -->
@@ -55,7 +56,12 @@
                             <p><i class="fa-solid fa-star"></i> {{ restaurant.rating || 'N/A' }}</p>
                             <p><time><i class="fa-solid fa-clock"></i> {{ restaurant.timeDelivery || '30-40 min' }}</time></p>
                         </div>
-                        <button class="Order" [routerLink]="['/menu', restaurant.id]">View menu</button>
+                        <div class="button-group">
+                            <button class="view-menu" [routerLink]="['/menu', restaurant.id]">View menu</button>
+                            <button class="remove-favorite" (click)="removeFromFavorites(restaurant.id)">
+                                <i class="fa-solid fa-heart-broken"></i> Remove
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

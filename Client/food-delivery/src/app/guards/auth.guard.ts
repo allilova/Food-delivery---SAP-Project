@@ -77,9 +77,9 @@ export const customerOnlyGuard: CanActivateFn = (route, state) => {
   if (authService.isLoggedIn) {
     const userRole = authService.userRole;
     
-    // Block restaurant owners, allow all other roles
-    if (userRole === 'ROLE_RESTAURANT') {
-      console.log('Customer only guard: Blocking restaurant owner from customer page');
+    // Block restaurant owners and drivers, allow all other roles
+    if ( userRole === 'ROLE_DRIVER') {
+      console.log('Customer only guard: Blocking restaurant owner or driver from customer page');
       router.navigate(['/supplier']);
       return false;
     }

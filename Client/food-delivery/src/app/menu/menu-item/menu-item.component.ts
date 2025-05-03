@@ -23,6 +23,7 @@ export class MenuItemComponent implements OnInit {
   isLoggedIn = false;
   isRestaurantOwner = false;
   isAdmin = false;
+  isDriver = false;
   loading = false;
   error = '';
 
@@ -35,10 +36,11 @@ export class MenuItemComponent implements OnInit {
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn;
     
-    // Check user role to enable restaurant owner features
+    // Check user role to enable restaurant owner/driver features
     const userRole = this.authService.userRole;
     this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
     this.isAdmin = userRole === USER_ROLE.ROLE_ADMIN;
+    this.isDriver = userRole === USER_ROLE.ROLE_DRIVER;
   }
 
   // Add item to cart

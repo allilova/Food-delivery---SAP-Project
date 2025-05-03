@@ -73,6 +73,29 @@ img{
     width: 100px;
     margin-top: 10px;
     margin: 5px;
+    cursor: pointer;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 5px;
+}
+
+.view-menu {
+    background-color: rgb(59, 4, 4);
+    flex: 2;
+}
+
+.remove-favorite {
+    background-color: #ff6b6b;
+    flex: 1;
+    width: 110px;
+}
+
+.remove-favorite:hover {
+    background-color: #ff3d3d;
 }
 
 .cards{

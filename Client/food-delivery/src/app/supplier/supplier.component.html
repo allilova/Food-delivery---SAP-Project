@@ -1,10 +1,9 @@
 <div class="supplier">
-  <h1>{{ isDriver() ? 'Driver Dashboard' : 'Restaurant Dashboard' }}</h1>
+  <h1>Delivery Dashboard</h1>
   <!-- Debug button only visible in development -->
   <button *ngIf="isDevelopment" class="debug-button" (click)="debugAuth()">Debug Authorization</button>
   <div class="dashboard">
-    <!-- Restaurant View -->
-    <div *ngIf="isRestaurant()" class="section">
+    <div class="section">
       <h2>New Orders</h2>
       <app-loading-spinner *ngIf="loading.newOrders"></app-loading-spinner>
       <div *ngIf="error.newOrders" class="error-message">{{ error.newOrders }}</div>
@@ -19,26 +18,8 @@
         </div>
       </div>
     </div>
-    
-    <!-- Driver View - Available for Delivery -->
-    <div *ngIf="isDriver()" class="section">
-      <h2>Available for Delivery</h2>
-      <app-loading-spinner *ngIf="loading.newOrders"></app-loading-spinner>
-      <div *ngIf="error.newOrders" class="error-message">{{ error.newOrders }}</div>
-      <div *ngIf="!loading.newOrders && readyOrders.length === 0" class="no-orders">No orders available for delivery.</div>
-      
-      <div *ngFor="let order of readyOrders" class="order">
-        <div class="order-status">
-          <a [routerLink]="['/supplier/orders', order.id]">
-            <span>Order #{{ order.id }} - {{ getOrderSummary(order) }}</span>
-          </a>
-          <button class="btn accept-btn" (click)="pickupOrder(order.id.toString())">Pick Up</button>
-        </div>
-      </div>
-    </div>
 
-    <!-- Restaurant View - Active Orders -->
-    <div *ngIf="isRestaurant()" class="section">
+    <div class="section">
       <h2>Active Orders</h2>
       <app-loading-spinner *ngIf="loading.activeOrders"></app-loading-spinner>
       <div *ngIf="error.activeOrders" class="error-message">{{ error.activeOrders }}</div>
@@ -59,26 +40,6 @@
             <option [value]="OrderStatus.OUT_FOR_DELIVERY">Out for Delivery</option>
             <option [value]="OrderStatus.DELIVERED">Delivered</option>
           </select>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Driver View - Current Deliveries -->
-    <div *ngIf="isDriver()" class="section">
-      <h2>Current Deliveries</h2>
-      <app-loading-spinner *ngIf="loading.activeOrders"></app-loading-spinner>
-      <div *ngIf="error.activeOrders" class="error-message">{{ error.activeOrders }}</div>
-      <div *ngIf="!loading.activeOrders && inDeliveryOrders.length === 0" class="no-orders">No active deliveries.</div>
-      
-      <div *ngFor="let order of inDeliveryOrders" class="order">
-        <div class="order-status">
-          <a [routerLink]="['/supplier/orders', order.id]">
-            <span>Order #{{ order.id }} - {{ getOrderSummary(order) }}</span>
-          </a>
-          <div class="delivery-address">
-            <strong>Address:</strong> {{ order.deliveryAddress }}
-          </div>
-          <button class="btn deliver-btn" (click)="deliverOrder(order.id.toString())">Mark as Delivered</button>
         </div>
       </div>
     </div>

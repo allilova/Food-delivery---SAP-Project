@@ -41,6 +41,7 @@ label{
     border-radius: 5px;
     height: 45px;
     font-size: large;
+    width: 100%;
 }
 
 label i{
@@ -80,5 +81,9 @@ margin-bottom: 5px;
 }
 
 .center{
+    text-align: center;
+}
+
+.button-group{
     text-align: center;
 }

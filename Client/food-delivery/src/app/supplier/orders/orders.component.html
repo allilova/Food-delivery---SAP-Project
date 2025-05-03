@@ -6,7 +6,7 @@
   <div *ngIf="!loading && order" class="container">
     <div class="header">
       <button class="btn-back" (click)="goBack()">Back to Dashboard</button>
-      <h1>{{ isDriver() ? 'Delivery' : 'Order' }} #{{ order.id }}</h1>
+      <h1>Order #{{ order.id }}</h1>
     </div>
     
     <div class="info">
@@ -43,62 +43,35 @@
     </div>
 
     <div class="order-actions">
-      <!-- Restaurant Owner View -->
-      <ng-container *ngIf="isRestaurant()">
-        <ng-container [ngSwitch]="order.status">
-          <button *ngSwitchCase="OrderStatus.PENDING" class="btn btn-start" (click)="acceptOrder()">
-            Accept Order
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.CONFIRMED" class="btn btn-preparing" (click)="updateOrderStatus(OrderStatus.PREPARING)">
-            Start Preparing
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.PREPARING" class="btn btn-ready" (click)="updateOrderStatus(OrderStatus.READY)">
-            Mark as Ready for Pickup
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.READY" class="btn btn-out-delivery" (click)="updateOrderStatus(OrderStatus.OUT_FOR_DELIVERY)">
-            Mark Out for Delivery
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.OUT_FOR_DELIVERY" class="btn btn-complete" (click)="markAsDelivered()">
-            Mark as Delivered
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.DELIVERED" class="btn btn-done" disabled>
-            Order Completed
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.CANCELLED" class="btn btn-cancelled" disabled>
-            Order Cancelled
-          </button>
-        </ng-container>
-      </ng-container>
-      
-      <!-- Driver View -->
-      <ng-container *ngIf="isDriver()">
-        <ng-container [ngSwitch]="order.status">
-          <button *ngSwitchCase="OrderStatus.READY" class="btn btn-start" (click)="updateOrderStatus(OrderStatus.OUT_FOR_DELIVERY)">
-            Pick Up Order
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.OUT_FOR_DELIVERY" class="btn btn-complete" (click)="markAsDelivered()">
-            Mark as Delivered
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.DELIVERED" class="btn btn-done" disabled>
-            Order Completed
-          </button>
-          
-          <button *ngSwitchCase="OrderStatus.CANCELLED" class="btn btn-cancelled" disabled>
-            Order Cancelled
-          </button>
-          
-          <button *ngSwitchDefault class="btn btn-info" disabled>
-            Waiting for Restaurant
-          </button>
-        </ng-container>
+      <!-- Only show one button based on order status -->
+      <ng-container [ngSwitch]="order.status">
+        <button *ngSwitchCase="OrderStatus.PENDING" class="btn btn-start" (click)="acceptOrder()">
+          Accept Order
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.CONFIRMED" class="btn btn-preparing" (click)="updateOrderStatus(OrderStatus.PREPARING)">
+          Start Preparing
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.PREPARING" class="btn btn-ready" (click)="updateOrderStatus(OrderStatus.READY)">
+          Mark as Ready for Pickup
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.READY" class="btn btn-out-delivery" (click)="updateOrderStatus(OrderStatus.OUT_FOR_DELIVERY)">
+          Mark Out for Delivery
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.OUT_FOR_DELIVERY" class="btn btn-complete" (click)="markAsDelivered()">
+          Mark as Delivered
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.DELIVERED" class="btn btn-done" disabled>
+          Order Completed
+        </button>
+        
+        <button *ngSwitchCase="OrderStatus.CANCELLED" class="btn btn-cancelled" disabled>
+          Order Cancelled
+        </button>
       </ng-container>
       
       <!-- Always show cancel button except for completed or already cancelled orders -->

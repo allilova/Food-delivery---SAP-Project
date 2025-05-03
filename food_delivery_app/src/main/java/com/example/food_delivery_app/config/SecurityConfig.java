@@ -44,7 +44,8 @@ public class SecurityConfig {
                                 "/api/auth/debug"
                         ).permitAll()
                         .requestMatchers("/api/user/**").authenticated()
-                        .requestMatchers("/api/supplier/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN")
+                        .requestMatchers("/api/supplier/**").hasAnyAuthority("ROLE_RESTAURANT", "ROLE_ADMIN", "ROLE_DRIVER")
+                        .requestMatchers("/api/driver/**").hasAnyAuthority("ROLE_DRIVER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

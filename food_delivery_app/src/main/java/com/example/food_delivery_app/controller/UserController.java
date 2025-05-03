@@ -69,6 +69,12 @@ public class UserController {
             dto.setEmail(user.getEmail());
             dto.setPhoneNumber(user.getPhoneNumber());
             dto.setRole(user.getRole());
+            
+            // Add favorites to the DTO
+            if (user.getFavourites() != null && !user.getFavourites().isEmpty()) {
+                dto.setFavourites(user.getFavourites());
+                System.out.println("Added " + user.getFavourites().size() + " favorites to profile response");
+            }
 
             if (user.getAddress() != null) {
                 dto.setAddress(user.getAddress().getStreet() + ", " + user.getAddress().getCity());

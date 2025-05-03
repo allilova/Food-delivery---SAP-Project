@@ -18,7 +18,7 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "restaurant_user_id", referencedColumnName = "id")
     private User restaurant;
 
@@ -46,6 +46,8 @@ public class Restaurant {
     private List<String>images;
 
     private boolean open; //kogato e closed , nqma da moje da se porucva
+    
+    private boolean isPublic = false; // Controls visibility in customer catalog
 
     @JsonIgnore
     @OneToOne(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)

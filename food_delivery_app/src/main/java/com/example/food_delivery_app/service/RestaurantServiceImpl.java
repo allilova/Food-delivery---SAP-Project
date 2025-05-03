@@ -4,6 +4,7 @@ import com.example.food_delivery_app.dto.RestaurantDto;
 import com.example.food_delivery_app.dto.RestaurantResponseDto;
 import com.example.food_delivery_app.model.Address;
 import com.example.food_delivery_app.model.Restaurant;
+import com.example.food_delivery_app.model.USER_ROLE;
 import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.repository.AddressRepository;
 import com.example.food_delivery_app.repository.RestaurantRepository;
@@ -31,14 +32,32 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public List<RestaurantResponseDto> getAllRestaurantsDto() {
         List<Restaurant> restaurants = restaurantRepository.findAll();
-        return restaurants.stream()
+        
+        // Filter to only return restaurants that should be visible to customers:
+        // 1. Public restaurants (typically created by admins)
+        // 2. Restaurants owned by regular restaurant owners
+        List<Restaurant> visibleRestaurants = restaurants.stream()
+                .filter(r -> r.isPublic() || 
+                        (r.getRestaurant() != null && 
+                        r.getRestaurant().getRole() == USER_ROLE.ROLE_RESTAURANT))
+                .collect(Collectors.toList());
+        
+        return visibleRestaurants.stream()
                 .map(this::convertToDto)
                 .toList();
     }
     @Override
     public List<RestaurantResponseDto> searchRestaurantsDto(String keyword) {
         List<Restaurant> restaurants = restaurantRepository.findBySearchQuery(keyword);
-        return restaurants.stream()
+        
+        // Apply the same visibility filter as in getAllRestaurantsDto
+        List<Restaurant> visibleRestaurants = restaurants.stream()
+                .filter(r -> r.isPublic() || 
+                        (r.getRestaurant() != null && 
+                        r.getRestaurant().getRole() == USER_ROLE.ROLE_RESTAURANT))
+                .collect(Collectors.toList());
+        
+        return visibleRestaurants.stream()
                 .map(this::convertToDto)
                 .toList();
     }
@@ -58,6 +77,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setImages(req.getImages());
         restaurant.setRestaurantName(req.getRestaurantName());
         restaurant.setRestaurant(user);
+        
+        // Set isPublic based on request flag or admin role
+        if (req.isPublic() || user.getRole() == USER_ROLE.ROLE_ADMIN) {
+            restaurant.setPublic(true);
+        }
 
         return restaurantRepository.save(restaurant);
     }

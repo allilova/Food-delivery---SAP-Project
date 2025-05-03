@@ -17,6 +17,7 @@ public class CreateRestaurantRequest {
     private String openingHours;
     private String closingHours;
     private ContactInfo contactInfo;
+    private boolean isPublic;
 
     @Data
     public static class UpdatePasswordRequest {

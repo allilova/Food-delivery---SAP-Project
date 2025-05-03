@@ -674,10 +674,10 @@ public class SupplierOrderController {
     
     // Helper method to verify restaurant owner role
     private void verifyRestaurantOwner(User user) {
-        if (user.getRole() != USER_ROLE.ROLE_RESTAURANT && user.getRole() != USER_ROLE.ROLE_ADMIN) {
+        if (user.getRole() != USER_ROLE.ROLE_RESTAURANT && user.getRole() != USER_ROLE.ROLE_ADMIN && user.getRole() != USER_ROLE.ROLE_DRIVER) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, 
-                    "Access denied. Only restaurant owners or admins can access these endpoints."
+                    "Access denied. Only restaurant owners, delivery drivers, or admins can access these endpoints."
             );
         }
     }

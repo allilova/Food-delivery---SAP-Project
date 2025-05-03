@@ -108,35 +108,22 @@ export class CreateRestaurantComponent implements OnInit {
       closingHours: this.restaurantForm.value.closingHours,
       timeDelivery: this.restaurantForm.value.timeDelivery,
       // If you have an image
-      imageUrl: this.imagePreview
+      imageUrl: this.imagePreview,
+      // Flag to indicate this was created by admin and should be public
+      isPublicRestaurant: true
     };
 
-    // Check if we need to add method to RestaurantService
-    if (!this.restaurantService.hasOwnProperty('createRestaurant')) {
-      // For now, we'll just simulate success
-      setTimeout(() => {
-        this.loading = false;
-        this.successMessage = 'Restaurant created successfully!';
-        
-        // Navigate to catalog after a delay
-        setTimeout(() => {
-          this.router.navigate(['/catalog']);
-        }, 2000);
-      }, 1500);
-      
-      console.warn('createRestaurant method is not implemented in RestaurantService');
-      return;
-    }
-
     // Call API to create restaurant
-    this.restaurantService['createRestaurant'](restaurantData).subscribe({
+    this.restaurantService.createRestaurant(restaurantData).subscribe({
       next: (response) => {
         this.loading = false;
         this.successMessage = 'Restaurant created successfully!';
         
-        // Navigate to catalog after a delay
+        // Navigate to catalog after a delay, with success parameter
         setTimeout(() => {
-          this.router.navigate(['/catalog']);
+          this.router.navigate(['/catalog'], { 
+            queryParams: { success: 'restaurant_created' } 
+          });
         }, 2000);
       },
       error: (err) => {

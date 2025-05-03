@@ -62,7 +62,13 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         
         // For debugging purposes
         logger.info("Processing request for path: {}", path);
-        logger.debug("Auth header present: {}", (authHeader != null));
+        logger.info("Auth header present: {}", (authHeader != null));
+        
+        // If we're in a supplier path, add extra logging
+        if (path.startsWith("/api/supplier")) {
+            logger.info("Supplier API request - detailed token check");
+            logger.info("Auth header: {}", authHeader != null ? authHeader.substring(0, Math.min(15, authHeader.length())) + "..." : "null");
+        }
         
         if(authHeader != null && authHeader.startsWith("Bearer ")) {
             try {
@@ -79,10 +85,14 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 // Clean authorities string if it contains brackets or special characters
                 authorities = authorities.replace("[", "").replace("]", "").trim();
                 
+                // Log all authorities for debugging
+                logger.info("Processing authorities: {}", authorities);
+                
                 // Make sure to handle ROLE_ prefix for Spring Security
-                if (authorities.contains("ROLE_RESTAURANT") || authorities.equals("ROLE_RESTAURANT")) {
-                    logger.info("Found ROLE_RESTAURANT in authorities");
-                } else if (!authorities.isEmpty() && !authorities.contains("ROLE_")) {
+                if (authorities.contains("ROLE_RESTAURANT") || authorities.contains("ROLE_DRIVER") || 
+                    authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_CUSTOMER")) {
+                    logger.info("Found valid role in authorities: {}", authorities);
+                } else if (!authorities.isEmpty()) {
                     // If roles don't have ROLE_ prefix, add it
                     String[] roles = authorities.split(",");
                     StringBuilder roleBuilder = new StringBuilder();

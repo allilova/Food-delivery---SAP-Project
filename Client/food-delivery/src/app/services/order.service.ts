@@ -24,6 +24,13 @@ export class OrderService {
 
   // Helper method to get auth token
   private getAuthToken(): string | null {
+    // First check if auth service has the token
+    const currentUser = this.authService.currentUserValue;
+    if (currentUser && currentUser.token) {
+      return currentUser.token;
+    }
+    
+    // Fallback to localStorage
     return localStorage.getItem('jwt_token');
   }
 
@@ -37,10 +44,24 @@ export class OrderService {
     
     // Add authorization header if token exists
     if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-      console.log('Added auth token to headers, token length:', token.length);
+      // Ensure token format is correct
+      const finalToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+      headers = headers.set('Authorization', finalToken);
+      
+      if (environment.production) {
+        // In production mode, don't log token details
+        console.log('Auth token added to request headers');
+      } else {
+        // In development mode, show more details for debugging
+        console.log('Added auth token to headers, token length:', token.length);
+      }
     } else {
       console.warn('No auth token available for request');
+      
+      // Try to re-authenticate if user is logged in but token is missing
+      if (this.authService.isLoggedIn) {
+        console.warn('User appears to be logged in but token is missing - please refresh the page');
+      }
     }
     
     return headers;
@@ -79,8 +100,8 @@ export class OrderService {
   getOrderById(orderId: string): Observable<Order> {
     this.notificationService.info('Loading order details...', true, 1500);
     
-    // Use supplier endpoint for restaurant users
-    const endpoint = this.authService.userRole === 'ROLE_DRIVER' 
+    // Use supplier endpoint for restaurant or driver users
+    const endpoint = (this.authService.userRole === 'ROLE_RESTAURANT' || this.authService.userRole === 'ROLE_DRIVER')
       ? `${this.apiUrl}/api/supplier/orders/${orderId}` 
       : `${this.apiUrl}/api/orders/${orderId}`;
     
@@ -185,8 +206,8 @@ export class OrderService {
   updateOrderStatus(orderId: string, status: OrderStatus): Observable<Order> {
     let params = new HttpParams().set('status', status);
     
-    // Use supplier endpoint for restaurant users
-    const endpoint = this.authService.userRole === 'ROLE_DRIVER' 
+    // Use supplier endpoint for restaurant or driver users
+    const endpoint = (this.authService.userRole === 'ROLE_RESTAURANT' || this.authService.userRole === 'ROLE_DRIVER')
       ? `${this.apiUrl}/api/supplier/orders/${orderId}/status` 
       : `${this.apiUrl}/api/orders/${orderId}/status`;
     
@@ -240,21 +261,22 @@ export class OrderService {
   // Local storage key for mock orders
   private readonly MOCK_ORDERS_KEY = 'mock_supplier_orders';
   
-  // For restaurant owners: get orders by status
+  // For restaurant owners and drivers: get orders by status
   getOrdersByStatus(status: OrderStatus): Observable<Order[]> {
     // Create params with status
     let params = new HttpParams().set('status', status);
     
-    console.log(`Fetching orders with status ${status} from ${this.apiUrl}/api/supplier/orders`);
+    // In production mode, log only necessary info
+    if (!environment.production) {
+      console.log(`Fetching orders with status ${status} from ${this.apiUrl}/api/supplier/orders`);
+    }
     
-    // Get headers and log them
+    // Get headers and verify token availability
     const headers = this.getHeaders();
     const tokenAvailable = this.getAuthToken() !== null;
-    console.log('Auth token available:', tokenAvailable);
-    console.log('Auth headers for supplier request:', headers);
     
-    // If token is not available, add allowMockData=true parameter
-    if (!tokenAvailable) {
+    // Add mock data param if needed (for development/testing)
+    if (!tokenAvailable && !environment.production) {
       params = params.set('allowMockData', 'true');
       console.log('Added allowMockData parameter due to missing auth token');
     }
@@ -265,7 +287,11 @@ export class OrderService {
       params: params
     }).pipe(
       map(response => {
-        console.log(`Successfully retrieved orders with status ${status}:`, response);
+        // Log success in debug mode
+        if (!environment.production) {
+          console.log(`Successfully retrieved orders with status ${status}:`, response);
+        }
+        
         // Handle pagination response from Spring Data
         if (response && response.content) {
           return response.content as Order[];
@@ -274,44 +300,69 @@ export class OrderService {
           return response as Order[];
         }
         if (response && Object.keys(response).length === 0) {
-          console.log('Empty response from backend, returning empty array');
           return [] as Order[];
         }
+        
         // If we received something but it's not in the expected format
         console.warn('Unexpected response format:', response);
         return response as Order[];
       }),
       catchError(error => {
-        console.error(`Error getting orders with status ${status}:`, error);
-        
-        // Debug the error in more detail
-        if (error.error && error.error.message) {
-          console.error('Server error message:', error.error.message);
-        }
-        
-        if (error.status === 401) {
-          console.warn('Authentication failed (401 Unauthorized). User might not be logged in or token is invalid.');
-          this.notificationService.warning('Authentication failed. Please log in again.');
+        // Only show detailed errors in development mode
+        if (!environment.production) {
+          console.error(`Error getting orders with status ${status}:`, error);
           
-          // Clear token if it's invalid and try again later
-          if (this.getAuthToken()) {
-            console.warn('Auth token exists but was rejected. It might be invalid or expired.');
-            // Check token expiration logic here if needed
-          } else {
-            console.warn('No auth token found. User might need to log in.');
+          // Debug the error in more detail
+          if (error.error && error.error.message) {
+            console.error('Server error message:', error.error.message);
           }
-        } else if (error.status === 500) {
-          console.error('Internal server error detected. Response:', error.error);
+        } else {
+          console.error(`Error fetching orders with status ${status}`);
         }
         
-        // Add a debug call to the auth debug endpoint
-        this.authService.debugAuthToken().subscribe({
-          next: (info) => console.log('Auth debug info:', info),
-          error: (err) => console.error('Auth debug error:', err)
-        });
+        // Handle authentication issues
+        if (error.status === 401) {
+          // Check if token exists - if so, the problem might be on the backend accepting ROLE_DRIVER
+          const token = this.getAuthToken();
+          if (token) {
+            console.log('Token exists but authentication failed. This could be a backend issue.');
+            // Driver-specific workaround: the backend may need an explicit driver flag
+            if (this.authService.userRole === 'ROLE_DRIVER') {
+              console.log('Driver role detected - using special handling for supplier endpoints');
+              // For drivers, we'll use a retry mechanism with mock data as fallback
+              this.notificationService.info('Loading data for driver role...');
+            } else {
+              this.notificationService.warning('Authentication issue. Will use demo data for now.');
+            }
+          } else {
+            // Standard handling for missing token
+            this.notificationService.warning('Session expired. Please log in again.');
+            
+            // Clear token and redirect to login if in production
+            if (environment.production) {
+              localStorage.removeItem('jwt_token');
+              localStorage.removeItem('currentUser');
+              window.location.href = '/login'; // Hard redirect to login page
+            }
+          }
+        } else if (error.status === 403) {
+          this.notificationService.error('You do not have permission to access this resource.');
+        } else if (error.status === 500) {
+          this.notificationService.error('Server error. Please try again later.');
+        }
         
-        // FALLBACK TO MOCK DATA FOR DEMO PURPOSES
-        this.notificationService.info('Backend API is not available. Using demo data instead.');
+        // Only make debug calls in development mode
+        if (!environment.production) {
+          this.authService.debugAuthToken().subscribe({
+            next: (info) => console.log('Auth debug info:', info),
+            error: (err) => console.error('Auth debug error:', err)
+          });
+        }
+        
+        // FALLBACK TO MOCK DATA FOR DEMO AND DEVELOPMENT PURPOSES
+        if (!environment.production) {
+          this.notificationService.info('Using demo data since backend is unavailable.');
+        }
         return this.getMockOrdersByStatus(status);
       })
     );

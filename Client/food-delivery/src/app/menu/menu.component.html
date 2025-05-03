@@ -18,8 +18,8 @@
                 <p><i class="fa-solid fa-star"></i><b> Rating:</b> {{ restaurant.rating }}</p>
                 <p><i class="fa-solid fa-clock"></i><b> Delivery Time:</b> {{ restaurant.timeDelivery }}</p>
             </div>
-            @if (isRestaurantOwner || isAdmin) {
-                <a [routerLink]="['/edit-restaurant', restaurantId]"><button class="Edit">Edit</button></a>
+            @if (isRestaurantOwner || isAdmin || isDriver) {
+                <button class="Edit" (click)="editRestaurant()">Edit</button>
             } @else {
                 <button type="button" (click)="addToFavorites()"><i class="fa-solid fa-heart"></i> Favorite</button>
             }
@@ -28,7 +28,7 @@
         <div class="menu-item">
             <h2>Welcome to our menu!</h2>
             
-            @if (isRestaurantOwner || isAdmin) {
+            @if (isRestaurantOwner || isAdmin || isDriver) {
                 <div class="adminAdd">
                     <a [routerLink]="['/admin/create-menu-item', restaurantId]">
                         <i class="fa-solid fa-plus"></i> Add new menu item
@@ -44,7 +44,16 @@
             } @else if (error.menu) {
                 <div class="error-message">{{ error.menu }}</div>
             } @else if (menuItems.length === 0) {
-                <p>No menu items available yet.</p>
+                <div class="empty-menu">
+                    <p>No menu items available yet.</p>
+                    @if (isRestaurantOwner || isAdmin || isDriver) {
+                        <div class="cta-button">
+                            <a [routerLink]="['/admin/create-menu-item', restaurantId]">
+                                <button class="add-menu-item"><i class="fa-solid fa-plus"></i> Add your first menu item</button>
+                            </a>
+                        </div>
+                    }
+                </div>
             } @else {
                 <div class="menu-cards">
                     <div class="cards">
@@ -60,11 +69,9 @@
                                     <p><b>{{ food.price.toFixed(2) }} BGN</b></p>
                                     
                                     <!-- Different buttons based on user role -->
-                                    @if (isRestaurantOwner || isAdmin) {
+                                    @if (isRestaurantOwner || isAdmin || isDriver) {
                                         <div class="adminBtn">
-                                            <a [routerLink]="['/edit-menu', food.id]">
-                                                <button class="Edit">Edit</button>
-                                            </a>
+                                            <button class="Edit" (click)="editMenuItem(food)">Edit</button>
                                             <button class="Delete" (click)="deleteMenuItem(food.id)">Delete</button>
                                             <button [class]="food.isAvailable ? 'Available' : 'Unavailable'" 
                                                     (click)="toggleAvailability(food)">

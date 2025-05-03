@@ -91,7 +91,13 @@ export class AuthService {
     // Show loading notification
     this.notificationService.info('Logging in...', true, 2000);
     
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials)
+    console.log(`Sending login request to: ${this.apiUrl}/auth/login`);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials, { headers })
       .pipe(
         tap(response => {
           if (response.jwt) {
@@ -113,13 +119,20 @@ export class AuthService {
             
             // Show success notification
             this.notificationService.success('Login successful! Welcome back.');
+          } else {
+            console.warn('Login response did not contain JWT token:', response);
+            this.notificationService.warning('Login successful but token was not received properly');
           }
         }),
         catchError((error: HttpErrorResponse) => {
+          console.error('Login error details:', error);
+          
           // Handle common login errors more elegantly
           let errorMessage = 'Login failed. Please check your credentials and try again.';
           
-          if (error.status === 401) {
+          if (error.status === 0) {
+            errorMessage = 'Cannot connect to the server. Please check your connection or ensure the backend is running.';
+          } else if (error.status === 401) {
             errorMessage = 'Invalid email or password. Please try again.';
           } else if (error.status === 403) {
             errorMessage = 'Your account is suspended or inactive. Please contact support.';

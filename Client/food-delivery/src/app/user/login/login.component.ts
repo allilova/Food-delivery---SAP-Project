@@ -56,17 +56,22 @@ export class LoginComponent implements OnInit {
 
         this.loading = true;
         
+        // Log the attempt for debugging
+        console.log('Logging in with email:', this.f['email'].value);
+        
         this.authService.login({
             email: this.f['email'].value,
             password: this.f['password'].value
         })
         .subscribe({
-            next: () => {
+            next: (response) => {
+                console.log('Login successful, role:', response.role);
                 // Navigate to return url or default route
                 this.router.navigate([this.returnUrl]);
             },
             error: error => {
-                this.error = error?.error?.message || 'Login failed. Please check your credentials.';
+                console.error('Login error:', error);
+                this.error = error?.error?.message || 'Login failed. Please check your credentials and ensure the backend is running.';
                 this.loading = false;
             }
         });

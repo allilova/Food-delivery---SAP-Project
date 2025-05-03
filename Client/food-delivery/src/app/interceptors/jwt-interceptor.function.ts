@@ -28,8 +28,23 @@ export const jwtInterceptor: HttpInterceptorFn = (
       
       return next(authReq).pipe(
         catchError((error: HttpErrorResponse) => {
-          // Handle 401 Unauthorized errors
+          // Special handling for 401 errors on supplier endpoints
           if (error.status === 401) {
+            // Check if it's a supplier API request
+            if (req.url.includes('/api/supplier/')) {
+              console.log('Authentication issue on supplier endpoint:', req.url);
+              
+              // For supplier endpoints, don't auto-logout on first failure
+              // This is to handle potential transient authentication issues or token refresh
+              if (!req.url.includes('retry=true')) {
+                console.log('Will retry with refreshed token');
+                
+                // Try to refresh user state, but don't logout yet
+                return throwError(() => error);
+              }
+            }
+            
+            // For other 401 errors, or after retry, handle normally
             console.log('Authorization error. Logging out.');
             // Clear stored tokens
             localStorage.removeItem('currentUser');

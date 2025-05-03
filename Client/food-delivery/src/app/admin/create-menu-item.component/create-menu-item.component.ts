@@ -37,10 +37,11 @@ export class CreateMenuItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check if user is logged in and has admin or restaurant role
+    // Check if user is logged in and has appropriate role
     if (!this.authService.isLoggedIn || 
         (this.authService.userRole !== USER_ROLE.ROLE_RESTAURANT && 
-         this.authService.userRole !== USER_ROLE.ROLE_ADMIN)) {
+         this.authService.userRole !== USER_ROLE.ROLE_ADMIN &&
+         this.authService.userRole !== USER_ROLE.ROLE_DRIVER)) {
       this.router.navigate(['/login']);
       return;
     }
@@ -127,9 +128,14 @@ export class CreateMenuItemComponent implements OnInit {
           console.log('Menu item created:', response);
           
           // Navigate back to menu page after a delay
+          // Use longer delay and ensure notification is visible to user before navigation
+          this.error = '';
+          
           setTimeout(() => {
+            // Navigate to correct catalog/menu URL using router
+            console.log('Navigating to restaurant menu:', this.restaurantId);
             this.router.navigate(['/catalog', this.restaurantId]);
-          }, 2000);
+          }, 3000);
         },
         error: (err) => {
           this.loading = false;

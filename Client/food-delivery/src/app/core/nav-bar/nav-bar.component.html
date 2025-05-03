@@ -1,22 +1,23 @@
 <nav>
     <ul>
-        <!-- Only visible when logged in as a restaurant owner -->
-        @if (isLoggedIn && isDriver()) {
+        
+        @if(isLoggedIn && isCustomer()){
+        <li><a routerLink="/catalog">Catalog</a></li>
+        }
+        <!-- Only visible when logged in as a restaurant owner or driver -->
+        @if (isLoggedIn &&  isDriver()) {
             <li><a routerLink="/supplier">Dashboard</a></li>
         }
         
         <!-- Only visible when logged in as an admin -->
         @if (isLoggedIn && isAdmin()) {
-            <li><a routerLink="/admin/create-restaurant">Create Restaurant</a></li>
             <li><a routerLink="/catalog">Catalog</a></li>
+            <li><a routerLink="/admin/create-restaurant">Create Restaurant</a></li>
         }
-
+        
+        <!-- Only visible when logged in as a restaurant owner -->
         @if (isLoggedIn && isRestaurant()) {
             <li><a routerLink="/restaurants">Dashboard</a></li>
-        }
-
-        @if (isLoggedIn && isCustomer()) {
-            <li><a routerLink="/catalog">Catalog</a></li>
         }
         
         <!-- Authentication links -->

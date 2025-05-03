@@ -1,4 +1,4 @@
-/*package com.example.food_delivery_app.repository;
+package com.example.food_delivery_app.repository;
 
 import com.example.food_delivery_app.model.Menu;
 import com.example.food_delivery_app.model.Restaurant;
@@ -25,10 +25,10 @@ class MenuRepositoryTest {
         menu.setRestaurant(restaurant);
         menuRepository.save(menu);
 
-        Optional<Menu> foundMenu = menuRepository.findByRestaurantRestaurantID(restaurant.getRestaurantID());
+        Optional<Menu> foundMenu = menuRepository.findByRestaurantId(restaurant.getId());
 
         assertThat(foundMenu).isPresent();
-        assertThat(foundMenu.get().getRestaurant().getRestaurantID()).isEqualTo(restaurant.getRestaurantID());
+        assertThat(foundMenu.get().getRestaurant().getId()).isEqualTo(restaurant.getId());
 
     }
-}*/
+}

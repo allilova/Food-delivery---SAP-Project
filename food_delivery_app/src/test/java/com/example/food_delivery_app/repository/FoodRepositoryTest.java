@@ -1,4 +1,4 @@
-/* package com.example.food_delivery_app.repository;
+package com.example.food_delivery_app.repository;
 
 import com.example.food_delivery_app.model.Category;
 import com.example.food_delivery_app.model.Food;
@@ -8,26 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.ArrayList;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:mysql://localhost:3306/food_delivery_test?createDatabaseIfNotExist=true",
-    "spring.datasource.username=root",
-    "spring.datasource.password=root",
-    "spring.jpa.hibernate.ddl-auto=create-drop"
-})
 class FoodRepositoryTest {
 
     @Autowired
@@ -61,6 +46,7 @@ class FoodRepositoryTest {
         food1.setIsAvailable(true);
         food1.setImageUrl("http://example.com/food1.jpg");
         food1.setCategory(category);
+        food1.setMenu(menu);
         entityManager.persist(food1);
 
         Food food2 = new Food();
@@ -71,18 +57,21 @@ class FoodRepositoryTest {
         food2.setIsAvailable(true);
         food2.setImageUrl("http://example.com/food2.jpg");
         food2.setCategory(category);
+        food2.setMenu(menu);
         entityManager.persist(food2);
+
 
         menu.getFoods().add(food1);
         menu.getFoods().add(food2);
         menu.getCategories().add(category);
         entityManager.persist(menu);
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Food> result = foodRepository.findByMenu(menu, pageable);
+        List<Food> result = foodRepository.findByMenu(menu);
 
-        assertThat(result.getContent()).hasSize(2);
+        assertThat(result).hasSize(2);
+        assertThat(result).extracting(Food::getName).containsExactlyInAnyOrder("Food 1", "Food 2");
     }
+
 
     @Test
     void ItShouldFindByCategory() {
@@ -129,10 +118,9 @@ class FoodRepositoryTest {
         food.setImageUrl("http://example.com/spaghetti.jpg");
         entityManager.persist(food);
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Food> result = foodRepository.searchFood("Spaghetti", pageable);
+        List<Food> result = foodRepository.searchFood("Spaghetti");
 
-        assertThat(result.getContent()).isNotEmpty()
-            .anyMatch(f -> f.getName().contains("Spaghetti"));
+        assertThat(result).isNotEmpty().anyMatch(f -> f.getName().contains("Spaghetti"));
     }
-} */
+
+}

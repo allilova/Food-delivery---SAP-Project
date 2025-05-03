@@ -1,6 +1,8 @@
 package com.example.food_delivery_app.repository;
 
 import com.example.food_delivery_app.model.Restaurant;
+import com.example.food_delivery_app.model.USER_ROLE;
+import com.example.food_delivery_app.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RestaurantRepositoryTest {
     @Autowired
     private RestaurantRepository restaurantRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Test
     void ItShouldFindRestaurantBySearchQuery() {
         Restaurant restaurant1 = new Restaurant();
@@ -47,5 +51,26 @@ public class RestaurantRepositoryTest {
         assertThat(foundRestaurant).isPresent();
         assertThat(foundRestaurant.get().getId()).isEqualTo(restaurant.getId());
     }
+    @Test
+    void ItShouldFindByRestaurantByOwner() {
 
+        User user = new User();
+        user.setEmail("Sezer@gmail.com");
+        user.setPassword("password");
+        user.setName("Sezer");
+        user.setPhoneNumber("1234567890");
+        user.setRole(USER_ROLE.ROLE_RESTAURANT);
+        userRepository.save(user);
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurant(user);
+        restaurantRepository.save(restaurant);
+
+        Optional<Restaurant> result = restaurantRepository.findByRestaurant(user);
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getRestaurant()).isEqualTo(user);
+
+
+    }
 }

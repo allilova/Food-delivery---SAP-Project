@@ -31,6 +31,7 @@
             ],
             "scripts": [],
             "server": "src/main.server.ts",
+            "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
             }
@@ -49,8 +50,7 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all",
-              "allowedCommonJsDependencies": ["rxjs"]
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
@@ -68,9 +68,6 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
           "configurations": {
             "production": {
               "buildTarget": "food-delivery:build:production"

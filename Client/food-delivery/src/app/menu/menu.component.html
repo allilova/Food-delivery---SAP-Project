@@ -19,7 +19,7 @@
                 <p><i class="fa-solid fa-clock"></i><b> Delivery Time:</b> {{ restaurant.timeDelivery }}</p>
             </div>
             @if (isRestaurantOwner || isAdmin || isDriver) {
-                <button class="Edit" (click)="editRestaurant()">Edit</button>
+                <button class="EditProfil" (click)="editRestaurant()">Edit</button>
             } @else {
                 <button type="button" (click)="addToFavorites()"><i class="fa-solid fa-heart"></i> Favorite</button>
             }
@@ -31,7 +31,7 @@
             @if (isRestaurantOwner || isAdmin || isDriver) {
                 <div class="adminAdd">
                     <a [routerLink]="['/admin/create-menu-item', restaurantId]">
-                        <i class="fa-solid fa-plus"></i> Add new menu item
+                        <i class="fa-solid fa-plus"></i>
                     </a>
                 </div>
             }
@@ -49,7 +49,7 @@
                     @if (isRestaurantOwner || isAdmin || isDriver) {
                         <div class="cta-button">
                             <a [routerLink]="['/admin/create-menu-item', restaurantId]">
-                                <button class="add-menu-item"><i class="fa-solid fa-plus"></i> Add your first menu item</button>
+                                <button class="add-menu-item"><i class="fa-solid fa-plus"></i></button>
                             </a>
                         </div>
                     }
@@ -60,7 +60,7 @@
                         @for (food of menuItems; track food.id) {
                             <div class="card">
                                 <div class="img-card">
-                                    <img [src]="food.imageUrl || 'assets/images/default-food.jpg'" [alt]="food.name">
+                                    <img [src]="food.imageUrl || 'food1.jpg'" [alt]="food.name">
                                 </div>
                                 <div class="text-card">
                                     <h4>{{ food.name }}</h4>

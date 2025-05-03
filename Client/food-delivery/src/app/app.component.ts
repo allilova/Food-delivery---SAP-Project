@@ -5,6 +5,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NotificationComponent } from './components/notifications/notification.component';
 import { DialogHostComponent } from './components/dialog-host/dialog-host.component';
+import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ import { DialogHostComponent } from './components/dialog-host/dialog-host.compon
     FooterComponent,
     HttpClientModule,
     NotificationComponent,
-    DialogHostComponent
+    DialogHostComponent,
+    OrderTrackingComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

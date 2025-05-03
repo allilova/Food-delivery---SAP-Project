@@ -16,6 +16,7 @@ import { SupplierComponent } from './supplier/supplier.component';
 import { OrdersComponent } from './supplier/orders/orders.component';
 import { RestaurantsComponent } from './restaurants/restaurants.component';
 import { OrderTrackingPageComponent } from './order-tracking/order-tracking-page.component';
+import{OrderTrackingComponent} from './components/order-tracking/order-tracking.component';
 import { CreateRestaurantComponent } from './admin/create-restaurant/create-restaurant.component';
 import { CreateMenuItemComponent } from './admin/create-menu-item.component/create-menu-item.component';
 import { authGuard, roleGuard, customerOnlyGuard } from './guards/auth.guard';
@@ -100,6 +101,7 @@ export const routes: Routes = [
         component: CreateMenuItemComponent,
         canActivate: [roleGuard([USER_ROLE.ROLE_ADMIN, USER_ROLE.ROLE_RESTAURANT])] // Admin or restaurant owner can create menu items
     },
+    {path: 'tracking', component: OrderTrackingComponent},
     {path: '404', component: ErrorComponent},
     {path: '**', redirectTo: '/404'}
 ];

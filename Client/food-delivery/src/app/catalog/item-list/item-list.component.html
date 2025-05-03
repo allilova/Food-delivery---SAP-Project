@@ -33,7 +33,7 @@
                                 <button class="view-menu">View menu</button>
                             </a>
                             @if (isLoggedIn) {
-                                <button class="add-favorite" (click)="addToFavorites(restaurant.id)">
+                                <button class="add-favorite" [attr.data-restaurant-id]="restaurant.id" (click)="addToFavorites(restaurant.id)">
                                     <i class="fa-solid fa-heart"></i> Favorite
                                 </button>
                             }

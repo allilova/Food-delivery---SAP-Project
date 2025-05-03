@@ -68,7 +68,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
   `,
   styles: [`
     .order-tracking-container {
-      background: white;
+      background: #FFDBDB;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       padding: 20px;
@@ -77,7 +77,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     
     h3 {
       margin-top: 0;
-      color: #333;
+      color: rgb(59, 4, 4);
       font-size: 1.5rem;
       font-weight: 600;
       margin-bottom: 20px;
@@ -88,7 +88,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     .order-info {
       margin-bottom: 24px;
     }
-    
+  
     .order-number {
       font-size: 1.1rem;
       font-weight: 600;
@@ -110,7 +110,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
       bottom: 0;
       left: 18px;
       width: 2px;
-      background-color: #e0e0e0;
+      background-color: #FFDBDB;
       z-index: 1;
     }
     
@@ -124,7 +124,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background-color: #e0e0e0;
+      background-color:  #FFDBDB;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -133,7 +133,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     }
     
     .step-icon i {
-      color: #fff;
+      color: rgb(59, 4, 4);
       font-size: 16px;
     }
     
@@ -149,18 +149,18 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     
     .step-details p {
       margin: 0;
-      color: #666;
+      color: rgb(59, 4, 4);
       font-size: 0.9rem;
     }
     
     .step-time {
-      color: #999;
+      color: rgb(59, 4, 4);
       font-size: 0.8rem !important;
       margin-top: 5px !important;
     }
     
     .estimated-time {
-      color: #ff6b00;
+      color:rgb(59, 4, 4);
       font-weight: 500;
     }
     
@@ -180,12 +180,12 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     
     .tracking-step.completed .step-details h4,
     .tracking-step.active .step-details h4 {
-      color: #333;
+      color: rgb(59, 4, 4);
     }
     
     .tracking-step.upcoming .step-details h4,
     .tracking-step.upcoming .step-details p {
-      color: #999;
+      color: rgb(59, 4, 4);
     }
     
     /* Delivery confirmation */
@@ -203,7 +203,7 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     }
     
     .rate-button {
-      background-color: #ff6b00;
+      background-color: rgb(59, 4, 4);
       color: white;
       border: none;
       padding: 8px 16px;
@@ -214,14 +214,14 @@ import { LoadingSpinnerComponent } from '../loading-spinner.component';
     }
     
     .rate-button:hover {
-      background-color: #e06000;
+      background-color: rgb(59, 4, 4);
     }
     
     /* Estimated delivery */
     .estimated-delivery {
       margin-top: 20px;
       font-weight: 500;
-      color: #ff6b00;
+      color: rgb(59, 4, 4)
       text-align: center;
     }
     

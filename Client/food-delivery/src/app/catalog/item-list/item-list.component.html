@@ -18,7 +18,7 @@
             @for (restaurant of restaurants; track restaurant.id) {
                 <div class="card">
                     <div class="img-card">
-                        <img src="Gourmet Restaurant.jpg"  alt="{{ restaurant.name }}">
+                        <img [src]="restaurant.imgUrl || 'Gourmet Restaurant.jpg'"  alt="{{ restaurant.name }}">
                     </div>
                     <div class="text-card">
                         <h4>{{ restaurant.name }}</h4>

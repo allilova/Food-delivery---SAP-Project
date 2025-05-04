@@ -26,13 +26,13 @@ public class RestaurantTurnover {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    private Long totalTurnover; // oborot na restoranta
+    private Long totalTurnover;
 
     @Temporal(TemporalType.DATE)
-    private Date startDate;  // Начална дата на отчетния период
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    private Date endDate;  // Крайна дата на отчетния период
+    private Date endDate;
 
     @OneToMany(mappedBy = "turnover", cascade = CascadeType.ALL)
     private List<Bonus> bonuses = new ArrayList<>();

@@ -45,7 +45,7 @@ public class Restaurant {
     @Column(length = 1000)
     private List<String>images;
 
-    private boolean open; //kogato e closed , nqma da moje da se porucva
+    private boolean open; //when it is closed, it will not be able to be ordered
     
     private boolean isPublic = false; // Controls visibility in customer catalog
 

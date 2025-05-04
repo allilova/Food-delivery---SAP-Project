@@ -563,7 +563,7 @@ export class RestaurantService {
         const newRestaurant: Restaurant = {
           id: Math.floor(Math.random() * 1000 + 100).toString(),
           name: restaurantData.restaurantName,
-          imgUrl: restaurantData.imageUrl || 'https://example.com/restaurant.jpg',
+          imgUrl: restaurantData.imageUrl || 'Gourmet Restaurant.jpg',
           address: restaurantData.restaurantAddress?.street || 'Default Address',
           rating: 5.0,
           foodType: restaurantData.type || 'Various',
@@ -592,7 +592,7 @@ export class RestaurantService {
     const restaurant: Restaurant = {
       id: response.id ? response.id.toString() : '',  // Convert number to string if needed
       name: response.name || response.restaurantName || '',
-      imgUrl: response.imgUrl || response.imageUrl || response.images || 'https://example.com/restaurant.jpg',
+      imgUrl: response.imgUrl || response.imageUrl || response.images || 'Gourmet Restaurant.jpg',
       address: response.address || (response.restaurantAddress?.street || 'Unknown address'),
       rating: response.rating || 5.0,
       foodType: response.foodType || response.type || 'Various',

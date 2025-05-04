@@ -18,7 +18,7 @@ export const mockFoodItems: Food[] = [
     name: 'Pasta Carbonara',
     description: 'Creamy pasta with eggs, cheese, pancetta, and black pepper',
     price: 14.99,
-    imageUrl: 'https://example.com/pasta-carbonara.jpg',
+    imageUrl: 'assets/pasta-carbanara.jpg',
     isAvailable: true,
     categoryName: 'Pasta',
     preparationTime: 15,

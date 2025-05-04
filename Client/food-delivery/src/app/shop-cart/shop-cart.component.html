@@ -21,7 +21,7 @@
             @for (item of cartItems; track item.id) {
                 <div class="card">
                     <div class="img-card">
-                        <img src="food1.jpg" [alt]="item.food.name">
+                        <img [src]="item.food.imageUrl || 'food1.jpg'" [alt]="item.food.name">
                     </div>
                     <div class="text-card">
                         <a href="javascript:void(0)" (click)="removeItem(item.food.id, item.food.name)">

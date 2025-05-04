@@ -1,8 +1,8 @@
-# BunnyBite Food Delivery Application
+# BunnyBite Food Delivery Application 🍔
 
 ## Overview
 
-This is a comprehensive food delivery application built with Spring Boot (backend) and Angular (frontend). The application allows customers to order food from restaurants, restaurant owners to manage their menus and orders, delivery drivers to track and fulfill deliveries, and administrators to oversee the entire platform, create restaurants, and manage users for system-wide operations.
+This is a comprehensive food delivery application built with Spring Boot (backend) and Angular (frontend). The application allows customers to order food from restaurants, restaurant owners to manage their orders, delivery drivers to track and fulfill deliveries, and administrators to oversee the entire platform, create restaurants, and manage users for system-wide operations.
 
 ## Features
 
@@ -96,13 +96,13 @@ This is a comprehensive food delivery application built with Spring Boot (backen
 For containerized deployment, we provide Docker configuration:
 
 1. Build Docker images:
-    `bashdocker-compose build`
+    `docker-compose build`
 
 2. Start the application:
-    `bashdocker-compose up -d`
+    `docker-compose up -d`
 
 3. Stop the application:
-    `bashdocker-compose down`
+    `docker-compose down`
 
 ## Testing
 

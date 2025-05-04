@@ -1,6 +1,5 @@
 package com.example.food_delivery_app.controller;
 
-import com.example.food_delivery_app.model.User;
 import com.example.food_delivery_app.request.LoginRequest;
 import com.example.food_delivery_app.request.RegisterRequest;
 import com.example.food_delivery_app.response.AuthResponse;

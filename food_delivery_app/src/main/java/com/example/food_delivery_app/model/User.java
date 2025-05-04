@@ -1,14 +1,11 @@
 package com.example.food_delivery_app.model;
 
 import com.example.food_delivery_app.dto.RestaurantDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.example.food_delivery_app.model.Review;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -65,5 +62,4 @@ public class User {
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
     private List<Bonus> bonuses = new ArrayList<>();
-
 }

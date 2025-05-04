@@ -33,5 +33,4 @@ public class OrderItem {
 
     @OneToMany(mappedBy = "orderItem")
     private List<Rating> ratings;
-
 }

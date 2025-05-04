@@ -2,8 +2,6 @@ package com.example.food_delivery_app.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

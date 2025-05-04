@@ -23,7 +23,7 @@ public class Menu {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    private String categoryName; // Например "Салати", "Основни ястия"
+    private String categoryName; // For example "Salads", "Main courses"
 
     @ManyToMany
     @JoinTable(
@@ -31,7 +31,7 @@ public class Menu {
             joinColumns = @JoinColumn(name = "menu_id"),
             inverseJoinColumns = @JoinColumn(name = "food_id")
     )
-    private List<Food> foods; // Списък с ястията, които са част от менюто
+    private List<Food> foods; // List of dishes that are part of the menu
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> categories;

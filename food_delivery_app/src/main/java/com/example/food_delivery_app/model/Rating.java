@@ -16,7 +16,7 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // rating kum produkta w poruckata
+    // rating for the product in the order
     @ManyToOne
     @JoinColumn(name = "orderItem_id")
     private OrderItem orderItem;

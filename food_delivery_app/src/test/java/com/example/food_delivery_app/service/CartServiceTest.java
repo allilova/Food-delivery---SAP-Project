@@ -1,4 +1,4 @@
-/*package com.example.food_delivery_app.service;
+package com.example.food_delivery_app.service;
 
 import com.example.food_delivery_app.exception.ResourceNotFoundException;
 import com.example.food_delivery_app.model.Cart;
@@ -9,7 +9,6 @@ import com.example.food_delivery_app.repository.CartItemRepository;
 import com.example.food_delivery_app.repository.CartRepository;
 import com.example.food_delivery_app.repository.FoodRepository;
 import com.example.food_delivery_app.request.CartItemRequest;
-import com.example.food_delivery_app.service.impl.CartServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +35,7 @@ class CartServiceTest {
     private FoodRepository foodRepository;
 
     @InjectMocks
-    private CartServiceImpl cartService;
+    private com.example.food_delivery_app.service.CartServiceImpl cartService;
 
     private User user;
     private Food food;
@@ -177,4 +176,4 @@ class CartServiceTest {
         assertTrue(cart.getItems().isEmpty());
         assertEquals(0.0, cart.getTotalAmount());
     }
-} */
+}

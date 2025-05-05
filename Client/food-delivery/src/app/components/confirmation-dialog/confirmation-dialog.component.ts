@@ -1,4 +1,3 @@
-// src/app/components/confirmation-dialog/confirmation-dialog.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

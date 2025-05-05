@@ -1,4 +1,3 @@
-// src/app/supplier/supplier.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -43,7 +42,7 @@ export class SupplierComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Check if user is logged in and is a restaurant owner
+    // Check if user is logged in and has the correct role  
     if (!this.authService.isLoggedIn || this.authService.userRole !== 'ROLE_DRIVER') {
       this.notificationService.warning('You must be logged in as a restaurant owner to access this page.');
       return;

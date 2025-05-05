@@ -1,4 +1,3 @@
-// src/app/catalog/item-list/item-list.component.ts
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';

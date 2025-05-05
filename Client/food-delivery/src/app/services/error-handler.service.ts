@@ -1,4 +1,3 @@
-// src/app/services/error-handler.service.ts
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, EMPTY, of } from 'rxjs';

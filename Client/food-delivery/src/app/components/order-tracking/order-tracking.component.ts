@@ -1,4 +1,3 @@
-// src/app/components/order-tracking/order-tracking.component.ts
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { interval, Subscription } from 'rxjs';

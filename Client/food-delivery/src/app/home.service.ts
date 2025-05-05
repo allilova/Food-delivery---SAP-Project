@@ -20,7 +20,7 @@ export class HomeService {
   getHomeData(): Observable<HomeData> {
     const { apiUrl } = environment;
     
-    // Create fallback mock data
+   
     const mockHomeData: HomeData = {
       title: "Welcome to Food Delivery",
       mainText: "Order delicious food online",
@@ -28,7 +28,7 @@ export class HomeService {
       callToAction: "Browse Restaurants"
     };
     
-    // Try to get data from API with fallback to mock data
+    
     return this.http.get<HomeData>(`${apiUrl}/api/home`).pipe(
       catchError(error => {
         console.log('Using mock home data due to API error:', error);

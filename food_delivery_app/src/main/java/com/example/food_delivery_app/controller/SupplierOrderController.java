@@ -375,7 +375,7 @@ public class SupplierOrderController {
             
             Restaurant restaurant;
             try {
-                // Let the service handle restaurant creation if needed - use ensureRestaurantExists
+                
                 restaurant = ensureRestaurantExists(user);
                 if (restaurant == null) {
                     logger.error("Failed to ensure restaurant exists for user: {}", user.getEmail());

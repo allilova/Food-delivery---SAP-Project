@@ -1,4 +1,3 @@
-// src/app/menu/menu.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
@@ -232,7 +231,7 @@ export class MenuComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error toggling food availability:', err);
-        // Could show an error notification here
+        
       }
     });
   }

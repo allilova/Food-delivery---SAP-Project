@@ -1,4 +1,3 @@
-// src/app/interceptors/jwt-interceptor.function.ts
 import { HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';

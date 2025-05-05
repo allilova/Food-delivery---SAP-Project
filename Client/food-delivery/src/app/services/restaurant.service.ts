@@ -1,4 +1,3 @@
-// src/app/services/restaurant.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, from } from 'rxjs';
@@ -486,7 +485,7 @@ export class RestaurantService {
     );
   }
 
-  // For restaurant owners: update menu item
+  // For admin: update menu item
   updateMenuItem(foodId: string, data: any): Observable<Food> {
     return this.http.put<Food>(`${this.apiUrl}/api/admin/food/${foodId}`, data, {
       headers: this.getHeaders()
@@ -498,7 +497,7 @@ export class RestaurantService {
     );
   }
 
-  // For restaurant owners: delete menu item
+  // For admin: delete menu item
   deleteMenuItem(foodId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/admin/food/${foodId}`, {
       headers: this.getHeaders()
@@ -510,7 +509,7 @@ export class RestaurantService {
     );
   }
 
-  // For restaurant owners: toggle food item availability
+  // For admin: toggle food item availability
   toggleFoodAvailability(foodId: string): Observable<Food> {
     return this.http.put<Food>(`${this.apiUrl}/api/admin/food/${foodId}`, {}, {
       headers: this.getHeaders()

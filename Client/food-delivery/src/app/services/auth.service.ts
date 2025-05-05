@@ -1,4 +1,3 @@
-// src/app/services/auth.service.ts
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
@@ -56,7 +55,7 @@ export class AuthService {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     
-    // Initialize currentUserSubject - safely check if we're in browser environment
+    
     let userData = null;
     if (this.isBrowser) {
       const userJson = localStorage.getItem('currentUser');

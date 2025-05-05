@@ -1,4 +1,4 @@
-// src/app/home/home.component.ts
+
 import { Component, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { HomeService, HomeData } from "../home.service";

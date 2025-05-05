@@ -1,4 +1,3 @@
-// src/app/user/login/login.component.ts
 import { Component, OnInit } from "@angular/core";
 import { RouterLink, Router, ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
@@ -26,9 +25,9 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private authService: AuthService
     ) {
-        // Redirect to home if already logged in
+        // Redirect to catalog if already logged in
         if (this.authService.isLoggedIn) {
-            this.router.navigate(['/']);
+            this.router.navigate(['/catalog']);
         }
     }
 

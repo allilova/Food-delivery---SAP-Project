@@ -1,4 +1,3 @@
-// src/app/shop-cart/shop-cart.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
@@ -130,7 +129,7 @@ export class ShopCartComponent implements OnInit {
 
   // Clear cart
   clearCart(): void {
-    // Create a simple confirmation dialog without relying on the dialog service
+    
     if (confirm('Are you sure you want to remove all items from your cart?')) {
       // Clear the cart
       this.cartService.clearCart();

@@ -4,7 +4,7 @@ export interface OrderItem {
     food: Food;
     quantity: number;
     price: number;
-    totalPrice?: number;  // Added this field to match template usage
+    totalPrice?: number;  
 }
 
 export enum OrderStatus {

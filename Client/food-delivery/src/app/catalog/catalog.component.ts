@@ -1,4 +1,3 @@
-// src/app/catalog/catalog.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
@@ -52,9 +51,8 @@ export class CatalogComponent implements OnInit {
       this.isRestaurantOwner = userRole === USER_ROLE.ROLE_RESTAURANT;
       this.isDriver = userRole === USER_ROLE.ROLE_DRIVER;
       
-      // Only redirect for restaurant or driver roles
-      // Do NOT redirect admin, as admin might have created a restaurant and need to view it
-      if ((this.isRestaurantOwner || this.isDriver) && userRole !== USER_ROLE.ROLE_ADMIN) {
+      
+      if (this.isDriver && userRole !== USER_ROLE.ROLE_ADMIN) {
         this.router.navigate(['/supplier']);
         return;
       }

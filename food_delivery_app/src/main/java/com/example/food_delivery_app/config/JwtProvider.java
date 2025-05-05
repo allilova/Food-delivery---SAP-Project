@@ -48,7 +48,7 @@ public class JwtProvider {
 
     public String getEmailFromToken(String jwt) {
         try {
-            // Check if the token still has the "Bearer " prefix and remove it
+           
             if (jwt.startsWith("Bearer ")) {
                 jwt = jwt.substring(7);
             }
@@ -69,7 +69,7 @@ public class JwtProvider {
     
     public Claims getAllClaimsFromToken(String jwt) {
         try {
-            // Check if the token still has the "Bearer " prefix and remove it
+            
             if (jwt.startsWith("Bearer ")) {
                 jwt = jwt.substring(7);
             }

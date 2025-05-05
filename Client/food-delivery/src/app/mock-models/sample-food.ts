@@ -1,4 +1,3 @@
-// src/app/mock-models/sample-food.ts
 import { Food } from '../types/food';
 
 export const mockFoodItems: Food[] = [

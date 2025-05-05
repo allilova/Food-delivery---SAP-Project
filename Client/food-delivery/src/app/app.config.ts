@@ -1,4 +1,3 @@
-// src/app/app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
@@ -12,7 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(
       withInterceptors([jwtInterceptor]),
-      withFetch() // Use fetch API instead of XHR which can be more reliable
+      withFetch() 
     ),
     provideClientHydration()
   ]

@@ -2,7 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 
-// Add an error handler to help debug API connectivity issues
+
 window.addEventListener('unhandledrejection', function(event) {
   if (event.reason && event.reason.name === 'HttpErrorResponse') {
     const error = event.reason;

@@ -88,7 +88,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                 // Log all authorities for debugging
                 logger.info("Processing authorities: {}", authorities);
                 
-                // Make sure to handle ROLE_ prefix for Spring Security
+                
                 if (authorities.contains("ROLE_RESTAURANT") || authorities.contains("ROLE_DRIVER") || 
                     authorities.contains("ROLE_ADMIN") || authorities.contains("ROLE_CUSTOMER")) {
                     logger.info("Found valid role in authorities: {}", authorities);
@@ -105,7 +105,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
                         }
                     }
                     if (roleBuilder.length() > 0) {
-                        roleBuilder.setLength(roleBuilder.length() - 1); // Remove trailing comma
+                        roleBuilder.setLength(roleBuilder.length() - 1); 
                     }
                     authorities = roleBuilder.toString();
                     logger.info("Modified authorities to ensure ROLE_ prefix: {}", authorities);

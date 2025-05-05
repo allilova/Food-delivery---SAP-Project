@@ -1,4 +1,3 @@
-// src/app/mock-models/sample-models.ts
 
 import { Restaurant } from '../types/restaurants';
 import { Food } from '../types/food';

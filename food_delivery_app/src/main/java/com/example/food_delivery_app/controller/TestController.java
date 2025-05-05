@@ -64,7 +64,7 @@ public class TestController {
                     authInfo.put("name", auth.getName());
                     authInfo.put("authorities", auth.getAuthorities().toString());
                     
-                    // Be careful with the principal, it might throw an exception
+                    
                     try {
                         if (auth.getPrincipal() != null) {
                             authInfo.put("principal", auth.getPrincipal().toString());
@@ -160,7 +160,7 @@ public class TestController {
             errorResponse.put("error", e.getMessage());
             errorResponse.put("status", "error");
             errorResponse.put("timestamp", new java.util.Date().toString());
-            // Don't include stack trace in production response
+            
             // errorResponse.put("stackTrace", e.getStackTrace()[0].toString());
             
             // Always return 200 OK with error details in the body
